@@ -1,3 +1,9 @@
 [submodule "vendors/idiorm"]
 	path = vendors/idiorm
 	url = git@github.com:Naatan/idiorm.git
+[submodule "vendor/idiorm"]
+	path = vendor/idiorm
+	url = git@github.com:Naatan/idiorm.git
+[submodule "vendor/paris"]
+	path = vendor/paris
+	url = git@github.com:Naatan/paris.git
