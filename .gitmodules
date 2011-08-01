@@ -1,0 +1,3 @@
+[submodule "vendors/idiorm"]
+	path = vendors/idiorm
+	url = git@github.com:Naatan/idiorm.git
