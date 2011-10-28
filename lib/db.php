@@ -3,8 +3,8 @@
 namespace CrossORM;
 
 require_once dirname(__FILE__) . '/exception.php';
-require_once dirname(__FILE__) . '/vendor/idiorm/idiorm.php';
-require_once dirname(__FILE__) . '/vendor/paris/paris.php';
+require_once dirname(__FILE__) . '/interfaces.php';
+require_once dirname(__FILE__) . '/model.php';
 
 class DB
 {
@@ -71,25 +71,19 @@ class DB
 		}
 		
 		$driver = basename($config['driver']); // no sneaking around
-		$class  = 'CrossORM\\Drivers\\'.$driver;
+		$path 	= dirname(__FILE__) . '/../drivers/' . $driver . '/';
+		$class  = 'CrossORM\\Drivers\\'.$driver.'\\ORM';
+		
+		if ( ! file_exists($path . 'orm.php') || ! file_exists($path . 'model.php'))
+		{
+			throw new Exception('Specified DB driver does not exist: '.$driver);
+		}
+		
+		require_once $path . 'orm.php';
 		
 		if ( ! class_exists($class))
 		{
-			
-			$path 	= dirname(__FILE__) . '/drivers/' . $driver . '.php';
-			
-			if ( ! file_exists($path))
-			{
-				throw new Exception('Specified DB driver was not found: '.$driver);
-			}
-			
-			require_once $path;
-			
-			if ( ! class_exists($class))
-			{
-				throw new Exception('Specified DB driver was not found: '.$driver);
-			}
-			
+			throw new Exception('Specified DB driver was not found: '.$driver);
 		}
 		
 		return new $class($config);

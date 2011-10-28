@@ -1,10 +1,14 @@
 <?php
 
-namespace CrossORM\Drivers;
+namespace CrossORM\Drivers\PDO;
 
 use CrossORM\DB;
 
-class pdo extends \Idiorm\ORM {
+require_once dirname(__FILE__) . '/vendor/idiorm/idiorm.php';
+require_once dirname(__FILE__) . '/vendor/paris/paris.php';
+require_once dirname(__FILE__) . '/model.php';
+
+class ORM extends \Idiorm\ORM implements \CrossORM\Interfaces\ORM {
 	
 	protected $_conn;
 	
