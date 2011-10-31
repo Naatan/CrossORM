@@ -1,6 +1,6 @@
 [submodule "drivers/pdo/vendor/idiorm"]
 	path = drivers/pdo/vendor/idiorm
-	url = git@github.com:Naatan/idiorm.git
+	url = git://github.com/Naatan/idiorm.git
 [submodule "drivers/pdo/vendor/paris"]
 	path = drivers/pdo/vendor/paris
-	url = git@github.com:Naatan/paris.git
+	url = git://github.com/Naatan/paris.git
