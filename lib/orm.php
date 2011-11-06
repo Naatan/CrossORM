@@ -110,6 +110,17 @@ abstract class ORM
 	/************************************************** BUILDING QUERIES */
 	
 	/**
+	 * Alias of @see table()
+	 * 
+	 * @param	string			$table_name		
+	 * @return	$this
+	 */
+	function for_table($table_name)
+	{
+		return $this->table($table_name);
+	}
+	
+	/**
 	 * Define table name to base queries on
 	 * 
 	 * @param	string			$table_name		
