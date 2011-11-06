@@ -13,7 +13,8 @@ class Model {
 		$table_name = self::_get_table_name($keyword);
 		$class_name = self::_get_class_name($keyword);
 		
-		$orm = DB::factory($id)->for_table($table_name);
+		$orm = DB::factory($id);
+		$orm->table($table_name);
 		
 		$model = new $class_name;
 		$model->orm = $orm;
@@ -69,7 +70,7 @@ class Model {
 
 	public function __call($method,$args)
 	{
-		return call_user_func_array(array($this->orm,$method),$args);
+		return call_user_func_array(array($this->model,$method),$args);
 	}
 	
 }

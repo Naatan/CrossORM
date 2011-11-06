@@ -7,20 +7,15 @@ require_once dirname(__FILE__) . '/../crossorm.php';
 
 DB::factory(array(
 	'driver'	=> 'pdo',
-	'connection_string' => 'mysql:dbname=test;host=127.0.0.1',
+	'connection_string' => PHP_OS == 'Darwin' ? 'mysql:dbname=test;host=127.0.0.1;port=8889' : 'mysql:dbname=test;host=127.0.0.1',
 	'username' => 'root',
-	'password' => '',
+	'password' => PHP_OS == 'Darwin' ? 'root' : '',
 ));
 
-class Model_testx extends \CrossORM\Drivers\PDO\Model {
-	
-	public static $_table = 'test';	
-	
-}
+$result = Model::factory('test')->find_one();
+var_dump($result->as_array());
 
-//$result = DB::factory()->for_table('test')->find_many();
-$result = Model::factory('testx')->find_many();
-
-foreach ($result AS $e) {
-	var_dump($e->as_array());
-}
+//echo '<hr/>';
+//
+//$result->value = 'foobar';
+//$result->save();

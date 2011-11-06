@@ -2,8 +2,11 @@
 
 namespace CrossORM;
 
+require_once dirname(__FILE__) . '/constants.php';
 require_once dirname(__FILE__) . '/exception.php';
 require_once dirname(__FILE__) . '/interfaces.php';
+require_once dirname(__FILE__) . '/builder.php';
+require_once dirname(__FILE__) . '/orm.php';
 require_once dirname(__FILE__) . '/model.php';
 
 class DB
@@ -36,9 +39,8 @@ class DB
 			}
 		}
 		
-		if ( !  isset(static::$connections[$id]))
+		if ( ! isset(static::$connections[$id]) )
 		{
-			
 			if (empty($config))
 			{
 				if (empty(static::$default_config))
@@ -47,14 +49,15 @@ class DB
 				}
 				else
 				{
-					$config = static::$default_config;
+					static::$connections[$id] = static::$default_config;
 				}
+			} else
+			{
+				static::$connections[$id] = $config;
 			}
-			
-			static::$connections[$id] = static::driver_init($config);
 		}
 		
-		return static::$connections[$id];
+		return static::driver_init(static::$connections[$id]);
 		
 	}
 	
@@ -72,7 +75,7 @@ class DB
 		
 		$driver = basename($config['driver']); // no sneaking around
 		$path 	= dirname(__FILE__) . '/../drivers/' . $driver . '/';
-		$class  = 'CrossORM\\Drivers\\'.$driver.'\\ORM';
+		$class  = '\\CrossORM\\Drivers\\'.strtoupper($driver).'\\ORM';
 		
 		if ( ! file_exists($path . 'orm.php') || ! file_exists($path . 'model.php'))
 		{
