@@ -78,7 +78,7 @@ abstract class ORM
 	}
 	
 	protected function _create_instance_from_row($row) {
-		$result = $this->create($row, false);
+		$result = $this->create($row);
 		$this->_build->reset_set();
 		
 		return $result;

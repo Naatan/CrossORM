@@ -12,7 +12,7 @@ DB::factory(array(
 	'password' => PHP_OS == 'Darwin' ? 'root' : '',
 ));
 
-$result = DB::factory()->for_table('test')->find_one();
+$result = DB::factory()->for_table('test')->where_id_is(1)->find_one();
 var_dump($result->as_array());
 
 //echo '<hr/>';

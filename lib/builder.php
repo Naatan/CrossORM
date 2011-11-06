@@ -109,7 +109,7 @@ class Builder {
 			return $this->clause;
 		}
 		
-		return $this->clauses(array($column_name, $separator, $value));
+		return $this->clauses(array(array($column_name, $separator, $value)));
 	}
 	
 	public function clauses($clauses = null)

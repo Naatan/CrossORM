@@ -97,13 +97,15 @@ class ORM extends \CrossORM\ORM implements \CrossORM\Interfaces\ORM
 		
 		} catch (PDOException $e)
 		{
-			throw Exception($e);
+			throw new Exception($e);
 		}
 
 	}
 
 	function build()
 	{
+		$this->_values = array();
+		
 		switch ($this->_build->query_type()) {
 			case SELECT:
 				$this->_build_select();
@@ -174,7 +176,7 @@ class ORM extends \CrossORM\ORM implements \CrossORM\Interfaces\ORM
 		foreach ($this->_build->clauses() as $clause)
 		{
 			$where_conditions[] = $clause[0] . ' ' . $clause[1] . ' ?';
-			$this->_values = array_merge($this->_values, $condition[3]);
+			$this->_values[] = $clause[2];
 		}
 
 		return "WHERE " . join(" AND ", $where_conditions);
@@ -238,7 +240,7 @@ class ORM extends \CrossORM\ORM implements \CrossORM\Interfaces\ORM
 		
 		$row = $this->_last_query_result->fetch(PDO::FETCH_ASSOC);
 		
-		if ($instantiate)
+		if ($row AND $instantiate)
 		{
 			$row = $this->_create_instance_from_row($row);
 		}
