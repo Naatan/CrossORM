@@ -2,28 +2,96 @@
 
 namespace CrossORM;
 
-class Model {
+/**
+ * Model class, wraps around the ORM
+ */
+class Model
+{
 	
-	public static $class_prefix = '\\Model_';
-	public static $class_suffix = '';
+	protected $orm;
 	
+	protected $table_name 	= null;
+	protected $db_id		= null;
 	
-	public static function factory($keyword, $id = null)
+	/**
+	 * Constructor
+	 * 
+	 * @returns	$this	
+	 */
+	public function __construct($id = null, $config = null)
 	{
-		$table_name = self::_get_table_name($keyword);
-		$class_name = self::_get_class_name($keyword);
+		if ($id == null AND $this->db_id != null)
+		{
+			$id = $this->db_id;
+		}
 		
-		$orm = DB::factory($id);
-		$orm->table($table_name);
+		$table_name = $this->_get_table_name();
 		
-		$model = new $class_name;
-		$model->orm = $orm;
+		$this->orm = DB::factory($id, $config);
+		$this->orm->table($table_name);
 		
-		return $model;
+		return $this;
 	}
 	
-	protected static function _get_class_name($class_name) {
-		return static::$class_prefix . $class_name . static::$class_suffix;
+	/**
+	 * Method overloading, forward unknown calls to the ORM
+	 * 
+	 * @param	string			$method			
+	 * @param	array			$args
+	 * 
+	 * @returns	mixed						
+	 */
+	public function __call($method,$args)
+	{
+		return call_user_func_array(array($this->orm,$method),$args);
+	}
+	
+	/**
+	 * Forward __get calls to ORM
+	 * 
+	 * @param	string			$key
+	 * 
+	 * @returns	mixed							
+	 */
+	public function __get($key)
+	{
+		return $this->orm->{$key};
+	}
+	
+	/**
+	 * Forward __set calls to ORM
+	 * 
+	 * @param	string			$key			
+	 * @param	mixed			$value
+	 * 
+	 * @returns	mixed							
+	 */
+	public function __set($key,$value)
+	{
+		return $this->orm->{$key} = $value;
+	}
+	
+	/**
+	 * Forward __isset calls to ORM
+	 * 
+	 * @param	string			$key
+	 * 
+	 * @returns	bool							
+	 */
+	public function __isset($key)
+	{
+		return isset($this->orm{$key});
+	}
+	
+	/**
+	 * Instantiate new instance of model
+	 * 
+	 * @returns	object							
+	 */
+	public static function factory()
+	{
+		$class_name = get_called_class();
+		return new $class_name;
 	}
 	
 	/**
@@ -33,14 +101,15 @@ class Model {
 	 * returned. If not, the class name will be converted using
 	 * the _class_name_to_table_name method method.
 	 */
-	protected static function _get_table_name($keyword)
+	protected function _get_table_name()
 	{
-		$specified_table_name = self::_get_static_property(self::_get_class_name($keyword), '_table');
-		if (is_null($specified_table_name))
+		if ( !empty($this->table_name))
 		{
-			return self::_class_name_to_table_name($keyword);
+			return $this->table_name;
 		}
-		return $specified_table_name;
+		
+		$class_name = get_class($this);
+		return static::_class_name_to_table_name($class_name);
 	}
 	
 	/**
@@ -48,29 +117,21 @@ class Model {
 	 * to a table name in lowercase_with_underscores.
 	 * For example, CarTyre would be converted to car_tyre.
 	 */
-	protected static function _class_name_to_table_name($keyword)
+	public static function _class_name_to_table_name($class_name)
 	{
-		return strtolower(preg_replace('/(?<=[a-z])([A-Z])/', '_$1', $keyword));
-	}
-	
-	/**
-	 * Retrieve the value of a static property on a class. If the
-	 * class or the property does not exist, returns the default
-	 * value supplied as the third argument (which defaults to null).
-	 */
-	protected static function _get_static_property($keyword, $property, $default=null)
-	{
-		if (!class_exists($keyword) || !property_exists($keyword, $property))
+		$table_name = strtolower(preg_replace('/(?<=[a-z])([A-Z])/', '_$1', basename($class_name)));
+		
+		if (substr($table_name,0,6)=='model_')
 		{
-			return $default;
+			$table_name = substr($table_name,6);
 		}
-		$properties = get_class_vars($keyword);
-		return $properties[$property];
-	}
-
-	public function __call($method,$args)
-	{
-		return call_user_func_array(array($this->model,$method),$args);
+		
+		if (substr($table_name,-6)=='_model')
+		{
+			$table_name = substr($table_name,0,-6);
+		}
+		
+		return $table_name;
 	}
 	
 }

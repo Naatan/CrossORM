@@ -1,0 +1,615 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Fri, 02 Dec 2011 14:01:12 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+<script type="text/javascript">
+			$(document).ready(function() {
+				$('iframe').load(function() {
+				  this.style.height =
+				  this.contentWindow.document.body.offsetHeight + 'px';
+				});
+			});
+		</script>
+<title>Builder (CrossORM Documentation)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>CrossORM</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../crossorm/package-summary.html">Namespace</a></li>
+<li class="active">Class</li>
+<li><a href="../crossorm/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../todo-list.html">Todo</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../crossorm/builder.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">CrossORM\Builder</div>
+<a href="../source/lib/builder.php.html#line10" class="location">lib/builder.php at line 10</a>
+
+<h1>Class Builder</h1>
+
+<pre class="tree"><strong>Builder</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Builder</strong></p>
+
+<div class="comment" id="overview_description"><p>Builder class</p><p>Prepares the query structure so that the driver can then build it however it wants</p></div>
+
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#affected_fields">$affected_fields</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#clause">$clause</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#groupby">$groupby</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#id">$id</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#id_column">$id_column</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#joins">$joins</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#limit">$limit</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#offset">$offset</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#orderby">$orderby</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#query_type">$query_type</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#select">$select</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#set">$set</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#table">$table</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#table_alias">$table_alias</a></p></td>
+</tr>
+</table>
+
+<table id="summary_constructor">
+<tr><th colspan="2">Constructor Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>()</p><p class="description">Contructor</p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get_query_dump()">get_query_dump</a>()</p><p class="description">Get the current query elements, mostly for debugging purposes</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get_affected_fields()">get_affected_fields</a>()</p><p class="description">Get fields being affected in this query, useful for ACL validation</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#query_type()">query_type</a>(string|null type)</p><p class="description">Set / get the type of query being executed</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#id_column()">id_column</a>(string|null field)</p><p class="description">Set / get the id column</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#select()">select</a>(string|array|null select)</p><p class="description">Set / get the select fields</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#clause()">clause</a>(string|null column_name, string separator, string|int value)</p><p class="description">Set / get the conditional clause</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#clauses()">clauses</a>(array|null clauses)</p><p class="description">Set / get conditional clauses</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#table()">table</a>(string|null table_name)</p><p class="description">Set / get the table to be used</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#table_alias()">table_alias</a>(string|null table_name)</p><p class="description">Set / get the table alias</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#limit()">limit</a>(int|null limit)</p><p class="description">Set / get the limit</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#offset()">offset</a>(int|null offset)</p><p class="description">Set / get the offset</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#order_by()">order_by</a>(string|null column_name, string|null dir)</p><p class="description">Set / get an order by clause</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#group_by()">group_by</a>(string|null column_name)</p><p class="description">Set / get a group by clause</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set()">set</a>(string|array|null entries, string|int|null value)</p><p class="description">Set fields to be updated / inserted</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get()">get</a>(string key)</p><p class="description">Get a value that is to be set</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#_use_field()">_use_field</a>(string field)</p><p class="description">Mark a specific field as used</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#_use_fields()">_use_fields</a>(array fields)</p><p class="description">Mark specific fields as used</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_array_unset_value()">_array_unset_value</a>(array array, string|int value)</p><p class="description">Unset array entries by value</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/lib/builder.php.html#line14" class="location">lib/builder.php at line 14</a>
+
+<h3 id="affected_fields">affected_fields</h3>
+<code class="signature">private  mixed <strong>$affected_fields</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line24" class="location">lib/builder.php at line 24</a>
+
+<h3 id="clause">clause</h3>
+<code class="signature">private  mixed <strong>$clause</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line26" class="location">lib/builder.php at line 26</a>
+
+<h3 id="groupby">groupby</h3>
+<code class="signature">private  mixed <strong>$groupby</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line23" class="location">lib/builder.php at line 23</a>
+
+<h3 id="id">id</h3>
+<code class="signature">private  mixed <strong>$id</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line16" class="location">lib/builder.php at line 16</a>
+
+<h3 id="id_column">id_column</h3>
+<code class="signature">private  mixed <strong>$id_column</strong> = ID_COLUMN</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line20" class="location">lib/builder.php at line 20</a>
+
+<h3 id="joins">joins</h3>
+<code class="signature">private  mixed <strong>$joins</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line28" class="location">lib/builder.php at line 28</a>
+
+<h3 id="limit">limit</h3>
+<code class="signature">private  mixed <strong>$limit</strong> = NULL</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line27" class="location">lib/builder.php at line 27</a>
+
+<h3 id="offset">offset</h3>
+<code class="signature">private  mixed <strong>$offset</strong> = NULL</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line25" class="location">lib/builder.php at line 25</a>
+
+<h3 id="orderby">orderby</h3>
+<code class="signature">private  mixed <strong>$orderby</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line12" class="location">lib/builder.php at line 12</a>
+
+<h3 id="query_type">query_type</h3>
+<code class="signature">private  mixed <strong>$query_type</strong> = INSERT</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line21" class="location">lib/builder.php at line 21</a>
+
+<h3 id="select">select</h3>
+<code class="signature">private  mixed <strong>$select</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line22" class="location">lib/builder.php at line 22</a>
+
+<h3 id="set">set</h3>
+<code class="signature">private  mixed <strong>$set</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line18" class="location">lib/builder.php at line 18</a>
+
+<h3 id="table">table</h3>
+<code class="signature">private  mixed <strong>$table</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line19" class="location">lib/builder.php at line 19</a>
+
+<h3 id="table_alias">table_alias</h3>
+<code class="signature">private  mixed <strong>$table_alias</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Constructor Detail</h2>
+<a href="../source/lib/builder.php.html#line35" class="location">lib/builder.php at line 35</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>()</code>
+<div class="details">
+<p>Contructor</p><dl>
+<dt>Returns:</dt>
+<dd>void</dd>
+</dl>
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2>
+<a href="../source/lib/builder.php.html#line45" class="location">lib/builder.php at line 45</a>
+
+<h3 id="get_query_dump()">get_query_dump</h3>
+<code class="signature">public  void <strong>get_query_dump</strong>()</code>
+<div class="details">
+<p>Get the current query elements, mostly for debugging purposes</p><dl>
+<dt>Returns:</dt>
+<dd>object</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line69" class="location">lib/builder.php at line 69</a>
+
+<h3 id="get_affected_fields()">get_affected_fields</h3>
+<code class="signature">public  void <strong>get_affected_fields</strong>()</code>
+<div class="details">
+<p>Get fields being affected in this query, useful for ACL validation</p><dl>
+<dt>Returns:</dt>
+<dd>array</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line81" class="location">lib/builder.php at line 81</a>
+
+<h3 id="query_type()">query_type</h3>
+<code class="signature">public  void <strong>query_type</strong>(string|null type)</code>
+<div class="details">
+<p>Set / get the type of query being executed</p><dl>
+<dt>Returns:</dt>
+<dd>string</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line98" class="location">lib/builder.php at line 98</a>
+
+<h3 id="id_column()">id_column</h3>
+<code class="signature">public  void <strong>id_column</strong>(string|null field)</code>
+<div class="details">
+<p>Set / get the id column</p><dl>
+<dt>Returns:</dt>
+<dd>string</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line115" class="location">lib/builder.php at line 115</a>
+
+<h3 id="select()">select</h3>
+<code class="signature">public  void <strong>select</strong>(string|array|null select)</code>
+<div class="details">
+<p>Set / get the select fields</p><dl>
+<dt>Returns:</dt>
+<dd>array</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line150" class="location">lib/builder.php at line 150</a>
+
+<h3 id="clause()">clause</h3>
+<code class="signature">public  void <strong>clause</strong>(string|null column_name, string separator, string|int value)</code>
+<div class="details">
+<p>Set / get the conditional clause</p><dl>
+<dt>Returns:</dt>
+<dd>array</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line174" class="location">lib/builder.php at line 174</a>
+
+<h3 id="clauses()">clauses</h3>
+<code class="signature">public  void <strong>clauses</strong>(array|null clauses)</code>
+<div class="details">
+<p>Set / get conditional clauses</p><dl>
+<dt>Returns:</dt>
+<dd>array</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line196" class="location">lib/builder.php at line 196</a>
+
+<h3 id="table()">table</h3>
+<code class="signature">public  void <strong>table</strong>(string|null table_name)</code>
+<div class="details">
+<p>Set / get the table to be used</p><dl>
+<dt>Returns:</dt>
+<dd>string</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line213" class="location">lib/builder.php at line 213</a>
+
+<h3 id="table_alias()">table_alias</h3>
+<code class="signature">public  void <strong>table_alias</strong>(string|null table_name)</code>
+<div class="details">
+<p>Set / get the table alias</p><dl>
+<dt>Returns:</dt>
+<dd>string</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line230" class="location">lib/builder.php at line 230</a>
+
+<h3 id="limit()">limit</h3>
+<code class="signature">public  void <strong>limit</strong>(int|null limit)</code>
+<div class="details">
+<p>Set / get the limit</p><dl>
+<dt>Returns:</dt>
+<dd>int</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line246" class="location">lib/builder.php at line 246</a>
+
+<h3 id="offset()">offset</h3>
+<code class="signature">public  void <strong>offset</strong>(int|null offset)</code>
+<div class="details">
+<p>Set / get the offset</p><dl>
+<dt>Returns:</dt>
+<dd>int</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line264" class="location">lib/builder.php at line 264</a>
+
+<h3 id="order_by()">order_by</h3>
+<code class="signature">public  void <strong>order_by</strong>(string|null column_name, string|null dir)</code>
+<div class="details">
+<p>Set / get an order by clause</p><dl>
+<dt>Returns:</dt>
+<dd>array</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line283" class="location">lib/builder.php at line 283</a>
+
+<h3 id="group_by()">group_by</h3>
+<code class="signature">public  void <strong>group_by</strong>(string|null column_name)</code>
+<div class="details">
+<p>Set / get a group by clause</p><dl>
+<dt>Returns:</dt>
+<dd>array</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line303" class="location">lib/builder.php at line 303</a>
+
+<h3 id="set()">set</h3>
+<code class="signature">public  void <strong>set</strong>(string|array|null entries, string|int|null value)</code>
+<div class="details">
+<p>Set fields to be updated / inserted</p><dl>
+<dt>Returns:</dt>
+<dd>array</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line331" class="location">lib/builder.php at line 331</a>
+
+<h3 id="get()">get</h3>
+<code class="signature">public  void <strong>get</strong>(string key)</code>
+<div class="details">
+<p>Get a value that is to be set</p><dl>
+<dt>Returns:</dt>
+<dd>string Can return the UNDEFINED constant if the key is not being set</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line343" class="location">lib/builder.php at line 343</a>
+
+<h3 id="_use_field()">_use_field</h3>
+<code class="signature">public  void <strong>_use_field</strong>(string field)</code>
+<div class="details">
+<p>Mark a specific field as used</p><dl>
+<dt>Returns:</dt>
+<dd>array</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line355" class="location">lib/builder.php at line 355</a>
+
+<h3 id="_use_fields()">_use_fields</h3>
+<code class="signature">public  void <strong>_use_fields</strong>(array fields)</code>
+<div class="details">
+<p>Mark specific fields as used</p><dl>
+<dt>Returns:</dt>
+<dd>array</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/lib/builder.php.html#line373" class="location">lib/builder.php at line 373</a>
+
+<h3 id="_array_unset_value()">_array_unset_value</h3>
+<code class="signature">private  void <strong>_array_unset_value</strong>(array array, string|int value)</code>
+<div class="details">
+<p>Unset array entries by value</p><dl>
+<dt>Returns:</dt>
+<dd>array</dd>
+</dl>
+</div>
+
+<hr>
+
+<div class="header">
+<h1>CrossORM</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../crossorm/package-summary.html">Namespace</a></li>
+<li class="active">Class</li>
+<li><a href="../crossorm/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../todo-list.html">Todo</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../crossorm/builder.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href=http://peej.github.com/phpdoctor/>PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

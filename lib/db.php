@@ -3,12 +3,19 @@
 namespace CrossORM;
 
 require_once dirname(__FILE__) . '/constants.php';
-require_once dirname(__FILE__) . '/exception.php';
-require_once dirname(__FILE__) . '/interfaces.php';
+require_once dirname(__FILE__) . '/exceptions/exception.php';
+require_once dirname(__FILE__) . '/exceptions/acl.php';
+require_once dirname(__FILE__) . '/interfaces/orm.php';
+require_once dirname(__FILE__) . '/interfaces/model.php';
 require_once dirname(__FILE__) . '/builder.php';
 require_once dirname(__FILE__) . '/orm.php';
 require_once dirname(__FILE__) . '/model.php';
+require_once dirname(__FILE__) . '/resultset.php';
+require_once dirname(__FILE__) . '/acl.php';
 
+/**
+ * Main DB class, this is where it all starts
+ */
 class DB
 {
 	
@@ -18,6 +25,14 @@ class DB
 	
 	protected static $default_config;
 	
+	/**
+	 * Factory method, used to get / initiate db instances
+	 * 
+	 * @param	int|array|null			$id			If this is an array it will be used as the config and $config will be ignored
+	 * @param	array|null				$config
+	 * 
+	 * @returns	object	Returns the driver that was initiated based on the config
+	 */
 	public static function factory($id = null, $config = null)
 	{
 		
@@ -31,7 +46,7 @@ class DB
 		{
 			if ( ! static::$active_connection)
 			{
-				$id = 'default';
+				$id = DB_ID_DEFAULT;
 			}
 			else
 			{
@@ -57,15 +72,19 @@ class DB
 			}
 		}
 		
-		return static::driver_init(static::$connections[$id]);
+		return static::driver_init(static::$connections[$id], $id);
 		
 	}
 	
-	public static function configure(array $config) {
-		static::$default_config = $config;
-	}
-	
-	private static function driver_init(array $config)
+	/**
+	 * Initialize a DB driver
+	 * 
+	 * @param	array			$config			
+	 * @param	string			$id
+	 * 
+	 * @returns	object
+	 */
+	private static function driver_init(array $config, $id = DB_ID_DEFAULT)
 	{
 		
 		if ( ! isset($config['driver']))
@@ -89,7 +108,7 @@ class DB
 			throw new Exception('Specified DB driver was not found: '.$driver);
 		}
 		
-		return new $class($config);
+		return new $class($config, DB_ID_DEFAULT);
 		
 	}
 	

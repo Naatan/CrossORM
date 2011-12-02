@@ -2,6 +2,9 @@
 
 namespace CrossORM;
 
+/**
+ * ORM Class, where most of the magic happens
+ */
 abstract class ORM
 {
 	
@@ -19,6 +22,11 @@ abstract class ORM
 	protected $_last_query;
 	protected $_last_query_result;
 	
+	protected $_db_id = DB_ID_DEFAULT;
+	protected $_actor = ACTOR_DEFAULT;
+	
+	protected $_acl = false;
+	
 	/************************************************** INITIALIZATION */
 	
 	/**
@@ -29,9 +37,10 @@ abstract class ORM
 	 * 
 	 * @return $this							
 	 */
-	function __construct($config)
+	function __construct($config, $id = DB_ID_DEFAULT)
 	{
 		$this->_config = (object) $config;
+		$this->_db_id = $id;
 		
 		$identifier = sha1($this->_config->connection_string);
 		
@@ -51,6 +60,10 @@ abstract class ORM
 	
 	/**
 	 * Create a new instance
+	 * 
+	 * @param	array|object|null			$data
+	 * 
+	 * @returns	object							
 	 */
 	public function create($data=null)
 	{
@@ -58,9 +71,11 @@ abstract class ORM
 		
 		$class_name = get_class($this);
 		
-		$instance = new $this($this->_config);
+		$instance = new $this($this->_config, $this->_db_id);
+		
 		$instance->table($this->_build->table());
-		$instance->id_column($this->_build->id_column);
+		$instance->id_column($this->_build->id_column());
+		$instance->acl($this->_acl ? $this->_actor : false);
 		
 		if ( !empty($data) )
 		{
@@ -71,19 +86,42 @@ abstract class ORM
 		return $instance;
 	}
 	
-	public function hydrate($data=array()) {
-		$this->set($data);
+	/**
+	 * Hydrate this instance with data
+	 * 
+	 * @param	array			$data
+	 * 
+	 * @returns	$this							
+	 */
+	public function hydrate($data) {
+		$this->set($data, null, true);
 		
 		return $this;
 	}
 	
+	/**
+	 * Turn a result row into an instance
+	 * 
+	 * @param	object|array			$row
+	 * 
+	 * @returns	object							
+	 */
 	protected function _create_instance_from_row($row) {
 		$result = $this->create($row);
-		$this->_build->reset_set();
+		
+		$result->_last_query 		= $this->_last_query;
+		$result->_last_query_result = $this->_last_query_result;
 		
 		return $result;
 	}
 	
+	/**
+	 * Set the query state
+	 * 
+	 * @param	string			$state
+	 * 
+	 * @returns	string							
+	 */
 	public function state($state = null) {
 		if ($state == null)
 		{
@@ -95,14 +133,36 @@ abstract class ORM
 	
 	/************************************************** OVERLOADING */
 	
+	/**
+	 * Forward __get requests to @see #get
+	 * 
+	 * @param	string			$key
+	 * 
+	 * @returns	mixed							
+	 */
 	public function __get($key) {
 		return $this->get($key);
 	}
 
+	/**
+	 * Forward __set requests to @see set()
+	 * 
+	 * @param	string			$key			
+	 * @param	mixed			$value
+	 * 
+	 * @returns	mixed							
+	 */
 	public function __set($key, $value) {
 		$this->set($key, $value);
 	}
 
+	/**
+	 * Check if @see $_fields has the given entry
+	 * 
+	 * @param	string			$key
+	 * 
+	 * @returns	bool							
+	 */
 	public function __isset($key) {
 		return isset($this->_fields[$key]);
 	}
@@ -110,9 +170,29 @@ abstract class ORM
 	/************************************************** BUILDING QUERIES */
 	
 	/**
+	 * Toggle ACL and optionally set the actor to be used
+	 * 
+	 * @param	bool|string			$enable			If a string is given it will be used as the actor
+	 * 
+	 * @returns	$this							
+	 */
+	function acl($enable = true)
+	{
+		if ( !is_bool($enable))
+		{
+			$this->_actor = $enable;
+		}
+		
+		$this->_acl = (bool) $enable;
+		
+		return $this;
+	}
+	
+	/**
 	 * Alias of @see table()
 	 * 
-	 * @param	string			$table_name		
+	 * @param	string			$table_name
+	 * 
 	 * @return	$this
 	 */
 	function for_table($table_name)
@@ -123,7 +203,8 @@ abstract class ORM
 	/**
 	 * Define table name to base queries on
 	 * 
-	 * @param	string			$table_name		
+	 * @param	string			$table_name
+	 * 
 	 * @return	$this
 	 */
 	function table($table_name)
@@ -137,6 +218,7 @@ abstract class ORM
 	 * Change the id column name
 	 * 
 	 * @param	string			$id_column
+	 * 
 	 * @return	$this							
 	 */
 	function id_column($id_column)
@@ -149,7 +231,8 @@ abstract class ORM
 	/**
 	 * Alias the table we're selecting from
 	 * 
-	 * @param	string			$alias			
+	 * @param	string			$alias
+	 * 
 	 * @return	$this						
 	 */
 	function table_alias($alias)
@@ -169,7 +252,8 @@ abstract class ORM
 	 * * array(field1,field2,field3)
 	 * * array(array(field1,alias_for_field1),array(field2,alias_for_field2))
 	 * 
-	 * @param	array|string			$select			
+	 * @param	array|string			$select
+	 * 
 	 * @return	$this							
 	 */
 	function select($select)
@@ -184,10 +268,16 @@ abstract class ORM
 	 * 
 	 * @param	string					$column_name	
 	 * @param	string|int|float			$value
+	 * 
 	 * @return	$this
 	 */
 	function where($column_name, $value)
 	{
+		if ($this->_build->query_type() == INSERT)
+		{
+			$this->_build->query_type(UPDATE);
+		}
+		
 		$this->_build->clause($column_name, EQUAL, $value);
 		
 		return $this;
@@ -198,6 +288,7 @@ abstract class ORM
 	 * 
 	 * @param	string					$column_name	
 	 * @param	string|int|float			$value
+	 * 
 	 * @return	$this
 	 */
 	function where_equal($column_name, $value)
@@ -210,6 +301,7 @@ abstract class ORM
 	 * 
 	 * @param	string					$column_name	
 	 * @param	string|int|float			$value
+	 * 
 	 * @return	$this
 	 */
 	function where_not_equal($column_name, $value)
@@ -222,12 +314,13 @@ abstract class ORM
 	/**
 	 * Get entry by id
 	 * 
-	 * @param	int			$id				
+	 * @param	int			$id
+	 * 
 	 * @return	$this							
 	 */
 	function where_id_is($id)
 	{
-		$this->_build->clause($this->_build->id_column, EQUAL, $id);
+		$this->_build->clause($this->_build->id_column(), EQUAL, $id);
 		
 		return $this;
 	}
@@ -237,6 +330,7 @@ abstract class ORM
 	 * 
 	 * @param	string					$column_name	
 	 * @param	string|int|float			$value
+	 * 
 	 * @return	$this
 	 */
 	function where_like($column_name, $value)
@@ -251,6 +345,7 @@ abstract class ORM
 	 * 
 	 * @param	string					$column_name	
 	 * @param	string|int|float			$value
+	 * 
 	 * @return	$this
 	 */
 	function where_not_like($column_name, $value)
@@ -265,6 +360,7 @@ abstract class ORM
 	 * 
 	 * @param	string					$column_name	
 	 * @param	string|int|float			$value
+	 * 
 	 * @return	$this
 	 */
 	function where_gt($column_name, $value)
@@ -279,6 +375,7 @@ abstract class ORM
 	 * 
 	 * @param	string					$column_name	
 	 * @param	string|int|float			$value
+	 * 
 	 * @return	$this
 	 */
 	function where_lt($column_name, $value)
@@ -293,6 +390,7 @@ abstract class ORM
 	 * 
 	 * @param	string					$column_name	
 	 * @param	string|int|float			$value
+	 * 
 	 * @return	$this
 	 */
 	function where_gte($column_name, $value)
@@ -307,6 +405,7 @@ abstract class ORM
 	 * 
 	 * @param	string					$column_name	
 	 * @param	string|int|float			$value
+	 * 
 	 * @return	$this
 	 */
 	function where_lte($column_name, $value)
@@ -321,6 +420,7 @@ abstract class ORM
 	 * 
 	 * @param	string					$column_name	
 	 * @param	string|int|float			$value
+	 * 
 	 * @return	$this
 	 */
 	function where_in($column_name, $values)
@@ -335,6 +435,7 @@ abstract class ORM
 	 * 
 	 * @param	string					$column_name	
 	 * @param	string|int|float			$value
+	 * 
 	 * @return	$this
 	 */
 	function where_not_in($column_name, $values)
@@ -349,6 +450,7 @@ abstract class ORM
 	 * 
 	 * @param	string					$column_name	
 	 * @param	string|int|float			$value
+	 * 
 	 * @return	$this
 	 */
 	function where_null($column_name)
@@ -363,6 +465,7 @@ abstract class ORM
 	 * 
 	 * @param	string					$column_name	
 	 * @param	string|int|float			$value
+	 * 
 	 * @return	$this
 	 */
 	function where_not_null($column_name)
@@ -375,7 +478,8 @@ abstract class ORM
 	/**
 	 * Limit results
 	 * 
-	 * @param	int			$limit			
+	 * @param	int			$limit
+	 * 
 	 * @return	$this							
 	 */
 	function limit($limit)
@@ -388,7 +492,8 @@ abstract class ORM
 	/**
 	 * Offset search entries
 	 * 
-	 * @param	int			$offset			
+	 * @param	int			$offset
+	 * 
 	 * @return	$this							
 	 */
 	function offset($offset)
@@ -401,7 +506,8 @@ abstract class ORM
 	/**
 	 * Order field descending
 	 * 
-	 * @param	string			$column_name	
+	 * @param	string			$column_name
+	 * 
 	 * @return	$this							
 	 */
 	function order_by_desc($column_name)
@@ -412,7 +518,8 @@ abstract class ORM
 	/**
 	 * Order field ascending
 	 * 
-	 * @param	string			$column_name	
+	 * @param	string			$column_name
+	 * 
 	 * @return	$this							
 	 */
 	function order_by_asc($column_name)
@@ -423,7 +530,8 @@ abstract class ORM
 	/**
 	 * Group results
 	 * 
-	 * @param	string			$column_name	
+	 * @param	string			$column_name
+	 * 
 	 * @return	$this							
 	 */
 	function group_by($column_name)
@@ -435,10 +543,11 @@ abstract class ORM
 	 * Set a field value
 	 * 
 	 * @param	string|array			$key			
-	 * @param	string|int|float|null	$value			
+	 * @param	string|int|float|null	$value
+	 * 
 	 * @return	$this					
 	 */
-	function set($key, $value = null)
+	function set($key, $value = null, $hydrate = false)
 	{
 		if (!is_array($key))
 		{
@@ -450,68 +559,205 @@ abstract class ORM
 			$this->_fields[$k] = $v;
 		}
 		
-		$this->_build->set($key, $value);
+		if ( ! $hydrate)
+		{
+			$this->_build->set($key, $value);
+		}
 		
 		return $this;
 	}
 	
 	/************************************************** EXECUTION */
 	
-	public function save()
+	/**
+	 * Save the current modifications to the database
+	 * 
+	 * @returns	$this
+	 */
+	public function save($query_type = null)
 	{
-		if ($this->_build->query_type() != INSERT)
+		
+		// Optionally override the query_type
+		if ($query_type != null)
 		{
-			$this->_build->query_type(UPDATE);
+			$this->_build->query_type($query_type);
 		}
 		
-		return $this->build()->run();
+		$type = $this->_build->query_type();
+		
+		// Auto detect query type if its not set to UPDATE or INSERT
+		if ( !in_array($type,array(UPDATE,INSERT)))
+		{
+			if ($this->state() == STATE_HYDRATED)
+			{
+				$this->_build->query_type(UPDATE);
+			}
+				else
+			{
+				$this->_build->query_type(INSERT);
+			}
+		}
+		
+		// If querying upon a hydrated instance, limit the query to this db entry
+		if ($type == UPDATE AND $this->state()==STATE_HYDRATED)
+		{
+			$this->where_id_is($this->id());
+			$this->limit(1);
+		}
+		
+		$this->build()->run();
+		
+		// If this was an INSERT query, set the state to FRESH and define the inserted ID
+		// as a clause so that a followup SELECT query is executed properly
+		if ($type == INSERT)
+		{
+			$this->state(STATE_FRESH);
+			$this->where_id_is($this->insert_id());
+			$this->limit(1);
+		}
+		
+		return $this;
 	}
 	
+	/**
+	 * Perform a delete query based on the current critera's set in the builder
+	 * 
+	 * @returns	$this							
+	 */
 	public function delete()
 	{
+		if ($this->state() == STATE_HYDRATED)
+		{
+			$this->where_id_is($this->id());
+			$this->limit(1);
+		}
+		
 		$this->_build->query_type(DELETE);
 		
-		return $this->build()->run();
+		$this->build()->run();
+		
+		return $this;
+	}
+	
+	/**
+	 * Validate if we have permission to run the query, throws @see Exceptions\ACL if not.
+	 * 
+	 * @returns	void							
+	 */
+	public function validate_acl()
+	{
+		if ( !$this->_acl)
+		{
+			return;
+		}
+		
+		ACL::validate_query($this->_build,array($this->_actor,$this->_db_id));
+	}
+	
+	public function get_query()
+	{
+		return $this->_last_query;
 	}
 	
 	/************************************************** RESULTS */
 	
+	/**
+	 * Get entry from @see $_fields
+	 * 
+	 * @param	string			$key
+	 * 
+	 * @returns	mixed
+	 */
 	public function get($key) {
 		return isset($this->_fields[$key]) ? $this->_fields[$key] : null;
 	}
 	
-	
-	function as_array()
+	/**
+	 * Return results as array 
+	 * 
+	 * @returns	object|array
+	 */
+	function as_array($contextual = true)
 	{
 		if ( $this->state() == STATE_FRESH)
 		{
-			return $this->_get_rows();
-		} else
+			$this->state(STATE_FRESH);
+			$this->_build->query_type(SELECT);
+			
+			if ($this->_build->limit()==1)
+			{
+				return (array) $this->_get_row();
+			}
+				else
+			{
+				return $this->_get_rows();
+			}
+		}
+			else
 		{
-			return $this->_fields;
+			if ($contextual)
+			{
+				return $this->_fields;
+			}
+				else
+			{
+				return array($this->_fields);
+			}
+			
 		}
 	}
+	
+	/**
+	 * Return results as JSON
+	 * 
+	 * @returns	string							
+	 */
+	function as_json($contextual = true) {
+		$result = $this->as_array();
+		return json_encode($result, JSON_BIGINT_AS_STRING | JSON_NUMERIC_CHECK);
+	}
 
+	/**
+	 * Find and return one entry
+	 * 
+	 * @returns	object
+	 */
 	function find_one()
 	{
+		$this->_build->query_type(SELECT);
+		
 		$this->_build->limit(1);
 		
 		return $this->_get_row(true);
 	}
 
+	/**
+	 * Find and return multiple entries
+	 * 
+	 * @returns	Resultset
+	 */
 	function find_many()
 	{
-		return $this->_get_rows(true);
+		$this->_build->query_type(SELECT);
+		
+		return new Resultset($this->_get_rows(true));
 	}
 	
+	/**
+	 * Get the ID of this instance
+	 * 
+	 * @returns	int|string
+	 */
 	function id()
 	{
+		$this->_build->query_type(SELECT);
+		
 		if ( $this->state() == STATE_FRESH)
 		{
 			return $this->find_one()->{$this->_build->id_column()};
 		} else
 		{
-			return $this->_fields->{$this->_build->id_column()};
+			return $this->_fields[$this->_build->id_column()];
 		}
 	}
 	

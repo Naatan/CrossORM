@@ -2,13 +2,18 @@
 
 namespace CrossORM;
 
+/**
+ * Builder class
+ *
+ * Prepares the query structure so that the driver can then build it however it wants
+ */
 class Builder {
 	
-	private $query_type		= SELECT;
+	private $query_type		= INSERT;
 	
 	private $affected_fields = array();
 	
-	public $id_column 		= ID_COLUMN;
+	private $id_column 		= ID_COLUMN;
 	
 	private $table 			= '';
 	private $table_alias	= '';
@@ -22,9 +27,24 @@ class Builder {
 	private $offset 		= NULL;
 	private $limit			= NULL;
 	
+	/**
+	 * Contructor
+	 * 
+	 * @returns	void							
+	 */
+	public function __construct()
+	{
+		$this->select('*');
+	}
+	
+	/**
+	 * Get the current query elements, mostly for debugging purposes
+	 * 
+	 * @returns	object							
+	 */
 	public function get_query_dump()
 	{
-		return array(
+		return (object) array(
 			'query_type'		=> $this->query_type,
 			'affected_fields'	=> $this->affected_fields,
 			'id_column'			=> $this->id_column,
@@ -41,6 +61,23 @@ class Builder {
 		);
 	}
 	
+	/**
+	 * Get fields being affected in this query, useful for ACL validation
+	 * 
+	 * @returns	array							
+	 */
+	public function get_affected_fields()
+	{
+		return $this->affected_fields;
+	}
+	
+	/**
+	 * Set / get the type of query being executed
+	 * 
+	 * @param	string|null			$type
+	 * 
+	 * @returns	string
+	 */
 	public function query_type($type = null)
 	{
 		if ($type == null)
@@ -51,6 +88,13 @@ class Builder {
 		return $this->query_type = $type;
 	}
 	
+	/**
+	 * Set / get the id column
+	 * 
+	 * @param	string|null			$field
+	 * 
+	 * @returns	string							
+	 */
 	public function id_column($field = null)
 	{
 		if ($field == null)
@@ -61,6 +105,13 @@ class Builder {
 		return $this->id_column = $field;
 	}
 	
+	/**
+	 * Set / get the select fields
+	 * 
+	 * @param	string|array|null			$select
+	 * 
+	 * @returns	array							
+	 */
 	public function select($select = null)
 	{
 		if ($select == null)
@@ -87,21 +138,15 @@ class Builder {
 		return $this->select = array_merge($this->select,$select);
 	}
 	
-	public function _use_field($field)
-	{
-		return $this->_use_fields(array($field));
-	}
-	
-	public function _use_fields($fields)
-	{
-		return $this->affected_fields = array_unique(
-			array_merge(
-				$this->affected_fields,
-				$fields
-			)
-		);
-	}
-	
+	/**
+	 * Set / get the conditional clause
+	 * 
+	 * @param	string|null			$column_name	
+	 * @param	string				$separator		
+	 * @param	string|int			$value
+	 * 
+	 * @returns	array							
+	 */
 	public function clause($column_name = null, $separator, $value)
 	{
 		if ($column_name == null)
@@ -109,9 +154,23 @@ class Builder {
 			return $this->clause;
 		}
 		
-		return $this->clauses(array(array($column_name, $separator, $value)));
+		if ($column_name == $this->id_column() AND $this->limit() == NULL)
+		{
+			$this->limit(1);
+		}
+		
+		$this->_use_field($column_name);
+		
+		return $this->clause[] = array($column_name, $separator, $value);
 	}
 	
+	/**
+	 * Set / get conditional clauses
+	 * 
+	 * @param	array|null			$clauses
+	 * 
+	 * @returns	array							
+	 */
 	public function clauses($clauses = null)
 	{
 		if ($clauses == null)
@@ -119,16 +178,21 @@ class Builder {
 			return $this->clause;
 		}
 		
-		$this->clause = array_merge($this->clause, $clauses);
-		
 		foreach ($clauses AS $clause)
 		{
-			$this->_use_field($clause[0]);
+			$this->clause($clause);
 		}
 		
 		return $this->clause;
 	}
 	
+	/**
+	 * Set / get the table to be used
+	 * 
+	 * @param	string|null			$table_name
+	 * 
+	 * @returns	string						
+	 */
 	public function table($table_name = null)
 	{
 		if ($table_name == null)
@@ -139,6 +203,13 @@ class Builder {
 		return $this->table = $table_name;
 	}
 	
+	/**
+	 * Set / get the table alias
+	 * 
+	 * @param	string|null			$table_name
+	 * 
+	 * @returns	string							
+	 */
 	public function table_alias($table_name = null)
 	{
 		if ($table_name == null)
@@ -149,6 +220,13 @@ class Builder {
 		return $this->table_alias = $table_name;
 	}
 	
+	/**
+	 * Set / get the limit
+	 * 
+	 * @param	int|null			$limit
+	 * 
+	 * @returns	int
+	 */
 	public function limit($limit = null)
 	{
 		if ($limit == null)
@@ -156,9 +234,15 @@ class Builder {
 			return $this->limit;
 		}
 		
-		return $this->limit = $limit;
+		return $this->limit = (int) $limit;
 	}
 	
+	/**
+	 * Set / get the offset
+	 * 
+	 * @param	int|null			$offset			
+	 * @returns	int							
+	 */
 	public function offset($offset = null)
 	{
 		if ($offset == null)
@@ -166,9 +250,17 @@ class Builder {
 			return $this->offset;
 		}
 		
-		return $this->offset = $offset;
+		return $this->offset = (int) $offset;
 	}
 	
+	/**
+	 * Set / get an order by clause
+	 * 
+	 * @param	string|null			$column_name	
+	 * @param	string|null			$dir
+	 * 
+	 * @returns	array							
+	 */
 	public function order_by($column_name = null, $dir = null)
 	{
 		if ($column_name == null)
@@ -181,6 +273,13 @@ class Builder {
 		return $this->orderby[] = array($column_name, $dir);
 	}
 	
+	/**
+	 * Set / get a group by clause
+	 * 
+	 * @param	string|null			$column_name
+	 * 
+	 * @returns	array
+	 */
 	public function group_by($column_name = null)
 	{
 		if ($column_name == null)
@@ -193,16 +292,14 @@ class Builder {
 		return $this->groupby[] = $column_name;
 	}
 	
-	public function reset_set()
-	{
-		foreach ($this->set AS $k => $v)
-		{
-			$this->affected_fields = $this->_array_unset_value($this->affected_fields,$k);
-		}
-		
-		return $this->set = array();
-	}
-	
+	/**
+	 * Set fields to be updated / inserted
+	 * 
+	 * @param	string|array|null			$entries		
+	 * @param	string|int|null				$value
+	 * 
+	 * @returns	array							
+	 */
 	public function set($entries = null, $value = null)
 	{
 		if ($entries == null)
@@ -224,12 +321,56 @@ class Builder {
 		return $this->set;
 	}
 	
+	/**
+	 * Get a value that is to be set
+	 * 
+	 * @param	string			$key
+	 * 
+	 * @returns	string		Can return the UNDEFINED constant if the key is not being set
+	 */
 	public function get($key)
 	{
 		return isset($this->set[$key]) ? $this->set[$key] : UNDEFINED;
 	}
 	
-	private function _array_unset_value($array,$value)
+	/**
+	 * Mark a specific field as used
+	 * 
+	 * @param	string			$field
+	 * 
+	 * @returns	array							
+	 */
+	public function _use_field($field)
+	{
+		return $this->_use_fields(array($field));
+	}
+	
+	/**
+	 * Mark specific fields as used
+	 * 
+	 * @param	array			$fields
+	 * 
+	 * @returns	array							
+	 */
+	public function _use_fields($fields)
+	{
+		return $this->affected_fields = array_unique(
+			array_merge(
+				$this->affected_fields,
+				$fields
+			)
+		);
+	}
+	
+	/**
+	 * Unset array entries by value
+	 * 
+	 * @param	array				$array	
+	 * @param	string|int			$value
+	 * 
+	 * @returns	array							
+	 */
+	private function _array_unset_value(array $array,$value)
 	{
 		if ( !in_array($value,$array))
 		{

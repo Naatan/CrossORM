@@ -1,0 +1,254 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Fri, 02 Dec 2011 14:01:12 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+<script type="text/javascript">
+			$(document).ready(function() {
+				$('iframe').load(function() {
+				  this.style.height =
+				  this.contentWindow.document.body.offsetHeight + 'px';
+				});
+			});
+		</script>
+<title>Model (CrossORM Documentation)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>CrossORM</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li><a href="../../crossorm/interfaces/package-summary.html">Namespace</a></li>
+<li class="active">Class</li>
+<li><a href="../../crossorm/interfaces/package-tree.html">Tree</a></li>
+<li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../todo-list.html">Todo</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../crossorm/interfaces/model.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">CrossORM\Interfaces\Model</div>
+<a href="../../source/lib/interfaces/model.php.html#line5" class="location">lib/interfaces/model.php at line 5</a>
+
+<h1>Interface Model</h1>
+
+<pre class="tree"><strong>Model</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  interface <strong>Model</strong></p>
+
+<hr>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#has_one()">has_one</a>(mixed associated_class_name, mixed foreign_key_name)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#has_many()">has_many</a>(mixed associated_class_name, mixed foreign_key_name)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#belongs_to()">belongs_to</a>(mixed associated_class_name, mixed foreign_key_name)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#has_many_through()">has_many_through</a>(mixed associated_class_name, mixed join_class_name, mixed key_to_base_table, mixed key_to_associated_table)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_orm()">set_orm</a>(mixed orm)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get()">get</a>(mixed property)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set()">set</a>(mixed property, mixed value)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#is_dirty()">is_dirty</a>(mixed property)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#as_array()">as_array</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#save()">save</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#delete()">delete</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#id()">id</a>()</p></td>
+</tr>
+</table>
+
+<h2 id="detail_method">Method Detail</h2>
+<a href="../../source/lib/interfaces/model.php.html#line7" class="location">lib/interfaces/model.php at line 7</a>
+
+<h3 id="has_one()">has_one</h3>
+<code class="signature">public  void <strong>has_one</strong>(mixed associated_class_name, mixed foreign_key_name)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../../source/lib/interfaces/model.php.html#line8" class="location">lib/interfaces/model.php at line 8</a>
+
+<h3 id="has_many()">has_many</h3>
+<code class="signature">public  void <strong>has_many</strong>(mixed associated_class_name, mixed foreign_key_name)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../../source/lib/interfaces/model.php.html#line9" class="location">lib/interfaces/model.php at line 9</a>
+
+<h3 id="belongs_to()">belongs_to</h3>
+<code class="signature">public  void <strong>belongs_to</strong>(mixed associated_class_name, mixed foreign_key_name)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../../source/lib/interfaces/model.php.html#line10" class="location">lib/interfaces/model.php at line 10</a>
+
+<h3 id="has_many_through()">has_many_through</h3>
+<code class="signature">public  void <strong>has_many_through</strong>(mixed associated_class_name, mixed join_class_name, mixed key_to_base_table, mixed key_to_associated_table)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../../source/lib/interfaces/model.php.html#line11" class="location">lib/interfaces/model.php at line 11</a>
+
+<h3 id="set_orm()">set_orm</h3>
+<code class="signature">public  void <strong>set_orm</strong>(mixed orm)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../../source/lib/interfaces/model.php.html#line12" class="location">lib/interfaces/model.php at line 12</a>
+
+<h3 id="get()">get</h3>
+<code class="signature">public  void <strong>get</strong>(mixed property)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../../source/lib/interfaces/model.php.html#line13" class="location">lib/interfaces/model.php at line 13</a>
+
+<h3 id="set()">set</h3>
+<code class="signature">public  void <strong>set</strong>(mixed property, mixed value)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../../source/lib/interfaces/model.php.html#line14" class="location">lib/interfaces/model.php at line 14</a>
+
+<h3 id="is_dirty()">is_dirty</h3>
+<code class="signature">public  void <strong>is_dirty</strong>(mixed property)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../../source/lib/interfaces/model.php.html#line15" class="location">lib/interfaces/model.php at line 15</a>
+
+<h3 id="as_array()">as_array</h3>
+<code class="signature">public  void <strong>as_array</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../../source/lib/interfaces/model.php.html#line16" class="location">lib/interfaces/model.php at line 16</a>
+
+<h3 id="save()">save</h3>
+<code class="signature">public  void <strong>save</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../../source/lib/interfaces/model.php.html#line17" class="location">lib/interfaces/model.php at line 17</a>
+
+<h3 id="delete()">delete</h3>
+<code class="signature">public  void <strong>delete</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../../source/lib/interfaces/model.php.html#line18" class="location">lib/interfaces/model.php at line 18</a>
+
+<h3 id="id()">id</h3>
+<code class="signature">public  void <strong>id</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<div class="header">
+<h1>CrossORM</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li><a href="../../crossorm/interfaces/package-summary.html">Namespace</a></li>
+<li class="active">Class</li>
+<li><a href="../../crossorm/interfaces/package-tree.html">Tree</a></li>
+<li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../todo-list.html">Todo</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../crossorm/interfaces/model.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href=http://peej.github.com/phpdoctor/>PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

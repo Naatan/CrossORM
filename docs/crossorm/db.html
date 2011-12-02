@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Fri, 02 Dec 2011 14:01:12 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+<script type="text/javascript">
+			$(document).ready(function() {
+				$('iframe').load(function() {
+				  this.style.height =
+				  this.contentWindow.document.body.offsetHeight + 'px';
+				});
+			});
+		</script>
+<title>DB (CrossORM Documentation)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>CrossORM</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../crossorm/package-summary.html">Namespace</a></li>
+<li class="active">Class</li>
+<li><a href="../crossorm/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../todo-list.html">Todo</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../crossorm/db.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">CrossORM\DB</div>
+<a href="../source/lib/db.php.html#line19" class="location">lib/db.php at line 19</a>
+
+<h1>Class DB</h1>
+
+<pre class="tree"><strong>DB</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>DB</strong></p>
+
+<div class="comment" id="overview_description"><p>Main DB class, this is where it all starts</p></div>
+
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">protected static  mixed</td>
+<td class="description"><p class="name"><a href="#active_connection">$active_connection</a></p></td>
+</tr>
+<tr>
+<td class="type">protected static  mixed</td>
+<td class="description"><p class="name"><a href="#connections">$connections</a></p></td>
+</tr>
+<tr>
+<td class="type">protected static  mixed</td>
+<td class="description"><p class="name"><a href="#default_config">$default_config</a></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#factory()">factory</a>(int|array|null id, array|null config)</p><p class="description">Factory method, used to get / initiate db instances</p></td>
+</tr>
+<tr>
+<td class="type">private static  void</td>
+<td class="description"><p class="name"><a href="#driver_init()">driver_init</a>(array config, string id)</p><p class="description">Initialize a DB driver</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/lib/db.php.html#line24" class="location">lib/db.php at line 24</a>
+
+<h3 id="active_connection">active_connection</h3>
+<code class="signature">protected static  mixed <strong>$active_connection</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/lib/db.php.html#line22" class="location">lib/db.php at line 22</a>
+
+<h3 id="connections">connections</h3>
+<code class="signature">protected static  mixed <strong>$connections</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/lib/db.php.html#line26" class="location">lib/db.php at line 26</a>
+
+<h3 id="default_config">default_config</h3>
+<code class="signature">protected static  mixed <strong>$default_config</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2>
+<a href="../source/lib/db.php.html#line36" class="location">lib/db.php at line 36</a>
+
+<h3 id="factory()">factory</h3>
+<code class="signature">public static  void <strong>factory</strong>(int|array|null id, array|null config)</code>
+<div class="details">
+<p>Factory method, used to get / initiate db instances</p><dl>
+<dt>Parameters:</dt>
+<dd>id - If this is an array it will be used as the config and $config will be ignored</dd>
+<dd></dd>
+<dt>Returns:</dt>
+<dd>object Returns the driver that was initiated based on the config</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/lib/db.php.html#line87" class="location">lib/db.php at line 87</a>
+
+<h3 id="driver_init()">driver_init</h3>
+<code class="signature">private static  void <strong>driver_init</strong>(array config, string id)</code>
+<div class="details">
+<p>Initialize a DB driver</p><dl>
+<dt>Returns:</dt>
+<dd>object</dd>
+</dl>
+</div>
+
+<hr>
+
+<div class="header">
+<h1>CrossORM</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../crossorm/package-summary.html">Namespace</a></li>
+<li class="active">Class</li>
+<li><a href="../crossorm/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../todo-list.html">Todo</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../crossorm/db.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href=http://peej.github.com/phpdoctor/>PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

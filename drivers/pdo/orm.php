@@ -2,14 +2,15 @@
 
 namespace CrossORM\Drivers\PDO;
 
+use CrossORM\ACL;
 use CrossORM\DB;
-use CrossORM\Exception;
+use CrossORM\Exceptions\Exception;
 use PDO;
 use PDOException;
 
 /**
  *
- * CrossORM ORM libarary for PDO driver
+ * CrossORM ORM library for PDO driver
  * This library is based on the excellent "Idiorm" library by Jamie Matthews
  *
  * Idiorm
@@ -53,83 +54,117 @@ require_once dirname(__FILE__) . '/model.php';
 class ORM extends \CrossORM\ORM implements \CrossORM\Interfaces\ORM
 {
 	
-	private $_values = array();
 	private $_identifier_quote_character;
-
+	
+	/**
+	 * Innitiate DB connection
+	 * 
+	 * @returns	object							
+	 */
 	function connect()
 	{
-		if (!is_object($this->_conn))
-		{
-			
-			try {
-				$conn = new PDO(
-					$this->_config->connection_string,
-					$this->_config->username,
-					$this->_config->password,
-					isset($this->_config->driver_options) ? $this->_config->driver_options : null
-				);
-			} catch (PDOException $e)
-			{
-				throw new Exception($e);
-			}
-			
-			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$this->_set_identifier_quote_character($conn);
-			
+		try {
+			$conn = new PDO(
+				$this->_config->connection_string,
+				$this->_config->username,
+				$this->_config->password,
+				isset($this->_config->driver_options) ? $this->_config->driver_options : null
+			);
 		}
+			catch (PDOException $e)
+		{
+			throw new Exception($e);
+		}
+		
+		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$this->_set_identifier_quote_character($conn);
 		
 		return $conn;
 	}
 	
-	public function run() {
+	/**
+	 * Run the query
+	 * 
+	 * @returns	object
+	 */
+	public function run()
+	{
 		
 		if (!is_object($this->_last_query_result))
 		{
 			$this->build();
 		}
 		
-		try {
+		$this->validate_acl();
+		
+		try
+		{
 			
 			$this->state(STATE_EXECUTED);
 			
-			$this->_last_query_result = $this->_conn->prepare($this->_last_query);
-			return $this->_last_query_result->execute($this->_values);
+			$this->_last_query_result = $this->_conn->prepare($this->_last_query[0]);
+			return $this->_last_query_result->execute($this->_last_query[1]);
 		
-		} catch (PDOException $e)
+		}
+			catch (PDOException $e)
 		{
 			throw new Exception($e);
 		}
 
 	}
 
+	/**
+	 * Build the current query in SQL format
+	 * 
+	 * @returns	$this							
+	 */
 	function build()
 	{
-		$this->_values = array();
+		$this->_last_query = array('',array());
 		
-		switch ($this->_build->query_type()) {
+		switch ($this->_build->query_type())
+		{
 			case SELECT:
 				$this->_build_select();
+				break;
+			case UPDATE:
+				$this->_build_update();
+				break;
+			case INSERT:
+				$this->_build_insert();
+				break;
+			case DELETE:
+				$this->_build_delete();
 				break;
 		}
 		
 		return $this;
 	}
 	
-	protected function _build_select() {
-		$this->_last_query = $this->_join_if_not_empty(" ", array(
+	/**
+	 * Build the current query as a select query
+	 * 
+	 * @returns	void
+	 */
+	protected function _build_select()
+	{
+		$this->_last_query[0] = $this->_join_if_not_empty(" ", array(
 			$this->_build_select_start(),
 			$this->_build_where(),
 			$this->_build_group_by(),
 			$this->_build_order_by(),
 			$this->_build_limit(),
-			$this->_build_offset(),
+			$this->_build_offset()
 		));
 	}
 	
 	/**
 	 * Build the start of the SELECT statement
+	 *
+	 * @returns string
 	 */
-	protected function _build_select_start() {
+	protected function _build_select_start()
+	{
 		$result_columns = array();
 		
 		foreach ($this->_build->select() AS $select)
@@ -162,7 +197,95 @@ class ORM extends \CrossORM\ORM implements \CrossORM\Interfaces\ORM
 	}
 	
 	/**
+	 * Build the current query as an update query
+	 * 
+	 * @returns	void
+	 */
+	protected function _build_update()
+	{
+		$this->_last_query[0] = $this->_join_if_not_empty(" ", array(
+			$this->_build_update_start(),
+			$this->_build_where(),
+			$this->_build_limit()
+		));
+	}
+	
+	/**
+	 * Build the start of the UPDATE statement
+	 *
+	 * @returns string
+	 */
+	protected function _build_update_start()
+	{
+		$query = array();
+		$query[] = "UPDATE " . $this->_quote_identifier($this->_build->table()) . " SET";
+
+		$field_list = array();
+		foreach ($this->_build->set() as $key => $value)
+		{
+			$field_list[] = $this->_quote_identifier($key) . " = ?";
+			$this->_last_query[1][] = $value;
+		}
+		
+		$query[] = join(", ", $field_list);
+		return join(" ", $query) . " ";
+	}
+	
+	/**
+	 * Build the current query as an insert query
+	 * 
+	 * @returns	void
+	 */
+	protected function _build_insert()
+	{
+		$query = array();
+		
+		$query[] = "INSERT INTO";
+		$query[] = $this->_quote_identifier($this->_build->table());
+		$field_list = array_map(array($this, '_quote_identifier'), array_keys($this->_build->set()));
+		$query[] = "(" . join(", ", $field_list) . ")";
+		$query[] = "VALUES";
+
+		$placeholders = join(", ", array_fill(0, count($this->_build->set()), "?"));
+		$query[] = "({$placeholders})";
+		
+		$this->_last_query[1] = array_merge($this->_last_query[1],array_values($this->_build->set()));
+		
+		$this->_last_query[0] = join(" ", $query);
+	}
+	
+	/**
+	 * Build the current query as a delete query
+	 * 
+	 * @returns	void
+	 */
+	protected function _build_delete()
+	{
+		$this->_last_query[0] = $this->_join_if_not_empty(" ", array(
+			$this->_build_delete_start(),
+			$this->_build_where(),
+			$this->_build_limit(),
+			$this->_build_offset()
+		));
+	}
+	
+	/**
+	 * Build the start of the DELETE statement
+	 *
+	 * @returns string
+	 */
+	protected function _build_delete_start()
+	{
+		return join(" ", array(
+			"DELETE FROM",
+			$this->_quote_identifier($this->_build->table())
+		));
+	}
+	
+	/**
 	 * Build the WHERE clause(s)
+	 *
+	 * @returns string
 	 */
 	protected function _build_where()
 	{
@@ -176,7 +299,7 @@ class ORM extends \CrossORM\ORM implements \CrossORM\Interfaces\ORM
 		foreach ($this->_build->clauses() as $clause)
 		{
 			$where_conditions[] = $clause[0] . ' ' . $clause[1] . ' ?';
-			$this->_values[] = $clause[2];
+			$this->_last_query[1][] = $clause[2];
 		}
 
 		return "WHERE " . join(" AND ", $where_conditions);
@@ -184,6 +307,8 @@ class ORM extends \CrossORM\ORM implements \CrossORM\Interfaces\ORM
 	
 	/**
 	 * Build GROUP BY
+	 *
+	 * @returns string
 	 */
 	protected function _build_group_by()
 	{
@@ -196,6 +321,8 @@ class ORM extends \CrossORM\ORM implements \CrossORM\Interfaces\ORM
 
 	/**
 	 * Build ORDER BY
+	 *
+	 * @returns string
 	 */
 	protected function _build_order_by()
 	{
@@ -208,32 +335,44 @@ class ORM extends \CrossORM\ORM implements \CrossORM\Interfaces\ORM
 	
 	/**
 	 * Build LIMIT
+	 *
+	 * @returns string
 	 */
 	protected function _build_limit()
 	{
 		if (!is_null($this->_build->limit()))
 		{
-			return "LIMIT " . $this->_build->limit();
+			return "LIMIT " . (int) $this->_build->limit();
 		}
 		return '';
 	}
 
 	/**
 	 * Build OFFSET
+	 *
+	 * @returns string
 	 */
 	protected function _build_offset()
 	{
 		if (!is_null($this->_build->offset()))
 		{
-			return "OFFSET " . $this->_build->offset();
+			return "OFFSET " . (int) $this->_build->offset();
 		}
 		return '';
 	}
 	
 	/************************************************** RESULTS */
 	
-	public function _get_row($instantiate = false) {
-		if ( $this->state() == STATE_FRESH)
+	/**
+	 * Get single row
+	 * 
+	 * @param	bool			$instantiate	Instantiate result as ORM instance
+	 * 
+	 * @returns	array|object							
+	 */
+	public function _get_row($instantiate = false)
+	{
+		if ($this->state() == STATE_FRESH)
 		{
 			$this->build()->run();
 		}
@@ -248,41 +387,64 @@ class ORM extends \CrossORM\ORM implements \CrossORM\Interfaces\ORM
 		return $row;
 	}
 	
-	public function _get_rows($instantiate = false) {
+	/**
+	 * Get all rows returned by query
+	 * 
+	 * @param	bool			$instantiate	Instantiate rows as ORM instances
+	 * 
+	 * @returns	array							
+	 */
+	public function _get_rows($instantiate = false)
+	{
 		$rows = array();
-		while ($row = $this->_get_row($instantiate)) {
+		while ($row = $this->_get_row($instantiate))
+		{
 			$rows[] = $row;
 		}
 		
 		return $rows;
 	}
+	
+	function insert_id()
+	{
+		return $this->_conn->lastInsertId();
+	}
 
+	/**
+	 * Count the number of results
+	 * 
+	 * @returns	int							
+	 */
 	function count()
 	{}
 
-	function is_dirty($key)
-	{}
-
-	
-	function force_all_dirty()
-	{}
-
-	function raw_query($query, $parameters)
-	{}
-
-	function where_raw($clause, $parameters)
-	{}
-	
 	/************************************************** HELPERS */
 	
-	protected function _quote_identifier($identifier) {
+	/**
+	 * Quote an identifier in the query
+	 * 
+	 * @param	string			$identifier
+	 * 
+	 * @returns	string							
+	 */
+	protected function _quote_identifier($identifier)
+	{
 		return $this->_identifier_quote_character . $identifier . $this->_identifier_quote_character;
 	}
 	
-	protected function _set_identifier_quote_character($conn) {
+	/**
+	 * Set the identifier quote character for the current connection, based on DB engine
+	 * 
+	 * @param	object			$conn		Must provide connection, as this function is called during the initialisation
+	 * 
+	 * @returns	void							
+	 */
+	protected function _set_identifier_quote_character($conn)
+	{
 		if ( !isset($this->_config->identifier_quote_character) )
 		{
-			switch($conn->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+			switch($conn->getAttribute(PDO::ATTR_DRIVER_NAME))
+			{
 				case 'pgsql':
 				case 'sqlsrv':
 				case 'dblib':
@@ -295,7 +457,8 @@ class ORM extends \CrossORM\ORM implements \CrossORM\Interfaces\ORM
 				default:
 					$this->_identifier_quote_character = '`';
 			}
-		} else
+		}
+			else
 		{
 			$this->_identifier_quote_character = $this->_config->identifier_quote_character;
 		}
@@ -305,18 +468,28 @@ class ORM extends \CrossORM\ORM implements \CrossORM\Interfaces\ORM
 	/**
 	 * Wrapper around PHP's join function which
 	 * only adds the pieces if they are not empty.
+	 *
+	 * @returns string
 	 */
-	protected function _join_if_not_empty($glue, $pieces) {
+	protected function _join_if_not_empty($glue, $pieces)
+	{
+		
 		$filtered_pieces = array();
-		foreach ($pieces as $piece) {
-			if (is_string($piece)) {
+		foreach ($pieces as $piece)
+		{
+			if (is_string($piece))
+			{
 				$piece = trim($piece);
 			}
-			if (!empty($piece)) {
+			
+			if (!empty($piece))
+			{
 				$filtered_pieces[] = $piece;
 			}
 		}
+		
 		return join($glue, $filtered_pieces);
+		
 	}
 
 	
