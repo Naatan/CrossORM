@@ -27,8 +27,9 @@ All parts of the project (whether Completed, In Progress or Todo) are subject to
 * Unit tests for all libraries
 * Reorganize libraries in sub-directories of the lib folder
 
-## Todo
+## Todo (order does not indicate priority)
 
+* Fork & modify PHPUnit and VisualPHPUnit repo's and use them as submodules
 * Support SQL Joins
 * Support raw queries, clauses & fields
 * Intelligently handle update/delete queries on resultsets
@@ -38,6 +39,7 @@ All parts of the project (whether Completed, In Progress or Todo) are subject to
 * Create validation library
 * Support ACL in models
 * Auto load dependencies (or hook into frameworks to do so)
+* Create proper documentation
 
 # Sample usage
 
