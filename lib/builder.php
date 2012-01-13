@@ -9,28 +9,28 @@ namespace CrossORM;
  */
 class Builder {
 	
-	private $query_type		= INSERT;
+	private $query_type			= INSERT;
 	
-	private $affected_fields = array();
+	private $affected_fields 	= array();
 	
-	private $id_column 		= ID_COLUMN;
+	private $id_column 			= ID_COLUMN;
 	
-	private $table 			= '';
-	private $table_alias	= '';
-	private $joins 			= array();
-	private $select 		= array();
-	private $set 			= array();
-	private $id				= '';
-	private $clause 		= array();
-	private $orderby 		= array();
-	private $groupby 		= array();
-	private $offset 		= NULL;
-	private $limit			= NULL;
+	private $table 				= '';
+	private $table_alias 		= '';
+	private $joins 				= array();
+	private $select 			= array();
+	private $set 				= array();
+	private $id					= '';
+	private $clause 			= array();
+	private $orderby 			= array();
+	private $groupby 			= array();
+	private $offset 			= NULL;
+	private $limit				= NULL;
 	
 	/**
 	 * Contructor
 	 * 
-	 * @returns	void							
+	 * @return	void							
 	 */
 	public function __construct()
 	{
@@ -40,18 +40,18 @@ class Builder {
 	/**
 	 * Get the current query elements, mostly for debugging purposes
 	 * 
-	 * @returns	object							
+	 * @return	object							
 	 */
 	public function get_query_dump()
 	{
 		return (object) array(
-			'query_type'		=> $this->query_type,
-			'affected_fields'	=> $this->affected_fields,
+			'query_type' 		=> $this->query_type,
+			'affected_fields' 	=> $this->affected_fields,
 			'id_column'			=> $this->id_column,
 			'tables'			=> $this->tables,
 			'select'			=> $this->select,
 			'set'				=> $this->set,
-			'id'				=> $this->id,
+			'id' 				=> $this->id,
 			'clause'			=> $this->clause,
 			'orderby'			=> $this->orderby,
 			'orderdir'			=> $this->orderdir,
@@ -64,7 +64,7 @@ class Builder {
 	/**
 	 * Get fields being affected in this query, useful for ACL validation
 	 * 
-	 * @returns	array							
+	 * @return	array							
 	 */
 	public function get_affected_fields()
 	{
@@ -76,7 +76,7 @@ class Builder {
 	 * 
 	 * @param	string|null			$type
 	 * 
-	 * @returns	string
+	 * @return	string
 	 */
 	public function query_type($type = null)
 	{
@@ -93,7 +93,7 @@ class Builder {
 	 * 
 	 * @param	string|null			$field
 	 * 
-	 * @returns	string							
+	 * @return	string							
 	 */
 	public function id_column($field = null)
 	{
@@ -110,7 +110,7 @@ class Builder {
 	 * 
 	 * @param	string|array|null			$select
 	 * 
-	 * @returns	array							
+	 * @return	array							
 	 */
 	public function select($select = null)
 	{
@@ -145,7 +145,7 @@ class Builder {
 	 * @param	string				$separator		
 	 * @param	string|int			$value
 	 * 
-	 * @returns	array							
+	 * @return	array							
 	 */
 	public function clause($column_name = null, $separator, $value)
 	{
@@ -169,7 +169,7 @@ class Builder {
 	 * 
 	 * @param	array|null			$clauses
 	 * 
-	 * @returns	array							
+	 * @return	array							
 	 */
 	public function clauses($clauses = null)
 	{
@@ -191,7 +191,7 @@ class Builder {
 	 * 
 	 * @param	string|null			$table_name
 	 * 
-	 * @returns	string						
+	 * @return	string						
 	 */
 	public function table($table_name = null)
 	{
@@ -208,7 +208,7 @@ class Builder {
 	 * 
 	 * @param	string|null			$table_name
 	 * 
-	 * @returns	string							
+	 * @return	string							
 	 */
 	public function table_alias($table_name = null)
 	{
@@ -225,7 +225,7 @@ class Builder {
 	 * 
 	 * @param	int|null			$limit
 	 * 
-	 * @returns	int
+	 * @return	int
 	 */
 	public function limit($limit = null)
 	{
@@ -241,7 +241,7 @@ class Builder {
 	 * Set / get the offset
 	 * 
 	 * @param	int|null			$offset			
-	 * @returns	int							
+	 * @return	int							
 	 */
 	public function offset($offset = null)
 	{
@@ -259,7 +259,7 @@ class Builder {
 	 * @param	string|null			$column_name	
 	 * @param	string|null			$dir
 	 * 
-	 * @returns	array							
+	 * @return	array							
 	 */
 	public function order_by($column_name = null, $dir = null)
 	{
@@ -278,7 +278,7 @@ class Builder {
 	 * 
 	 * @param	string|null			$column_name
 	 * 
-	 * @returns	array
+	 * @return	array
 	 */
 	public function group_by($column_name = null)
 	{
@@ -298,7 +298,7 @@ class Builder {
 	 * @param	string|array|null			$entries		
 	 * @param	string|int|null				$value
 	 * 
-	 * @returns	array							
+	 * @return	array							
 	 */
 	public function set($entries = null, $value = null)
 	{
@@ -326,7 +326,7 @@ class Builder {
 	 * 
 	 * @param	string			$key
 	 * 
-	 * @returns	string		Can return the UNDEFINED constant if the key is not being set
+	 * @return	string		Can return the UNDEFINED constant if the key is not being set
 	 */
 	public function get($key)
 	{
@@ -338,7 +338,7 @@ class Builder {
 	 * 
 	 * @param	string			$field
 	 * 
-	 * @returns	array							
+	 * @return	array							
 	 */
 	public function _use_field($field)
 	{
@@ -350,7 +350,7 @@ class Builder {
 	 * 
 	 * @param	array			$fields
 	 * 
-	 * @returns	array							
+	 * @return	array							
 	 */
 	public function _use_fields($fields)
 	{
@@ -368,7 +368,7 @@ class Builder {
 	 * @param	array				$array	
 	 * @param	string|int			$value
 	 * 
-	 * @returns	array							
+	 * @return	array							
 	 */
 	private function _array_unset_value(array $array,$value)
 	{

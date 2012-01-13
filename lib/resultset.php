@@ -15,7 +15,7 @@ class Resultset {
 	 * 
 	 * @param	array			$rows
 	 * 
-	 * @returns	$this							
+	 * @return	$this							
 	 */
 	function __construct($rows)
 	{
@@ -35,7 +35,7 @@ class Resultset {
 	 * @param	string			$method			
 	 * @param	array			$args
 	 * 
-	 * @returns	$this							
+	 * @return	$this							
 	 */
 	function __call($method,$args)
 	{
@@ -59,7 +59,7 @@ class Resultset {
 	 * 
 	 * @param	string			$key
 	 * 
-	 * @returns	array							
+	 * @return	array							
 	 */
 	function __get($key)
 	{
@@ -79,7 +79,7 @@ class Resultset {
 	 * @param	string			$key			
 	 * @param	mixed			$value
 	 * 
-	 * @returns	$this							
+	 * @return	$this							
 	 */
 	function __set($key, $value)
 	{
@@ -97,7 +97,7 @@ class Resultset {
 	/**
 	 * Retreive all rows as an array
 	 * 
-	 * @returns	array							
+	 * @return	array							
 	 */
 	function as_array()
 	{
@@ -114,7 +114,7 @@ class Resultset {
 	/**
 	 * Retreive all rows as json
 	 * 
-	 * @returns	string							
+	 * @return	string							
 	 */
 	function as_json()
 	{
@@ -123,9 +123,19 @@ class Resultset {
 	}
 	
 	/**
+	 * Retreive all rows in their original format
+	 * 
+	 * @return	array							
+	 */
+	function get_rows()
+	{
+		return $this->_rows;
+	}
+	
+	/**
 	 * Count number of rows
 	 * 
-	 * @returns	int							
+	 * @return	int							
 	 */
 	function count()
 	{

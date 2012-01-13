@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Fri, 02 Dec 2011 14:01:12 +0000">
+<meta name="when" content="Fri, 13 Jan 2012 18:08:38 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -58,7 +58,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<p class="signature">public  class <strong>Model</strong></p>
+<p class="signature">public abstract  class <strong>Model</strong></p>
 
 <div class="comment" id="overview_description"><p>Model class, wraps around the ORM</p></div>
 
@@ -68,7 +68,19 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <tr><th colspan="2">Field Summary</th></tr>
 <tr>
 <td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#_validate_on">$_validate_on</a></p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#config">$config</a></p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
 <td class="description"><p class="name"><a href="#db_id">$db_id</a></p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#fields">$fields</a></p></td>
 </tr>
 <tr>
 <td class="type">protected  mixed</td>
@@ -83,32 +95,44 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <table id="summary_constructor">
 <tr><th colspan="2">Constructor Summary</th></tr>
 <tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed id, mixed config)</p><p class="description">Constructor</p></td>
+<td class="type"> $this</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed id, mixed config, mixed orm)</p><p class="description">Constructor</p></td>
 </tr>
 </table>
 
 <table id="summary_method">
 <tr><th colspan="2">Method Summary</th></tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#__call()">__call</a>(string method, array args)</p><p class="description">Method overloading, forward unknown calls to the ORM</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#__get()">__get</a>(string key)</p><p class="description">Forward __get calls to ORM</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#__set()">__set</a>(string key, mixed value)</p><p class="description">Forward __set calls to ORM</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> bool</td>
 <td class="description"><p class="name"><a href="#__isset()">__isset</a>(string key)</p><p class="description">Forward __isset calls to ORM</p></td>
 </tr>
 <tr>
-<td class="type">static  void</td>
+<td class="type">static  object</td>
 <td class="description"><p class="name"><a href="#factory()">factory</a>()</p><p class="description">Instantiate new instance of model</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#find_one()">find_one</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#find_many()">find_many</a>()</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_validate_fields()">_validate_fields</a>()</p></td>
 </tr>
 <tr>
 <td class="type">protected  void</td>
@@ -124,6 +148,24 @@ to a table name in lowercase_with_underscores.
 </table>
 
 <h2 id="detail_field">Field Detail</h2>
+<a href="../source/lib/model.php.html#line19" class="location">lib/model.php at line 19</a>
+
+<h3 id="_validate_on">_validate_on</h3>
+<code class="signature">protected  mixed <strong>$_validate_on</strong> = VALIDATE_ON_ALL</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/lib/model.php.html#line15" class="location">lib/model.php at line 15</a>
+
+<h3 id="config">config</h3>
+<code class="signature">protected  mixed <strong>$config</strong> = null</code>
+<div class="details">
+</div>
+
+<hr>
+
 <a href="../source/lib/model.php.html#line14" class="location">lib/model.php at line 14</a>
 
 <h3 id="db_id">db_id</h3>
@@ -133,10 +175,19 @@ to a table name in lowercase_with_underscores.
 
 <hr>
 
+<a href="../source/lib/model.php.html#line17" class="location">lib/model.php at line 17</a>
+
+<h3 id="fields">fields</h3>
+<code class="signature">protected  mixed <strong>$fields</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
 <a href="../source/lib/model.php.html#line11" class="location">lib/model.php at line 11</a>
 
 <h3 id="orm">orm</h3>
-<code class="signature">protected  mixed <strong>$orm</strong> = DB_ID_DEFAULT</code>
+<code class="signature">protected  mixed <strong>$orm</strong> = ''</code>
 <div class="details">
 </div>
 
@@ -152,86 +203,89 @@ to a table name in lowercase_with_underscores.
 <hr>
 
 <h2 id="detail_method">Constructor Detail</h2>
-<a href="../source/lib/model.php.html#line21" class="location">lib/model.php at line 21</a>
+<a href="../source/lib/model.php.html#line26" class="location">lib/model.php at line 26</a>
 
 <h3 id="__construct()">__construct</h3>
-<code class="signature">public  void <strong>__construct</strong>(mixed id, mixed config)</code>
+<code class="signature">public  $this <strong>__construct</strong>(mixed id, mixed config, mixed orm)</code>
 <div class="details">
-<p>Constructor</p><dl>
-<dt>Returns:</dt>
-<dd>$this</dd>
-</dl>
-</div>
+<p>Constructor</p></div>
 
 <hr>
 
 <h2 id="detail_method">Method Detail</h2>
-<a href="../source/lib/model.php.html#line44" class="location">lib/model.php at line 44</a>
+<a href="../source/lib/model.php.html#line61" class="location">lib/model.php at line 61</a>
 
 <h3 id="__call()">__call</h3>
-<code class="signature">public  void <strong>__call</strong>(string method, array args)</code>
+<code class="signature">public  mixed <strong>__call</strong>(string method, array args)</code>
 <div class="details">
-<p>Method overloading, forward unknown calls to the ORM</p><dl>
-<dt>Returns:</dt>
-<dd>mixed</dd>
-</dl>
-</div>
+<p>Method overloading, forward unknown calls to the ORM</p></div>
 
 <hr>
 
-<a href="../source/lib/model.php.html#line56" class="location">lib/model.php at line 56</a>
+<a href="../source/lib/model.php.html#line78" class="location">lib/model.php at line 78</a>
 
 <h3 id="__get()">__get</h3>
-<code class="signature">public  void <strong>__get</strong>(string key)</code>
+<code class="signature">public  mixed <strong>__get</strong>(string key)</code>
 <div class="details">
-<p>Forward __get calls to ORM</p><dl>
-<dt>Returns:</dt>
-<dd>mixed</dd>
-</dl>
-</div>
-
-<hr>
-
-<a href="../source/lib/model.php.html#line69" class="location">lib/model.php at line 69</a>
-
-<h3 id="__set()">__set</h3>
-<code class="signature">public  void <strong>__set</strong>(string key, mixed value)</code>
-<div class="details">
-<p>Forward __set calls to ORM</p><dl>
-<dt>Returns:</dt>
-<dd>mixed</dd>
-</dl>
-</div>
-
-<hr>
-
-<a href="../source/lib/model.php.html#line81" class="location">lib/model.php at line 81</a>
-
-<h3 id="__isset()">__isset</h3>
-<code class="signature">public  void <strong>__isset</strong>(string key)</code>
-<div class="details">
-<p>Forward __isset calls to ORM</p><dl>
-<dt>Returns:</dt>
-<dd>bool</dd>
-</dl>
-</div>
+<p>Forward __get calls to ORM</p></div>
 
 <hr>
 
 <a href="../source/lib/model.php.html#line91" class="location">lib/model.php at line 91</a>
 
-<h3 id="factory()">factory</h3>
-<code class="signature">public static  void <strong>factory</strong>()</code>
+<h3 id="__set()">__set</h3>
+<code class="signature">public  mixed <strong>__set</strong>(string key, mixed value)</code>
 <div class="details">
-<p>Instantiate new instance of model</p><dl>
-<dt>Returns:</dt>
-<dd>object</dd>
-</dl>
+<p>Forward __set calls to ORM</p></div>
+
+<hr>
+
+<a href="../source/lib/model.php.html#line118" class="location">lib/model.php at line 118</a>
+
+<h3 id="__isset()">__isset</h3>
+<code class="signature">public  bool <strong>__isset</strong>(string key)</code>
+<div class="details">
+<p>Forward __isset calls to ORM</p></div>
+
+<hr>
+
+<a href="../source/lib/model.php.html#line128" class="location">lib/model.php at line 128</a>
+
+<h3 id="factory()">factory</h3>
+<code class="signature">public static  object <strong>factory</strong>()</code>
+<div class="details">
+<p>Instantiate new instance of model</p></div>
+
+<hr>
+
+<a href="../source/lib/model.php.html#line134" class="location">lib/model.php at line 134</a>
+
+<h3 id="find_one()">find_one</h3>
+<code class="signature">public  void <strong>find_one</strong>()</code>
+<div class="details">
 </div>
 
 <hr>
 
-<a href="../source/lib/model.php.html#line104" class="location">lib/model.php at line 104</a>
+<a href="../source/lib/model.php.html#line142" class="location">lib/model.php at line 142</a>
+
+<h3 id="find_many()">find_many</h3>
+<code class="signature">public  void <strong>find_many</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/lib/model.php.html#line162" class="location">lib/model.php at line 162</a>
+
+<h3 id="_validate_fields()">_validate_fields</h3>
+<code class="signature">protected  void <strong>_validate_fields</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/lib/model.php.html#line187" class="location">lib/model.php at line 187</a>
 
 <h3 id="_get_table_name()">_get_table_name</h3>
 <code class="signature">protected  void <strong>_get_table_name</strong>()</code>
@@ -244,7 +298,7 @@ the _class_name_to_table_name method method.</p></div>
 
 <hr>
 
-<a href="../source/lib/model.php.html#line120" class="location">lib/model.php at line 120</a>
+<a href="../source/lib/model.php.html#line203" class="location">lib/model.php at line 203</a>
 
 <h3 id="_class_name_to_table_name()">_class_name_to_table_name</h3>
 <code class="signature">public static  void <strong>_class_name_to_table_name</strong>(mixed class_name)</code>

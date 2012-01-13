@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Fri, 02 Dec 2011 14:01:12 +0000">
+<meta name="when" content="Fri, 13 Jan 2012 18:08:38 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -65,34 +65,34 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <table id="summary_method">
 <tr><th colspan="2">Method Summary</th></tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#connect()">connect</a>()</p><p class="description">Connect to the database</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> $this</td>
 <td class="description"><p class="name"><a href="#build()">build</a>()</p><p class="description">Build the query to be executed (do not execute it), the query should be build
 inside the $this->_last_query variable</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#run()">run</a>()</p><p class="description">Run the query, this method can be called without having called build,
 so you have to build the query if it has not been done yet.
 </p></td>
 </tr>
 <tr>
-<td class="type">private  void</td>
+<td class="type">private  array|object</td>
 <td class="description"><p class="name"><a href="#_get_row()">_get_row</a>(bool instantiate)</p><p class="description">Get a single row from the result set and move the iterator forward</p></td>
 </tr>
 <tr>
-<td class="type">private  void</td>
+<td class="type">private  array</td>
 <td class="description"><p class="name"><a href="#_get_rows()">_get_rows</a>()</p><p class="description">Get all rows from the result set</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> int</td>
 <td class="description"><p class="name"><a href="#insert_id()">insert_id</a>()</p><p class="description">Get the last insert ID</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> int</td>
 <td class="description"><p class="name"><a href="#count()">count</a>()</p><p class="description">Count the number of results</p></td>
 </tr>
 </table>
@@ -101,11 +101,11 @@ so you have to build the query if it has not been done yet.
 <a href="../../source/lib/interfaces/orm.php.html#line12" class="location">lib/interfaces/orm.php at line 12</a>
 
 <h3 id="connect()">connect</h3>
-<code class="signature">public  void <strong>connect</strong>()</code>
+<code class="signature">public  mixed <strong>connect</strong>()</code>
 <div class="details">
 <p>Connect to the database</p><dl>
 <dt>Returns:</dt>
-<dd>mixed the returned value is used as the connection for the given database config (not standarized)</dd>
+<dd>the returned value is used as the connection for the given database config (not standarized)</dd>
 </dl>
 </div>
 
@@ -114,26 +114,22 @@ so you have to build the query if it has not been done yet.
 <a href="../../source/lib/interfaces/orm.php.html#line20" class="location">lib/interfaces/orm.php at line 20</a>
 
 <h3 id="build()">build</h3>
-<code class="signature">public  void <strong>build</strong>()</code>
+<code class="signature">public  $this <strong>build</strong>()</code>
 <div class="details">
 <p>Build the query to be executed (do not execute it), the query should be build
-inside the $this->_last_query variable</p><dl>
-<dt>Returns:</dt>
-<dd>$this</dd>
-</dl>
-</div>
+inside the $this->_last_query variable</p></div>
 
 <hr>
 
 <a href="../../source/lib/interfaces/orm.php.html#line30" class="location">lib/interfaces/orm.php at line 30</a>
 
 <h3 id="run()">run</h3>
-<code class="signature">public  void <strong>run</strong>()</code>
+<code class="signature">public  mixed <strong>run</strong>()</code>
 <div class="details">
 <p>Run the query, this method can be called without having called build,
 so you have to build the query if it has not been done yet.</p><p>The result of the query should also be assigned to $this->_last_query_result</p><dl>
 <dt>Returns:</dt>
-<dd>mixed return query result (not standarized)</dd>
+<dd>return query result (not standarized)</dd>
 </dl>
 </div>
 
@@ -142,13 +138,11 @@ so you have to build the query if it has not been done yet.</p><p>The result of 
 <a href="../../source/lib/interfaces/orm.php.html#line39" class="location">lib/interfaces/orm.php at line 39</a>
 
 <h3 id="_get_row()">_get_row</h3>
-<code class="signature">private  void <strong>_get_row</strong>(bool instantiate)</code>
+<code class="signature">private  array|object <strong>_get_row</strong>(bool instantiate)</code>
 <div class="details">
 <p>Get a single row from the result set and move the iterator forward</p><dl>
 <dt>Parameters:</dt>
 <dd>instantiate - if true, instantiate the row inside the ORM</dd>
-<dt>Returns:</dt>
-<dd>array|object</dd>
 </dl>
 </div>
 
@@ -157,39 +151,27 @@ so you have to build the query if it has not been done yet.</p><p>The result of 
 <a href="../../source/lib/interfaces/orm.php.html#line46" class="location">lib/interfaces/orm.php at line 46</a>
 
 <h3 id="_get_rows()">_get_rows</h3>
-<code class="signature">private  void <strong>_get_rows</strong>()</code>
+<code class="signature">private  array <strong>_get_rows</strong>()</code>
 <div class="details">
-<p>Get all rows from the result set</p><dl>
-<dt>Returns:</dt>
-<dd>array</dd>
-</dl>
-</div>
+<p>Get all rows from the result set</p></div>
 
 <hr>
 
 <a href="../../source/lib/interfaces/orm.php.html#line53" class="location">lib/interfaces/orm.php at line 53</a>
 
 <h3 id="insert_id()">insert_id</h3>
-<code class="signature">public  void <strong>insert_id</strong>()</code>
+<code class="signature">public  int <strong>insert_id</strong>()</code>
 <div class="details">
-<p>Get the last insert ID</p><dl>
-<dt>Returns:</dt>
-<dd>int</dd>
-</dl>
-</div>
+<p>Get the last insert ID</p></div>
 
 <hr>
 
 <a href="../../source/lib/interfaces/orm.php.html#line60" class="location">lib/interfaces/orm.php at line 60</a>
 
 <h3 id="count()">count</h3>
-<code class="signature">public  void <strong>count</strong>()</code>
+<code class="signature">public  int <strong>count</strong>()</code>
 <div class="details">
-<p>Count the number of results</p><dl>
-<dt>Returns:</dt>
-<dd>int</dd>
-</dl>
-</div>
+<p>Count the number of results</p></div>
 
 <hr>
 

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Fri, 02 Dec 2011 14:01:12 +0000">
+<meta name="when" content="Fri, 13 Jan 2012 18:08:38 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -50,7 +50,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <div class="qualifiedName">CrossORM\DB</div>
-<a href="../source/lib/db.php.html#line19" class="location">lib/db.php at line 19</a>
+<a href="../source/lib/db.php.html#line22" class="location">lib/db.php at line 22</a>
 
 <h1>Class DB</h1>
 
@@ -83,17 +83,17 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <table id="summary_method">
 <tr><th colspan="2">Method Summary</th></tr>
 <tr>
-<td class="type">static  void</td>
+<td class="type">static  object</td>
 <td class="description"><p class="name"><a href="#factory()">factory</a>(int|array|null id, array|null config)</p><p class="description">Factory method, used to get / initiate db instances</p></td>
 </tr>
 <tr>
-<td class="type">private static  void</td>
+<td class="type">private static  object</td>
 <td class="description"><p class="name"><a href="#driver_init()">driver_init</a>(array config, string id)</p><p class="description">Initialize a DB driver</p></td>
 </tr>
 </table>
 
 <h2 id="detail_field">Field Detail</h2>
-<a href="../source/lib/db.php.html#line24" class="location">lib/db.php at line 24</a>
+<a href="../source/lib/db.php.html#line27" class="location">lib/db.php at line 27</a>
 
 <h3 id="active_connection">active_connection</h3>
 <code class="signature">protected static  mixed <strong>$active_connection</strong></code>
@@ -102,7 +102,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/lib/db.php.html#line22" class="location">lib/db.php at line 22</a>
+<a href="../source/lib/db.php.html#line25" class="location">lib/db.php at line 25</a>
 
 <h3 id="connections">connections</h3>
 <code class="signature">protected static  mixed <strong>$connections</strong> = array()</code>
@@ -111,7 +111,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/lib/db.php.html#line26" class="location">lib/db.php at line 26</a>
+<a href="../source/lib/db.php.html#line29" class="location">lib/db.php at line 29</a>
 
 <h3 id="default_config">default_config</h3>
 <code class="signature">protected static  mixed <strong>$default_config</strong></code>
@@ -121,32 +121,28 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <h2 id="detail_method">Method Detail</h2>
-<a href="../source/lib/db.php.html#line36" class="location">lib/db.php at line 36</a>
+<a href="../source/lib/db.php.html#line39" class="location">lib/db.php at line 39</a>
 
 <h3 id="factory()">factory</h3>
-<code class="signature">public static  void <strong>factory</strong>(int|array|null id, array|null config)</code>
+<code class="signature">public static  object <strong>factory</strong>(int|array|null id, array|null config)</code>
 <div class="details">
 <p>Factory method, used to get / initiate db instances</p><dl>
 <dt>Parameters:</dt>
 <dd>id - If this is an array it will be used as the config and $config will be ignored</dd>
 <dd></dd>
 <dt>Returns:</dt>
-<dd>object Returns the driver that was initiated based on the config</dd>
+<dd>Returns the driver that was initiated based on the config</dd>
 </dl>
 </div>
 
 <hr>
 
-<a href="../source/lib/db.php.html#line87" class="location">lib/db.php at line 87</a>
+<a href="../source/lib/db.php.html#line90" class="location">lib/db.php at line 90</a>
 
 <h3 id="driver_init()">driver_init</h3>
-<code class="signature">private static  void <strong>driver_init</strong>(array config, string id)</code>
+<code class="signature">private static  object <strong>driver_init</strong>(array config, string id)</code>
 <div class="details">
-<p>Initialize a DB driver</p><dl>
-<dt>Returns:</dt>
-<dd>object</dd>
-</dl>
-</div>
+<p>Initialize a DB driver</p></div>
 
 <hr>
 

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Fri, 02 Dec 2011 14:01:12 +0000">
+<meta name="when" content="Fri, 13 Jan 2012 18:08:38 +0000">
 
 <link rel="stylesheet" type="text/css" href="stylesheet.css">
 <link rel="start" href="overview-summary.html">
@@ -55,6 +55,7 @@
 <a href="#letterM">M</a>
 <a href="#letterN">N</a>
 <a href="#letterO">O</a>
+<a href="#letterP">P</a>
 <a href="#letterQ">Q</a>
 <a href="#letterR">R</a>
 <a href="#letterS">S</a>
@@ -98,15 +99,13 @@
 <dd>Build the WHERE clause(s)</dd>
 <dt><a href="crossorm/acl.html#_ensure_exists()">_ensure_exists()</a> - Method in class <a href="crossorm/acl.html">CrossORM\ACL</a></dt>
 <dd>Checks if object / array entry exists and creates it if not</dd>
-<dt><a href="crossorm/acl.html#_flatten_array()">_flatten_array()</a> - Method in class <a href="crossorm/acl.html">CrossORM\ACL</a></dt>
-<dd>Flatten array, if input contains an object it will be converted to an array</dd>
 <dt><a href="crossorm/acl.html#_get_actor_id()">_get_actor_id()</a> - Method in class <a href="crossorm/acl.html">CrossORM\ACL</a></dt>
 <dd>Get actor id based on actor name and db id, falls back on defaults</dd>
 <dt><a href="crossorm/resultset.html#_get_method_results()">_get_method_results()</a> - Method in class <a href="crossorm/resultset.html">CrossORM\Resultset</a></dt>
-<dt><a href="crossorm/drivers/pdo/orm.html#_get_row()">_get_row()</a> - Method in class <a href="crossorm/drivers/pdo/orm.html">CrossORM\Drivers\PDO\ORM</a></dt>
-<dd>Get single row</dd>
 <dt><a href="crossorm/interfaces/orm.html#_get_row()">_get_row()</a> - Method in class <a href="crossorm/interfaces/orm.html">CrossORM\Interfaces\ORM</a></dt>
 <dd>Get a single row from the result set and move the iterator forward</dd>
+<dt><a href="crossorm/drivers/pdo/orm.html#_get_row()">_get_row()</a> - Method in class <a href="crossorm/drivers/pdo/orm.html">CrossORM\Drivers\PDO\ORM</a></dt>
+<dd>Get single row</dd>
 <dt><a href="crossorm/drivers/pdo/orm.html#_get_rows()">_get_rows()</a> - Method in class <a href="crossorm/drivers/pdo/orm.html">CrossORM\Drivers\PDO\ORM</a></dt>
 <dd>Get all rows returned by query</dd>
 <dt><a href="crossorm/interfaces/orm.html#_get_rows()">_get_rows()</a> - Method in class <a href="crossorm/interfaces/orm.html">CrossORM\Interfaces\ORM</a></dt>
@@ -114,13 +113,6 @@
 <dt><a href="crossorm/drivers/pdo/orm.html#_join_if_not_empty()">_join_if_not_empty()</a> - Method in class <a href="crossorm/drivers/pdo/orm.html">CrossORM\Drivers\PDO\ORM</a></dt>
 <dd>Wrapper around PHP's join function which
  only adds the pieces if they are not empty.</dd>
-<dt><a href="crossorm/acl.html#_object_merge()">_object_merge()</a> - Method in class <a href="crossorm/acl.html">CrossORM\ACL</a></dt>
-<dd>Merge two objects recursively, can also input an array, basically enforces
- a json style array/object structure after merging both inputs as arrays</dd>
-<dt><a href="crossorm/acl.html#_object_to_array()">_object_to_array()</a> - Method in class <a href="crossorm/acl.html">CrossORM\ACL</a></dt>
-<dd>Convert object to array recursively</dd>
-<dt><a href="crossorm/acl.html#_objectify()">_objectify()</a> - Method in class <a href="crossorm/acl.html">CrossORM\ACL</a></dt>
-<dd>Turn array / object structure into json style structure</dd>
 <dt><a href="crossorm/acl.html#_objectify_strings()">_objectify_strings()</a> - Method in class <a href="crossorm/acl.html">CrossORM\ACL</a></dt>
 <dd>Convert an flattened array to a properly structured object</dd>
 <dt><a href="crossorm/drivers/pdo/orm.html#_quote_identifier()">_quote_identifier()</a> - Method in class <a href="crossorm/drivers/pdo/orm.html">CrossORM\Drivers\PDO\ORM</a></dt>
@@ -137,6 +129,12 @@
 <dd>Mark a specific field as used</dd>
 <dt><a href="crossorm/builder.html#_use_fields()">_use_fields()</a> - Method in class <a href="crossorm/builder.html">CrossORM\Builder</a></dt>
 <dd>Mark specific fields as used</dd>
+<dt><a href="crossorm/validation.html#_validate_alphabetical()">_validate_alphabetical()</a> - Method in class <a href="crossorm/validation.html">CrossORM\Validation</a></dt>
+<dd>Validate if value is alphabetical</dd>
+<dt><a href="crossorm/validation.html#_validate_alphanumeric()">_validate_alphanumeric()</a> - Method in class <a href="crossorm/validation.html">CrossORM\Validation</a></dt>
+<dd>Validate if value is alphanumerical</dd>
+<dt><a href="crossorm/validation.html#_validate_maxlength()">_validate_maxlength()</a> - Method in class <a href="crossorm/validation.html">CrossORM\Validation</a></dt>
+<dd>Validate if value does not exceed max length</dd>
 <dt><a href="crossorm/acl.html#_validate_select_query()">_validate_select_query()</a> - Method in class <a href="crossorm/acl.html">CrossORM\ACL</a></dt>
 <dd>Validate the given SELECT query</dd>
 </dl>
@@ -147,17 +145,17 @@
 <dt><a href="crossorm/exceptions/acl.html">ACL()</a> - Exception in namespace <a href="crossorm/exceptions/package-summary.html">CrossORM\Exceptions</a></dt>
 <dt><a href="crossorm/package-globals.html#ACTOR_DEFAULT">ACTOR_DEFAULT()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
 <dd>DEFAULTS</dd>
-<dt><a href="crossorm/orm.html#as_array()">as_array()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
-<dd>Return results as array</dd>
 <dt><a href="crossorm/resultset.html#as_array()">as_array()</a> - Method in class <a href="crossorm/resultset.html">CrossORM\Resultset</a></dt>
 <dd>Retreive all rows as an array</dd>
+<dt><a href="crossorm/interfaces/model.html#as_array()">as_array()</a> - Method in class <a href="crossorm/interfaces/model.html">CrossORM\Interfaces\Model</a></dt>
+<dt><a href="crossorm/orm.html#as_array()">as_array()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
+<dd>Return results as array</dd>
 <dt><a href="crossorm/drivers/pdo/model.html#as_array()">as_array()</a> - Method in class <a href="crossorm/drivers/pdo/model.html">CrossORM\Drivers\PDO\Model</a></dt>
 <dd>Wrapper for Idiorm's as_array method.</dd>
-<dt><a href="crossorm/interfaces/model.html#as_array()">as_array()</a> - Method in class <a href="crossorm/interfaces/model.html">CrossORM\Interfaces\Model</a></dt>
-<dt><a href="crossorm/orm.html#as_json()">as_json()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
-<dd>Return results as JSON</dd>
 <dt><a href="crossorm/resultset.html#as_json()">as_json()</a> - Method in class <a href="crossorm/resultset.html">CrossORM\Resultset</a></dt>
 <dd>Retreive all rows as json</dd>
+<dt><a href="crossorm/orm.html#as_json()">as_json()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
+<dd>Return results as JSON</dd>
 <dt><a href="crossorm/package-globals.html#ASC">ASC()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
 </dl>
 <h1 id="letterB">B</h1>
@@ -181,10 +179,10 @@
 <dd>Clear the ACL rules altogether (no arg) or for a specific actor</dd>
 <dt><a href="crossorm/interfaces/orm.html#connect()">connect()</a> - Method in class <a href="crossorm/interfaces/orm.html">CrossORM\Interfaces\ORM</a></dt>
 <dd>Connect to the database</dd>
-<dt><a href="crossorm/interfaces/orm.html#count()">count()</a> - Method in class <a href="crossorm/interfaces/orm.html">CrossORM\Interfaces\ORM</a></dt>
-<dd>Count the number of results</dd>
 <dt><a href="crossorm/resultset.html#count()">count()</a> - Method in class <a href="crossorm/resultset.html">CrossORM\Resultset</a></dt>
 <dd>Count number of rows</dd>
+<dt><a href="crossorm/interfaces/orm.html#count()">count()</a> - Method in class <a href="crossorm/interfaces/orm.html">CrossORM\Interfaces\ORM</a></dt>
+<dd>Count the number of results</dd>
 <dt><a href="crossorm/drivers/pdo/orm.html#count()">count()</a> - Method in class <a href="crossorm/drivers/pdo/orm.html">CrossORM\Drivers\PDO\ORM</a></dt>
 <dd>Count the number of results</dd>
 </dl>
@@ -193,12 +191,12 @@
 <dt><a href="crossorm/db.html">DB()</a> - Class in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
 <dd>Main DB class, this is where it all starts</dd>
 <dt><a href="crossorm/package-globals.html#DB_ID_DEFAULT">DB_ID_DEFAULT()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
-<dt><a href="crossorm/interfaces/model.html#delete()">delete()</a> - Method in class <a href="crossorm/interfaces/model.html">CrossORM\Interfaces\Model</a></dt>
-<dt><a href="crossorm/package-globals.html#DELETE">DELETE()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
 <dt><a href="crossorm/orm.html#delete()">delete()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
 <dd>Perform a delete query based on the current critera's set in the builder</dd>
+<dt><a href="crossorm/interfaces/model.html#delete()">delete()</a> - Method in class <a href="crossorm/interfaces/model.html">CrossORM\Interfaces\Model</a></dt>
 <dt><a href="crossorm/drivers/pdo/model.html#delete()">delete()</a> - Method in class <a href="crossorm/drivers/pdo/model.html">CrossORM\Drivers\PDO\Model</a></dt>
 <dd>Delete the database row associated with this model instance.</dd>
+<dt><a href="crossorm/package-globals.html#DELETE">DELETE()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
 <dt><a href="crossorm/package-globals.html#DESC">DESC()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
 <dt><a href="crossorm/db.html#driver_init()">driver_init()</a> - Method in class <a href="crossorm/db.html">CrossORM\DB</a></dt>
 <dd>Initialize a DB driver</dd>
@@ -213,20 +211,24 @@
 <dl>
 <dt><a href="crossorm/db.html#factory()">factory()</a> - Method in class <a href="crossorm/db.html">CrossORM\DB</a></dt>
 <dd>Factory method, used to get / initiate db instances</dd>
+<dt><a href="crossorm/orm.html#fields()">fields()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
+<dd>Get the defined fields</dd>
 <dt><a href="crossorm/orm.html#find_many()">find_many()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
 <dd>Find and return multiple entries</dd>
 <dt><a href="crossorm/orm.html#find_one()">find_one()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
 <dd>Find and return one entry</dd>
+<dt><a href="crossorm/helpers.html#flatten_array()">flatten_array()</a> - Method in class <a href="crossorm/helpers.html">CrossORM\Helpers</a></dt>
+<dd>Flatten array, if input contains an object it will be converted to an array</dd>
 </dl>
 <h1 id="letterG">G</h1>
 <dl>
-<dt><a href="crossorm/orm.html#get()">get()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
-<dd>Get entry from @see $_fields</dd>
 <dt><a href="crossorm/builder.html#get()">get()</a> - Method in class <a href="crossorm/builder.html">CrossORM\Builder</a></dt>
 <dd>Get a value that is to be set</dd>
-<dt><a href="crossorm/interfaces/model.html#get()">get()</a> - Method in class <a href="crossorm/interfaces/model.html">CrossORM\Interfaces\Model</a></dt>
 <dt><a href="crossorm/drivers/pdo/model.html#get()">get()</a> - Method in class <a href="crossorm/drivers/pdo/model.html">CrossORM\Drivers\PDO\Model</a></dt>
 <dd>Getter method, allows $model->get('property') access to data</dd>
+<dt><a href="crossorm/interfaces/model.html#get()">get()</a> - Method in class <a href="crossorm/interfaces/model.html">CrossORM\Interfaces\Model</a></dt>
+<dt><a href="crossorm/orm.html#get()">get()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
+<dd>Get entry from @see $_fields</dd>
 <dt><a href="crossorm/acl.html#get_actor()">get_actor()</a> - Method in class <a href="crossorm/acl.html">CrossORM\ACL</a></dt>
 <dd>Get actor settings</dd>
 <dt><a href="crossorm/builder.html#get_affected_fields()">get_affected_fields()</a> - Method in class <a href="crossorm/builder.html">CrossORM\Builder</a></dt>
@@ -234,8 +236,14 @@
 <dt><a href="crossorm/orm.html#get_query()">get_query()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
 <dt><a href="crossorm/builder.html#get_query_dump()">get_query_dump()</a> - Method in class <a href="crossorm/builder.html">CrossORM\Builder</a></dt>
 <dd>Get the current query elements, mostly for debugging purposes</dd>
+<dt><a href="crossorm/resultset.html#get_rows()">get_rows()</a> - Method in class <a href="crossorm/resultset.html">CrossORM\Resultset</a></dt>
+<dd>Retreive all rows in their original format</dd>
 <dt><a href="crossorm/acl.html#get_rules()">get_rules()</a> - Method in class <a href="crossorm/acl.html">CrossORM\ACL</a></dt>
 <dd>Get the active rules</dd>
+<dt><a href="crossorm/exceptions/validation.html#getArgs()">getArgs()</a> - Method in class <a href="crossorm/exceptions/validation.html">CrossORM\Exceptions\Validation</a></dt>
+<dt><a href="crossorm/exceptions/validation.html#getInput()">getInput()</a> - Method in class <a href="crossorm/exceptions/validation.html">CrossORM\Exceptions\Validation</a></dt>
+<dt><a href="crossorm/exceptions/validation.html#getLabel()">getLabel()</a> - Method in class <a href="crossorm/exceptions/validation.html">CrossORM\Exceptions\Validation</a></dt>
+<dt><a href="crossorm/exceptions/validation.html#getRule()">getRule()</a> - Method in class <a href="crossorm/exceptions/validation.html">CrossORM\Exceptions\Validation</a></dt>
 <dt><a href="crossorm/package-globals.html#GREATER_THAN">GREATER_THAN()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
 <dt><a href="crossorm/package-globals.html#GREATER_THAN_EQUAL">GREATER_THAN_EQUAL()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
 <dt><a href="crossorm/orm.html#group_by()">group_by()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
@@ -250,28 +258,29 @@
 <dt><a href="crossorm/interfaces/model.html#has_one()">has_one()</a> - Method in class <a href="crossorm/interfaces/model.html">CrossORM\Interfaces\Model</a></dt>
 <dt><a href="crossorm/acl.html#has_permission()">has_permission()</a> - Method in class <a href="crossorm/acl.html">CrossORM\ACL</a></dt>
 <dd>Check if actor has given permission</dd>
+<dt><a href="crossorm/helpers.html">Helpers()</a> - Class in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
 <dt><a href="crossorm/drivers/pdo/model.html#hydrate()">hydrate()</a> - Method in class <a href="crossorm/drivers/pdo/model.html">CrossORM\Drivers\PDO\Model</a></dt>
 <dd>Hydrate this model instance with an associative array of data.
 </dd>
 </dl>
 <h1 id="letterI">I</h1>
 <dl>
+<dt><a href="crossorm/interfaces/model.html#id()">id()</a> - Method in class <a href="crossorm/interfaces/model.html">CrossORM\Interfaces\Model</a></dt>
 <dt><a href="crossorm/orm.html#id()">id()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
 <dd>Get the ID of this instance</dd>
-<dt><a href="crossorm/interfaces/model.html#id()">id()</a> - Method in class <a href="crossorm/interfaces/model.html">CrossORM\Interfaces\Model</a></dt>
 <dt><a href="crossorm/drivers/pdo/model.html#id()">id()</a> - Method in class <a href="crossorm/drivers/pdo/model.html">CrossORM\Drivers\PDO\Model</a></dt>
 <dd>Get the database ID of this model instance.</dd>
-<dt><a href="crossorm/package-globals.html#ID_COLUMN">ID_COLUMN()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
 <dt><a href="crossorm/builder.html#id_column()">id_column()</a> - Method in class <a href="crossorm/builder.html">CrossORM\Builder</a></dt>
 <dd>Set / get the id column</dd>
+<dt><a href="crossorm/package-globals.html#ID_COLUMN">ID_COLUMN()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
 <dt><a href="crossorm/package-globals.html#IN">IN()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
 <dt><a href="crossorm/package-globals.html#INSERT">INSERT()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
-<dt><a href="crossorm/drivers/pdo/orm.html#insert_id()">insert_id()</a> - Method in class <a href="crossorm/drivers/pdo/orm.html">CrossORM\Drivers\PDO\ORM</a></dt>
 <dt><a href="crossorm/interfaces/orm.html#insert_id()">insert_id()</a> - Method in class <a href="crossorm/interfaces/orm.html">CrossORM\Interfaces\ORM</a></dt>
 <dd>Get the last insert ID</dd>
-<dt><a href="crossorm/interfaces/model.html#is_dirty()">is_dirty()</a> - Method in class <a href="crossorm/interfaces/model.html">CrossORM\Interfaces\Model</a></dt>
+<dt><a href="crossorm/drivers/pdo/orm.html#insert_id()">insert_id()</a> - Method in class <a href="crossorm/drivers/pdo/orm.html">CrossORM\Drivers\PDO\ORM</a></dt>
 <dt><a href="crossorm/drivers/pdo/model.html#is_dirty()">is_dirty()</a> - Method in class <a href="crossorm/drivers/pdo/model.html">CrossORM\Drivers\PDO\Model</a></dt>
 <dd>Check whether the given field has changed since the object was created or saved</dd>
+<dt><a href="crossorm/interfaces/model.html#is_dirty()">is_dirty()</a> - Method in class <a href="crossorm/interfaces/model.html">CrossORM\Interfaces\Model</a></dt>
 <dt><a href="crossorm/package-globals.html#IS_NOT_NULL">IS_NOT_NULL()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
 <dt><a href="crossorm/package-globals.html#IS_NULL">IS_NULL()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
 </dl>
@@ -280,10 +289,10 @@
 <dt><a href="crossorm/package-globals.html#LESS_THAN">LESS_THAN()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
 <dt><a href="crossorm/package-globals.html#LESS_THAN_EQUAL">LESS_THAN_EQUAL()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
 <dt><a href="crossorm/package-globals.html#LIKE">LIKE()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
-<dt><a href="crossorm/orm.html#limit()">limit()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
-<dd>Limit results</dd>
 <dt><a href="crossorm/builder.html#limit()">limit()</a> - Method in class <a href="crossorm/builder.html">CrossORM\Builder</a></dt>
 <dd>Set / get the limit</dd>
+<dt><a href="crossorm/orm.html#limit()">limit()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
+<dd>Limit results</dd>
 </dl>
 <h1 id="letterM">M</h1>
 <dl>
@@ -313,6 +322,13 @@
 </dl>
 <h1 id="letterO">O</h1>
 <dl>
+<dt><a href="crossorm/helpers.html#object_merge()">object_merge()</a> - Method in class <a href="crossorm/helpers.html">CrossORM\Helpers</a></dt>
+<dd>Merge two objects recursively, can also input an array, basically enforces
+ a json style array/object structure after merging both inputs as arrays</dd>
+<dt><a href="crossorm/helpers.html#object_to_array()">object_to_array()</a> - Method in class <a href="crossorm/helpers.html">CrossORM\Helpers</a></dt>
+<dd>Convert object to array recursively</dd>
+<dt><a href="crossorm/helpers.html#objectify()">objectify()</a> - Method in class <a href="crossorm/helpers.html">CrossORM\Helpers</a></dt>
+<dd>Turn array / object structure into json style structure</dd>
 <dt><a href="crossorm/builder.html#offset()">offset()</a> - Method in class <a href="crossorm/builder.html">CrossORM\Builder</a></dt>
 <dd>Set / get the offset</dd>
 <dt><a href="crossorm/orm.html#offset()">offset()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
@@ -323,6 +339,8 @@
 <dd>Order field ascending</dd>
 <dt><a href="crossorm/orm.html#order_by_desc()">order_by_desc()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
 <dd>Order field descending</dd>
+<dt><a href="crossorm/orm.html">ORM()</a> - Class in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
+<dd>ORM Class, where most of the magic happens</dd>
 <dt><a href="crossorm/drivers/pdo/orm.html">ORM()</a> - Class in namespace <a href="crossorm/drivers/pdo/package-summary.html">CrossORM\Drivers\PDO</a></dt>
 <dd>CrossORM ORM library for PDO driver
  This library is based on the excellent "Idiorm" library by Jamie Matthews
@@ -333,9 +351,12 @@
 
  A single-class super-simple database abstraction layer for PHP.
 </dd>
-<dt><a href="crossorm/orm.html">ORM()</a> - Class in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
-<dd>ORM Class, where most of the magic happens</dd>
 <dt><a href="crossorm/interfaces/orm.html">ORM()</a> - Interface in namespace <a href="crossorm/interfaces/package-summary.html">CrossORM\Interfaces</a></dt>
+</dl>
+<h1 id="letterP">P</h1>
+<dl>
+<dt><a href="crossorm/validation.html#parse_rules()">parse_rules()</a> - Method in class <a href="crossorm/validation.html">CrossORM\Validation</a></dt>
+<dd>Parse rules in string format into an array</dd>
 </dl>
 <h1 id="letterQ">Q</h1>
 <dl>
@@ -360,22 +381,22 @@
 </dl>
 <h1 id="letterS">S</h1>
 <dl>
+<dt><a href="crossorm/interfaces/model.html#save()">save()</a> - Method in class <a href="crossorm/interfaces/model.html">CrossORM\Interfaces\Model</a></dt>
 <dt><a href="crossorm/orm.html#save()">save()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
 <dd>Save the current modifications to the database</dd>
-<dt><a href="crossorm/interfaces/model.html#save()">save()</a> - Method in class <a href="crossorm/interfaces/model.html">CrossORM\Interfaces\Model</a></dt>
 <dt><a href="crossorm/drivers/pdo/model.html#save()">save()</a> - Method in class <a href="crossorm/drivers/pdo/model.html">CrossORM\Drivers\PDO\Model</a></dt>
 <dd>Save the data associated with this model instance to the database.</dd>
 <dt><a href="crossorm/package-globals.html#SELECT">SELECT()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
 <dd>KEYWORDS</dd>
 <dt><a href="crossorm/builder.html#select()">select()</a> - Method in class <a href="crossorm/builder.html">CrossORM\Builder</a></dt>
 <dd>Set / get the select fields</dd>
-<dt><a href="crossorm/orm.html#set()">set()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
-<dd>Set a field value</dd>
-<dt><a href="crossorm/interfaces/model.html#set()">set()</a> - Method in class <a href="crossorm/interfaces/model.html">CrossORM\Interfaces\Model</a></dt>
 <dt><a href="crossorm/builder.html#set()">set()</a> - Method in class <a href="crossorm/builder.html">CrossORM\Builder</a></dt>
 <dd>Set fields to be updated / inserted</dd>
+<dt><a href="crossorm/orm.html#set()">set()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
+<dd>Set a field value</dd>
 <dt><a href="crossorm/drivers/pdo/model.html#set()">set()</a> - Method in class <a href="crossorm/drivers/pdo/model.html">CrossORM\Drivers\PDO\Model</a></dt>
 <dd>Setter method, allows $model->set('property', 'value') access to data.</dd>
+<dt><a href="crossorm/interfaces/model.html#set()">set()</a> - Method in class <a href="crossorm/interfaces/model.html">CrossORM\Interfaces\Model</a></dt>
 <dt><a href="crossorm/acl.html#set_actor()">set_actor()</a> - Method in class <a href="crossorm/acl.html">CrossORM\ACL</a></dt>
 <dd>Creates / modifies settings for the given actor</dd>
 <dt><a href="crossorm/interfaces/model.html#set_orm()">set_orm()</a> - Method in class <a href="crossorm/interfaces/model.html">CrossORM\Interfaces\Model</a></dt>
@@ -407,8 +428,14 @@
 <dl>
 <dt><a href="crossorm/orm.html#validate_acl()">validate_acl()</a> - Method in class <a href="crossorm/orm.html">CrossORM\ORM</a></dt>
 <dd>Validate if we have permission to run the query, throws @see Exceptions\ACL if not.</dd>
+<dt><a href="crossorm/package-globals.html#VALIDATE_ON_ALL">VALIDATE_ON_ALL()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
+<dd>VALIDATION</dd>
+<dt><a href="crossorm/package-globals.html#VALIDATE_ON_RUN">VALIDATE_ON_RUN()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
+<dt><a href="crossorm/package-globals.html#VALIDATE_ON_SET">VALIDATE_ON_SET()</a> - Global in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
 <dt><a href="crossorm/acl.html#validate_query()">validate_query()</a> - Method in class <a href="crossorm/acl.html">CrossORM\ACL</a></dt>
 <dd>Validate the given query build</dd>
+<dt><a href="crossorm/exceptions/validation.html">Validation()</a> - Exception in namespace <a href="crossorm/exceptions/package-summary.html">CrossORM\Exceptions</a></dt>
+<dt><a href="crossorm/validation.html">Validation()</a> - Class in namespace <a href="crossorm/package-summary.html">CrossORM</a></dt>
 </dl>
 <h1 id="letterW">W</h1>
 <dl>

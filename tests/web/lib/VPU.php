@@ -344,7 +344,8 @@ class VPU {
             'variables_message' => $variables_message,
             'variables_display' => ( $variables_message ) ? 'show' : 'hide',
             'trace_message'     => $trace_message,
-            'trace_display'     => ( $trace_message ) ? 'show' : 'hide'
+            'trace_display'     => ( $trace_message ) ? 'show' : 'hide',
+            'test_results'      => $test_results
         );
 
         return $test;

@@ -43,6 +43,31 @@ class Updates extends PHPUnit_Framework_TestCase
 		echo json_encode($result->get_query());
 	}
 	
+	function test_update_one_model()
+	{
+		$result = Model_Test_2::factory()->find_one();
+		$this->assertArrayHasKey('id',$result->as_array());
+		
+		echo 'Before:-bit-';
+		
+		echo json_encode($result->as_array());
+		
+		echo '-bit-'."\n";
+		
+		echo json_encode($result->get_query());
+		
+		echo '-bit-After:-bit-';
+		
+		$result->name = uniqid();
+		$result->save();
+		
+		echo json_encode($result->as_array());
+		
+		echo '-bit-'."\n";
+		
+		echo json_encode($result->get_query());
+	}
+	
 	function test_update_many()
 	{
 		$result = DB::factory()->for_table('test')->where_like('name','4ed%')->limit(3);

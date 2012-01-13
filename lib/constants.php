@@ -56,3 +56,10 @@ define('RULE_TYPE_TABLES',		'tables');
 define('RULE_TYPE_TABLE_ACTIONS','table_actions');
 define('RULE_TYPE_FIELD',		'field');
 define('RULE_TYPE_FIELDS',		'fields');
+
+/************************************************** VALIDATION */
+
+define('VALIDATE_ON_ALL',		'all');
+define('VALIDATE_ON_SET',		'set');
+define('VALIDATE_ON_RUN',		'run');
+

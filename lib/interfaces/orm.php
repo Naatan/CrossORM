@@ -7,7 +7,7 @@ interface ORM {
 	/**
 	 * Connect to the database
 	 * 
-	 * @returns	mixed		the returned value is used as the connection for the given database config (not standarized)
+	 * @return	mixed		the returned value is used as the connection for the given database config (not standarized)
 	 */
 	function connect();
 	
@@ -15,7 +15,7 @@ interface ORM {
 	 * Build the query to be executed (do not execute it), the query should be build
 	 * inside the $this->_last_query variable
 	 * 
-	 * @returns	$this							
+	 * @return	$this							
 	 */
 	function build();
 	
@@ -25,7 +25,7 @@ interface ORM {
 	 *
 	 * The result of the query should also be assigned to $this->_last_query_result
 	 * 
-	 * @returns	mixed							return query result (not standarized)
+	 * @return	mixed							return query result (not standarized)
 	 */
 	function run();
 	
@@ -34,28 +34,28 @@ interface ORM {
 	 * 
 	 * @param	bool			$instantiate	if true, instantiate the row inside the ORM
 	 * 
-	 * @returns	array|object							
+	 * @return	array|object							
 	 */
 	function _get_row($instantiate = false);
 	
 	/**
 	 * Get all rows from the result set
 	 * 
-	 * @returns	array
+	 * @return	array
 	 */
 	function _get_rows();
 	
 	/**
 	 * Get the last insert ID
 	 * 
-	 * @returns	int							
+	 * @return	int							
 	 */
 	function insert_id();
 	
 	/**
 	 * Count the number of results
 	 * 
-	 * @returns	int							
+	 * @return	int							
 	 */
 	function count();
 	

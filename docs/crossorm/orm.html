@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Fri, 02 Dec 2011 14:01:12 +0000">
+<meta name="when" content="Fri, 13 Jan 2012 18:08:38 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -124,35 +124,35 @@ if it does not already exist</p></td>
 <table id="summary_method">
 <tr><th colspan="2">Method Summary</th></tr>
 <tr>
-<td class="type">static  void</td>
+<td class="type">static  object</td>
 <td class="description"><p class="name"><a href="#create()">create</a>(array|object|null data)</p><p class="description">Create a new instance</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> $this</td>
 <td class="description"><p class="name"><a href="#hydrate()">hydrate</a>(array data)</p><p class="description">Hydrate this instance with data</p></td>
 </tr>
 <tr>
-<td class="type">protected  void</td>
+<td class="type">protected  object</td>
 <td class="description"><p class="name"><a href="#_create_instance_from_row()">_create_instance_from_row</a>(object|array row)</p><p class="description">Turn a result row into an instance</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> string</td>
 <td class="description"><p class="name"><a href="#state()">state</a>(string state)</p><p class="description">Set the query state</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#__get()">__get</a>(string key)</p><p class="description">Forward __get requests to @see #get</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#__set()">__set</a>(string key, mixed value)</p><p class="description">Forward __set requests to @see set()</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> bool</td>
 <td class="description"><p class="name"><a href="#__isset()">__isset</a>(string key)</p><p class="description">Check if @see $_fields has the given entry</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> $this</td>
 <td class="description"><p class="name"><a href="#acl()">acl</a>(bool|string enable)</p><p class="description">Toggle ACL and optionally set the actor to be used</p></td>
 </tr>
 <tr>
@@ -259,11 +259,11 @@ if it does not already exist</p></td>
 <td class="description"><p class="name"><a href="#set()">set</a>(string|array key, string|int|float|null value, bool hydrate)</p><p class="description">Set a field value</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> $this</td>
 <td class="description"><p class="name"><a href="#save()">save</a>(mixed query_type)</p><p class="description">Save the current modifications to the database</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> $this</td>
 <td class="description"><p class="name"><a href="#delete()">delete</a>()</p><p class="description">Perform a delete query based on the current critera's set in the builder</p></td>
 </tr>
 <tr>
@@ -275,27 +275,31 @@ if it does not already exist</p></td>
 <td class="description"><p class="name"><a href="#get_query()">get_query</a>()</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#get()">get</a>(string key)</p><p class="description">Get entry from @see $_fields</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#fields()">fields</a>()</p><p class="description">Get the defined fields</p></td>
+</tr>
+<tr>
+<td class="type"> object|array</td>
 <td class="description"><p class="name"><a href="#as_array()">as_array</a>(bool contextual)</p><p class="description">Return results as array</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> string</td>
 <td class="description"><p class="name"><a href="#as_json()">as_json</a>(bool contextual)</p><p class="description">Return results as JSON</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> object</td>
 <td class="description"><p class="name"><a href="#find_one()">find_one</a>()</p><p class="description">Find and return one entry</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> <a href="../crossorm/resultset.html">Resultset</a></td>
 <td class="description"><p class="name"><a href="#find_many()">find_many</a>()</p><p class="description">Find and return multiple entries</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> int|string</td>
 <td class="description"><p class="name"><a href="#id()">id</a>()</p><p class="description">Get the ID of this instance</p></td>
 </tr>
 </table>
@@ -415,110 +419,80 @@ if it does not already exist</p></div>
 <a href="../source/lib/orm.php.html#line68" class="location">lib/orm.php at line 68</a>
 
 <h3 id="create()">create</h3>
-<code class="signature">public static  void <strong>create</strong>(array|object|null data)</code>
+<code class="signature">public static  object <strong>create</strong>(array|object|null data)</code>
 <div class="details">
-<p>Create a new instance</p><dl>
-<dt>Returns:</dt>
-<dd>object</dd>
-</dl>
-</div>
+<p>Create a new instance</p></div>
 
 <hr>
 
 <a href="../source/lib/orm.php.html#line96" class="location">lib/orm.php at line 96</a>
 
 <h3 id="hydrate()">hydrate</h3>
-<code class="signature">public  void <strong>hydrate</strong>(array data)</code>
+<code class="signature">public  $this <strong>hydrate</strong>(array data)</code>
 <div class="details">
-<p>Hydrate this instance with data</p><dl>
-<dt>Returns:</dt>
-<dd>$this</dd>
-</dl>
-</div>
+<p>Hydrate this instance with data</p></div>
 
 <hr>
 
 <a href="../source/lib/orm.php.html#line109" class="location">lib/orm.php at line 109</a>
 
 <h3 id="_create_instance_from_row()">_create_instance_from_row</h3>
-<code class="signature">protected  void <strong>_create_instance_from_row</strong>(object|array row)</code>
+<code class="signature">protected  object <strong>_create_instance_from_row</strong>(object|array row)</code>
 <div class="details">
-<p>Turn a result row into an instance</p><dl>
-<dt>Returns:</dt>
-<dd>object</dd>
-</dl>
-</div>
+<p>Turn a result row into an instance</p></div>
 
 <hr>
 
 <a href="../source/lib/orm.php.html#line125" class="location">lib/orm.php at line 125</a>
 
 <h3 id="state()">state</h3>
-<code class="signature">public  void <strong>state</strong>(string state)</code>
+<code class="signature">public  string <strong>state</strong>(string state)</code>
 <div class="details">
-<p>Set the query state</p><dl>
-<dt>Returns:</dt>
-<dd>string</dd>
-</dl>
-</div>
+<p>Set the query state</p></div>
 
 <hr>
 
 <a href="../source/lib/orm.php.html#line143" class="location">lib/orm.php at line 143</a>
 
 <h3 id="__get()">__get</h3>
-<code class="signature">public  void <strong>__get</strong>(string key)</code>
+<code class="signature">public  mixed <strong>__get</strong>(string key)</code>
 <div class="details">
-<p>Forward __get requests to @see #get</p><dl>
-<dt>Returns:</dt>
-<dd>mixed</dd>
-</dl>
-</div>
+<p>Forward __get requests to @see #get</p></div>
 
 <hr>
 
 <a href="../source/lib/orm.php.html#line155" class="location">lib/orm.php at line 155</a>
 
 <h3 id="__set()">__set</h3>
-<code class="signature">public  void <strong>__set</strong>(string key, mixed value)</code>
+<code class="signature">public  mixed <strong>__set</strong>(string key, mixed value)</code>
 <div class="details">
-<p>Forward __set requests to @see set()</p><dl>
-<dt>Returns:</dt>
-<dd>mixed</dd>
-</dl>
-</div>
+<p>Forward __set requests to @see set()</p></div>
 
 <hr>
 
-<a href="../source/lib/orm.php.html#line166" class="location">lib/orm.php at line 166</a>
+<a href="../source/lib/orm.php.html#line171" class="location">lib/orm.php at line 171</a>
 
 <h3 id="__isset()">__isset</h3>
-<code class="signature">public  void <strong>__isset</strong>(string key)</code>
+<code class="signature">public  bool <strong>__isset</strong>(string key)</code>
 <div class="details">
-<p>Check if @see $_fields has the given entry</p><dl>
-<dt>Returns:</dt>
-<dd>bool</dd>
-</dl>
-</div>
+<p>Check if @see $_fields has the given entry</p></div>
 
 <hr>
 
-<a href="../source/lib/orm.php.html#line179" class="location">lib/orm.php at line 179</a>
+<a href="../source/lib/orm.php.html#line184" class="location">lib/orm.php at line 184</a>
 
 <h3 id="acl()">acl</h3>
-<code class="signature">public  void <strong>acl</strong>(bool|string enable)</code>
+<code class="signature">public  $this <strong>acl</strong>(bool|string enable)</code>
 <div class="details">
 <p>Toggle ACL and optionally set the actor to be used</p><dl>
 <dt>Parameters:</dt>
 <dd>enable - If a string is given it will be used as the actor</dd>
-<dt>Returns:</dt>
-<dd>$this</dd>
 </dl>
 </div>
 
 <hr>
 
-<a href="../source/lib/orm.php.html#line198" class="location">lib/orm.php at line 198</a>
+<a href="../source/lib/orm.php.html#line203" class="location">lib/orm.php at line 203</a>
 
 <h3 id="for_table()">for_table</h3>
 <code class="signature">public  $this <strong>for_table</strong>(string table_name)</code>
@@ -527,7 +501,7 @@ if it does not already exist</p></div>
 
 <hr>
 
-<a href="../source/lib/orm.php.html#line210" class="location">lib/orm.php at line 210</a>
+<a href="../source/lib/orm.php.html#line215" class="location">lib/orm.php at line 215</a>
 
 <h3 id="table()">table</h3>
 <code class="signature">public  $this <strong>table</strong>(string table_name)</code>
@@ -536,7 +510,7 @@ if it does not already exist</p></div>
 
 <hr>
 
-<a href="../source/lib/orm.php.html#line224" class="location">lib/orm.php at line 224</a>
+<a href="../source/lib/orm.php.html#line229" class="location">lib/orm.php at line 229</a>
 
 <h3 id="id_column()">id_column</h3>
 <code class="signature">public  $this <strong>id_column</strong>(string id_column)</code>
@@ -545,7 +519,7 @@ if it does not already exist</p></div>
 
 <hr>
 
-<a href="../source/lib/orm.php.html#line238" class="location">lib/orm.php at line 238</a>
+<a href="../source/lib/orm.php.html#line243" class="location">lib/orm.php at line 243</a>
 
 <h3 id="table_alias()">table_alias</h3>
 <code class="signature">public  $this <strong>table_alias</strong>(string alias)</code>
@@ -554,7 +528,7 @@ if it does not already exist</p></div>
 
 <hr>
 
-<a href="../source/lib/orm.php.html#line259" class="location">lib/orm.php at line 259</a>
+<a href="../source/lib/orm.php.html#line264" class="location">lib/orm.php at line 264</a>
 
 <h3 id="select()">select</h3>
 <code class="signature">public  $this <strong>select</strong>(array|string select)</code>
@@ -566,7 +540,7 @@ if it does not already exist</p></div>
 
 <hr>
 
-<a href="../source/lib/orm.php.html#line274" class="location">lib/orm.php at line 274</a>
+<a href="../source/lib/orm.php.html#line279" class="location">lib/orm.php at line 279</a>
 
 <h3 id="where()">where</h3>
 <code class="signature">public  $this <strong>where</strong>(string column_name, string|int|float value)</code>
@@ -749,26 +723,18 @@ if it does not already exist</p></div>
 <a href="../source/lib/orm.php.html#line577" class="location">lib/orm.php at line 577</a>
 
 <h3 id="save()">save</h3>
-<code class="signature">public  void <strong>save</strong>(mixed query_type)</code>
+<code class="signature">public  $this <strong>save</strong>(mixed query_type)</code>
 <div class="details">
-<p>Save the current modifications to the database</p><dl>
-<dt>Returns:</dt>
-<dd>$this</dd>
-</dl>
-</div>
+<p>Save the current modifications to the database</p></div>
 
 <hr>
 
 <a href="../source/lib/orm.php.html#line627" class="location">lib/orm.php at line 627</a>
 
 <h3 id="delete()">delete</h3>
-<code class="signature">public  void <strong>delete</strong>()</code>
+<code class="signature">public  $this <strong>delete</strong>()</code>
 <div class="details">
-<p>Perform a delete query based on the current critera's set in the builder</p><dl>
-<dt>Returns:</dt>
-<dd>$this</dd>
-</dl>
-</div>
+<p>Perform a delete query based on the current critera's set in the builder</p></div>
 
 <hr>
 
@@ -777,11 +743,7 @@ if it does not already exist</p></div>
 <h3 id="validate_acl()">validate_acl</h3>
 <code class="signature">public  void <strong>validate_acl</strong>()</code>
 <div class="details">
-<p>Validate if we have permission to run the query, throws @see Exceptions\ACL if not.</p><dl>
-<dt>Returns:</dt>
-<dd>void</dd>
-</dl>
-</div>
+<p>Validate if we have permission to run the query, throws @see Exceptions\ACL if not.</p></div>
 
 <hr>
 
@@ -797,78 +759,63 @@ if it does not already exist</p></div>
 <a href="../source/lib/orm.php.html#line671" class="location">lib/orm.php at line 671</a>
 
 <h3 id="get()">get</h3>
-<code class="signature">public  void <strong>get</strong>(string key)</code>
+<code class="signature">public  mixed <strong>get</strong>(string key)</code>
 <div class="details">
-<p>Get entry from @see $_fields</p><dl>
-<dt>Returns:</dt>
-<dd>mixed</dd>
-</dl>
-</div>
+<p>Get entry from @see $_fields</p></div>
 
 <hr>
 
-<a href="../source/lib/orm.php.html#line680" class="location">lib/orm.php at line 680</a>
+<a href="../source/lib/orm.php.html#line681" class="location">lib/orm.php at line 681</a>
+
+<h3 id="fields()">fields</h3>
+<code class="signature">public  array <strong>fields</strong>()</code>
+<div class="details">
+<p>Get the defined fields</p></div>
+
+<hr>
+
+<a href="../source/lib/orm.php.html#line691" class="location">lib/orm.php at line 691</a>
 
 <h3 id="as_array()">as_array</h3>
-<code class="signature">public  void <strong>as_array</strong>(bool contextual)</code>
+<code class="signature">public  object|array <strong>as_array</strong>(bool contextual)</code>
 <div class="details">
-<p>Return results as array</p><dl>
-<dt>Returns:</dt>
-<dd>object|array</dd>
-</dl>
-</div>
-
-<hr>
-
-<a href="../source/lib/orm.php.html#line715" class="location">lib/orm.php at line 715</a>
-
-<h3 id="as_json()">as_json</h3>
-<code class="signature">public  void <strong>as_json</strong>(bool contextual)</code>
-<div class="details">
-<p>Return results as JSON</p><dl>
-<dt>Returns:</dt>
-<dd>string</dd>
-</dl>
-</div>
+<p>Return results as array</p></div>
 
 <hr>
 
 <a href="../source/lib/orm.php.html#line725" class="location">lib/orm.php at line 725</a>
 
-<h3 id="find_one()">find_one</h3>
-<code class="signature">public  void <strong>find_one</strong>()</code>
+<h3 id="as_json()">as_json</h3>
+<code class="signature">public  string <strong>as_json</strong>(bool contextual)</code>
 <div class="details">
-<p>Find and return one entry</p><dl>
-<dt>Returns:</dt>
-<dd>object</dd>
-</dl>
-</div>
+<p>Return results as JSON</p></div>
 
 <hr>
 
-<a href="../source/lib/orm.php.html#line739" class="location">lib/orm.php at line 739</a>
+<a href="../source/lib/orm.php.html#line735" class="location">lib/orm.php at line 735</a>
+
+<h3 id="find_one()">find_one</h3>
+<code class="signature">public  object <strong>find_one</strong>()</code>
+<div class="details">
+<p>Find and return one entry</p></div>
+
+<hr>
+
+<a href="../source/lib/orm.php.html#line749" class="location">lib/orm.php at line 749</a>
 
 <h3 id="find_many()">find_many</h3>
-<code class="signature">public  void <strong>find_many</strong>()</code>
+<code class="signature">public  <a href="../crossorm/resultset.html">Resultset</a> <strong>find_many</strong>()</code>
 <div class="details">
-<p>Find and return multiple entries</p><dl>
-<dt>Returns:</dt>
-<dd>Resultset</dd>
-</dl>
-</div>
+<p>Find and return multiple entries</p></div>
 
 <hr>
 
-<a href="../source/lib/orm.php.html#line751" class="location">lib/orm.php at line 751</a>
+<a href="../source/lib/orm.php.html#line761" class="location">lib/orm.php at line 761</a>
 
 <h3 id="id()">id</h3>
-<code class="signature">public  void <strong>id</strong>()</code>
+<code class="signature">public  int|string <strong>id</strong>()</code>
 <div class="details">
-<p>Get the ID of this instance</p><dl>
-<dt>Returns:</dt>
-<dd>int|string</dd>
-</dl>
-</div>
+<p>Get the ID of this instance</p></div>
 
 <hr>
 

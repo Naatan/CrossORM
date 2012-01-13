@@ -3,11 +3,14 @@
 namespace CrossORM;
 
 require_once dirname(__FILE__) . '/constants.php';
+require_once dirname(__FILE__) . '/helpers.php';
 require_once dirname(__FILE__) . '/exceptions/exception.php';
 require_once dirname(__FILE__) . '/exceptions/acl.php';
+require_once dirname(__FILE__) . '/exceptions/validation.php';
 require_once dirname(__FILE__) . '/interfaces/orm.php';
 require_once dirname(__FILE__) . '/interfaces/model.php';
 require_once dirname(__FILE__) . '/builder.php';
+require_once dirname(__FILE__) . '/validation.php';
 require_once dirname(__FILE__) . '/orm.php';
 require_once dirname(__FILE__) . '/model.php';
 require_once dirname(__FILE__) . '/resultset.php';
@@ -31,7 +34,7 @@ class DB
 	 * @param	int|array|null			$id			If this is an array it will be used as the config and $config will be ignored
 	 * @param	array|null				$config
 	 * 
-	 * @returns	object	Returns the driver that was initiated based on the config
+	 * @return	object	Returns the driver that was initiated based on the config
 	 */
 	public static function factory($id = null, $config = null)
 	{
@@ -82,7 +85,7 @@ class DB
 	 * @param	array			$config			
 	 * @param	string			$id
 	 * 
-	 * @returns	object
+	 * @return	object
 	 */
 	private static function driver_init(array $config, $id = DB_ID_DEFAULT)
 	{

@@ -142,7 +142,7 @@
     ob_start();
 
     if ( $sandbox_errors ) {
-        //set_error_handler(array($vpu, 'handle_errors'));
+        set_error_handler(array($vpu, 'handle_errors'));
     }
 
     $results = $vpu->run($tests);

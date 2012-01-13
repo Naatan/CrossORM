@@ -5,30 +5,47 @@ namespace CrossORM;
 /**
  * Model class, wraps around the ORM
  */
-class Model
+abstract class Model
 {
 	
 	protected $orm;
 	
 	protected $table_name 	= null;
 	protected $db_id		= null;
+	protected $config		= null;
+	
+	protected $fields		= array();
+	
+	protected $_validate_on = VALIDATE_ON_ALL;
 	
 	/**
 	 * Constructor
 	 * 
-	 * @returns	$this	
+	 * @return	$this	
 	 */
-	public function __construct($id = null, $config = null)
+	public function __construct($id = null, $config = null, $orm = null)
 	{
 		if ($id == null AND $this->db_id != null)
 		{
 			$id = $this->db_id;
 		}
 		
+		$this->db_id = $id;
+		$this->config = $config;
+		
 		$table_name = $this->_get_table_name();
 		
-		$this->orm = DB::factory($id, $config);
-		$this->orm->table($table_name);
+		if ($orm == null)
+		{
+			$this->orm = DB::factory($id, $config);
+			$this->orm->table($table_name);
+		}
+			else
+		{
+			$this->orm = $orm;
+		}
+		
+		$this->fields = Helpers::objectify($this->fields);
 		
 		return $this;
 	}
@@ -39,10 +56,15 @@ class Model
 	 * @param	string			$method			
 	 * @param	array			$args
 	 * 
-	 * @returns	mixed						
+	 * @return	mixed						
 	 */
 	public function __call($method,$args)
 	{
+		if (in_array($method,array('as_array','as_json')))
+		{
+			$this->_validate_fields();
+		}
+
 		return call_user_func_array(array($this->orm,$method),$args);
 	}
 	
@@ -51,7 +73,7 @@ class Model
 	 * 
 	 * @param	string			$key
 	 * 
-	 * @returns	mixed							
+	 * @return	mixed							
 	 */
 	public function __get($key)
 	{
@@ -64,10 +86,25 @@ class Model
 	 * @param	string			$key			
 	 * @param	mixed			$value
 	 * 
-	 * @returns	mixed							
+	 * @return	mixed							
 	 */
 	public function __set($key,$value)
 	{
+		if (count($this->fields) > 0 AND !isset($this->fields->{$key}))
+		{
+			throw new Exceptions\Validation('Trying to set field "' . (string) $key . '" which does not exist in model "' . (string) get_class($this) . '"');
+		}
+		
+		if (in_array($this->_validate_on,array(VALIDATE_ON_ALL,VALIDATE_ON_SET)) AND isset($this->fields->{$key}))
+		{
+			$field = $this->fields->{$key};
+			
+			$rules  = isset($field->validation) ? $field->validation . ',' : '';
+			$rules .= isset($field->type) ? $field->type : '';
+			
+			Validation::run(isset($field->label) ? $field->label : $key, $value, $rules, $this);
+		}
+		
 		return $this->orm->{$key} = $value;
 	}
 	
@@ -76,7 +113,7 @@ class Model
 	 * 
 	 * @param	string			$key
 	 * 
-	 * @returns	bool							
+	 * @return	bool							
 	 */
 	public function __isset($key)
 	{
@@ -86,12 +123,58 @@ class Model
 	/**
 	 * Instantiate new instance of model
 	 * 
-	 * @returns	object							
+	 * @return	object							
 	 */
 	public static function factory()
 	{
 		$class_name = get_called_class();
 		return new $class_name;
+	}
+	
+	public function find_one()
+	{
+		$this->_validate_fields();
+
+		$this->orm = $this->orm->find_one();
+		return $this;
+	}
+	
+	public function find_many()
+	{
+		$this->_validate_fields();
+
+		if ( ! $result = $this->orm->find_many())
+		{
+			return false;
+		}
+		
+		$class 	= get_called_class();
+		$rows 	= array();
+		
+		foreach ($result->get_rows() AS $row)
+		{
+			$rows[] = new $this($this->db_id, $this->config, $row);
+		}
+		
+		return $rows;
+	}
+
+	protected function _validate_fields()
+	{
+		$fields = $this->orm->fields();
+
+		foreach ($fields AS $key => $value)
+		{
+			if (in_array($this->_validate_on,array(VALIDATE_ON_ALL,VALIDATE_ON_RUN)) AND isset($this->fields->{$key}))
+			{
+				$field = $this->fields->{$key};
+				
+				$rules  = isset($field->validation) ? $field->validation . ',' : '';
+				$rules .= isset($field->type) ? $field->type : '';
+				
+				Validation::run(isset($field->label) ? $field->label : $key, $value, $rules, $this);
+			}
+		}
 	}
 	
 	/**

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Fri, 02 Dec 2011 14:01:12 +0000">
+<meta name="when" content="Fri, 13 Jan 2012 18:08:38 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -79,7 +79,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <table id="summary_constructor">
 <tr><th colspan="2">Constructor Summary</th></tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> $this</td>
 <td class="description"><p class="name"><a href="#__construct()">__construct</a>(array rows)</p><p class="description">Constructor, hydrates itself with given rows</p></td>
 </tr>
 </table>
@@ -87,7 +87,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <table id="summary_method">
 <tr><th colspan="2">Method Summary</th></tr>
 <tr>
-<td class="type">private  void</td>
+<td class="type">private  $this</td>
 <td class="description"><p class="name"><a href="#__call()">__call</a>(string method, array args)</p><p class="description">Forward __call requests to each individual row</p></td>
 </tr>
 <tr>
@@ -95,23 +95,27 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <td class="description"><p class="name"><a href="#_get_method_results()">_get_method_results</a>()</p></td>
 </tr>
 <tr>
-<td class="type">private  void</td>
+<td class="type">private  array</td>
 <td class="description"><p class="name"><a href="#__get()">__get</a>(string key)</p><p class="description">Forward __get requests to each individual row and return each result as an array entry</p></td>
 </tr>
 <tr>
-<td class="type">private  void</td>
+<td class="type">private  $this</td>
 <td class="description"><p class="name"><a href="#__set()">__set</a>(string key, mixed value)</p><p class="description">Forward __set requests to each individual row</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> array</td>
 <td class="description"><p class="name"><a href="#as_array()">as_array</a>()</p><p class="description">Retreive all rows as an array</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> string</td>
 <td class="description"><p class="name"><a href="#as_json()">as_json</a>()</p><p class="description">Retreive all rows as json</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#get_rows()">get_rows</a>()</p><p class="description">Retreive all rows in their original format</p></td>
+</tr>
+<tr>
+<td class="type"> int</td>
 <td class="description"><p class="name"><a href="#count()">count</a>()</p><p class="description">Count number of rows</p></td>
 </tr>
 </table>
@@ -139,13 +143,9 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <a href="../source/lib/resultset.php.html#line20" class="location">lib/resultset.php at line 20</a>
 
 <h3 id="__construct()">__construct</h3>
-<code class="signature">public  void <strong>__construct</strong>(array rows)</code>
+<code class="signature">public  $this <strong>__construct</strong>(array rows)</code>
 <div class="details">
-<p>Constructor, hydrates itself with given rows</p><dl>
-<dt>Returns:</dt>
-<dd>$this</dd>
-</dl>
-</div>
+<p>Constructor, hydrates itself with given rows</p></div>
 
 <hr>
 
@@ -153,13 +153,9 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <a href="../source/lib/resultset.php.html#line40" class="location">lib/resultset.php at line 40</a>
 
 <h3 id="__call()">__call</h3>
-<code class="signature">private  void <strong>__call</strong>(string method, array args)</code>
+<code class="signature">private  $this <strong>__call</strong>(string method, array args)</code>
 <div class="details">
-<p>Forward __call requests to each individual row</p><dl>
-<dt>Returns:</dt>
-<dd>$this</dd>
-</dl>
-</div>
+<p>Forward __call requests to each individual row</p></div>
 
 <hr>
 
@@ -175,65 +171,54 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <a href="../source/lib/resultset.php.html#line64" class="location">lib/resultset.php at line 64</a>
 
 <h3 id="__get()">__get</h3>
-<code class="signature">private  void <strong>__get</strong>(string key)</code>
+<code class="signature">private  array <strong>__get</strong>(string key)</code>
 <div class="details">
-<p>Forward __get requests to each individual row and return each result as an array entry</p><dl>
-<dt>Returns:</dt>
-<dd>array</dd>
-</dl>
-</div>
+<p>Forward __get requests to each individual row and return each result as an array entry</p></div>
 
 <hr>
 
 <a href="../source/lib/resultset.php.html#line84" class="location">lib/resultset.php at line 84</a>
 
 <h3 id="__set()">__set</h3>
-<code class="signature">private  void <strong>__set</strong>(string key, mixed value)</code>
+<code class="signature">private  $this <strong>__set</strong>(string key, mixed value)</code>
 <div class="details">
-<p>Forward __set requests to each individual row</p><dl>
-<dt>Returns:</dt>
-<dd>$this</dd>
-</dl>
-</div>
+<p>Forward __set requests to each individual row</p></div>
 
 <hr>
 
 <a href="../source/lib/resultset.php.html#line102" class="location">lib/resultset.php at line 102</a>
 
 <h3 id="as_array()">as_array</h3>
-<code class="signature">public  void <strong>as_array</strong>()</code>
+<code class="signature">public  array <strong>as_array</strong>()</code>
 <div class="details">
-<p>Retreive all rows as an array</p><dl>
-<dt>Returns:</dt>
-<dd>array</dd>
-</dl>
-</div>
+<p>Retreive all rows as an array</p></div>
 
 <hr>
 
 <a href="../source/lib/resultset.php.html#line119" class="location">lib/resultset.php at line 119</a>
 
 <h3 id="as_json()">as_json</h3>
-<code class="signature">public  void <strong>as_json</strong>()</code>
+<code class="signature">public  string <strong>as_json</strong>()</code>
 <div class="details">
-<p>Retreive all rows as json</p><dl>
-<dt>Returns:</dt>
-<dd>string</dd>
-</dl>
-</div>
+<p>Retreive all rows as json</p></div>
 
 <hr>
 
 <a href="../source/lib/resultset.php.html#line130" class="location">lib/resultset.php at line 130</a>
 
-<h3 id="count()">count</h3>
-<code class="signature">public  void <strong>count</strong>()</code>
+<h3 id="get_rows()">get_rows</h3>
+<code class="signature">public  array <strong>get_rows</strong>()</code>
 <div class="details">
-<p>Count number of rows</p><dl>
-<dt>Returns:</dt>
-<dd>int</dd>
-</dl>
-</div>
+<p>Retreive all rows in their original format</p></div>
+
+<hr>
+
+<a href="../source/lib/resultset.php.html#line140" class="location">lib/resultset.php at line 140</a>
+
+<h3 id="count()">count</h3>
+<code class="signature">public  int <strong>count</strong>()</code>
+<div class="details">
+<p>Count number of rows</p></div>
 
 <hr>
 

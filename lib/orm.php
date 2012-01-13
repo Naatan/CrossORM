@@ -33,9 +33,9 @@ abstract class ORM
 	 * Initiate a new instance of the ORM, and create the db connection
 	 * if it does not already exist
 	 * 
-	 * @param	array|object			$config
+	 * @param 	array|object			$config
 	 * 
-	 * @return $this							
+	 * @return 	$this							
 	 */
 	function __construct($config, $id = DB_ID_DEFAULT)
 	{
@@ -43,7 +43,7 @@ abstract class ORM
 		$this->_db_id = $id;
 		
 		$identifier = sha1($this->_config->connection_string);
-		
+
 		if (isset(static::$_connections[$identifier]))
 		{
 			$this->_conn = static::$_connections[$identifier];
@@ -63,7 +63,7 @@ abstract class ORM
 	 * 
 	 * @param	array|object|null			$data
 	 * 
-	 * @returns	object							
+	 * @return	object							
 	 */
 	public function create($data=null)
 	{
@@ -91,7 +91,7 @@ abstract class ORM
 	 * 
 	 * @param	array			$data
 	 * 
-	 * @returns	$this							
+	 * @return	$this							
 	 */
 	public function hydrate($data) {
 		$this->set($data, null, true);
@@ -104,7 +104,7 @@ abstract class ORM
 	 * 
 	 * @param	object|array			$row
 	 * 
-	 * @returns	object							
+	 * @return	object							
 	 */
 	protected function _create_instance_from_row($row) {
 		$result = $this->create($row);
@@ -120,7 +120,7 @@ abstract class ORM
 	 * 
 	 * @param	string			$state
 	 * 
-	 * @returns	string							
+	 * @return	string							
 	 */
 	public function state($state = null) {
 		if ($state == null)
@@ -138,7 +138,7 @@ abstract class ORM
 	 * 
 	 * @param	string			$key
 	 * 
-	 * @returns	mixed							
+	 * @return	mixed							
 	 */
 	public function __get($key) {
 		return $this->get($key);
@@ -150,9 +150,14 @@ abstract class ORM
 	 * @param	string			$key			
 	 * @param	mixed			$value
 	 * 
-	 * @returns	mixed							
+	 * @return	mixed							
 	 */
 	public function __set($key, $value) {
+		if ($this->state() == STATE_HYDRATED)
+		{
+			$this->_build->query_type(UPDATE);
+		}
+		
 		$this->set($key, $value);
 	}
 
@@ -161,7 +166,7 @@ abstract class ORM
 	 * 
 	 * @param	string			$key
 	 * 
-	 * @returns	bool							
+	 * @return	bool							
 	 */
 	public function __isset($key) {
 		return isset($this->_fields[$key]);
@@ -174,7 +179,7 @@ abstract class ORM
 	 * 
 	 * @param	bool|string			$enable			If a string is given it will be used as the actor
 	 * 
-	 * @returns	$this							
+	 * @return	$this							
 	 */
 	function acl($enable = true)
 	{
@@ -267,17 +272,12 @@ abstract class ORM
 	 * Add standard where clause statement
 	 * 
 	 * @param	string					$column_name	
-	 * @param	string|int|float			$value
+	 * @param	string|int|float		$value
 	 * 
 	 * @return	$this
 	 */
 	function where($column_name, $value)
 	{
-		if ($this->_build->query_type() == INSERT)
-		{
-			$this->_build->query_type(UPDATE);
-		}
-		
 		$this->_build->clause($column_name, EQUAL, $value);
 		
 		return $this;
@@ -287,7 +287,7 @@ abstract class ORM
 	 * Add standard where clause statement, links to @see where()
 	 * 
 	 * @param	string					$column_name	
-	 * @param	string|int|float			$value
+	 * @param	string|int|float		$value
 	 * 
 	 * @return	$this
 	 */
@@ -300,7 +300,7 @@ abstract class ORM
 	 * Add "is not" where clause statement
 	 * 
 	 * @param	string					$column_name	
-	 * @param	string|int|float			$value
+	 * @param	string|int|float		$value
 	 * 
 	 * @return	$this
 	 */
@@ -329,7 +329,7 @@ abstract class ORM
 	 * Add "like" where clause statement
 	 * 
 	 * @param	string					$column_name	
-	 * @param	string|int|float			$value
+	 * @param	string|int|float		$value
 	 * 
 	 * @return	$this
 	 */
@@ -344,7 +344,7 @@ abstract class ORM
 	 * Add "not like" where clause statement
 	 * 
 	 * @param	string					$column_name	
-	 * @param	string|int|float			$value
+	 * @param	string|int|float		$value
 	 * 
 	 * @return	$this
 	 */
@@ -359,7 +359,7 @@ abstract class ORM
 	 * Add "greater than" where clause statement
 	 * 
 	 * @param	string					$column_name	
-	 * @param	string|int|float			$value
+	 * @param	string|int|float		$value
 	 * 
 	 * @return	$this
 	 */
@@ -374,7 +374,7 @@ abstract class ORM
 	 * Add "less than" where clause statement
 	 * 
 	 * @param	string					$column_name	
-	 * @param	string|int|float			$value
+	 * @param	string|int|float		$value
 	 * 
 	 * @return	$this
 	 */
@@ -389,7 +389,7 @@ abstract class ORM
 	 * Add "greater than or equal" where clause statement
 	 * 
 	 * @param	string					$column_name	
-	 * @param	string|int|float			$value
+	 * @param	string|int|float		$value
 	 * 
 	 * @return	$this
 	 */
@@ -404,7 +404,7 @@ abstract class ORM
 	 * Add "less than or equal" where clause statement
 	 * 
 	 * @param	string					$column_name	
-	 * @param	string|int|float			$value
+	 * @param	string|int|float		$value
 	 * 
 	 * @return	$this
 	 */
@@ -419,7 +419,7 @@ abstract class ORM
 	 * Add "IN" where clause statement
 	 * 
 	 * @param	string					$column_name	
-	 * @param	string|int|float			$value
+	 * @param	string|int|float		$value
 	 * 
 	 * @return	$this
 	 */
@@ -434,7 +434,7 @@ abstract class ORM
 	 * Add "NOT IN" where clause statement
 	 * 
 	 * @param	string					$column_name	
-	 * @param	string|int|float			$value
+	 * @param	string|int|float		$value
 	 * 
 	 * @return	$this
 	 */
@@ -449,7 +449,7 @@ abstract class ORM
 	 * Add "IS NULL" where clause statement
 	 * 
 	 * @param	string					$column_name	
-	 * @param	string|int|float			$value
+	 * @param	string|int|float		$value
 	 * 
 	 * @return	$this
 	 */
@@ -464,7 +464,7 @@ abstract class ORM
 	 * Add "IS NOT NULL" where clause statement
 	 * 
 	 * @param	string					$column_name	
-	 * @param	string|int|float			$value
+	 * @param	string|int|float		$value
 	 * 
 	 * @return	$this
 	 */
@@ -572,7 +572,7 @@ abstract class ORM
 	/**
 	 * Save the current modifications to the database
 	 * 
-	 * @returns	$this
+	 * @return	$this
 	 */
 	public function save($query_type = null)
 	{
@@ -622,7 +622,7 @@ abstract class ORM
 	/**
 	 * Perform a delete query based on the current critera's set in the builder
 	 * 
-	 * @returns	$this							
+	 * @return	$this							
 	 */
 	public function delete()
 	{
@@ -642,7 +642,7 @@ abstract class ORM
 	/**
 	 * Validate if we have permission to run the query, throws @see Exceptions\ACL if not.
 	 * 
-	 * @returns	void							
+	 * @return	void							
 	 */
 	public function validate_acl()
 	{
@@ -666,22 +666,32 @@ abstract class ORM
 	 * 
 	 * @param	string			$key
 	 * 
-	 * @returns	mixed
+	 * @return	mixed
 	 */
-	public function get($key) {
+	public function get($key) 
+	{
 		return isset($this->_fields[$key]) ? $this->_fields[$key] : null;
+	}
+
+	/**
+	 * Get the defined fields
+	 * 
+	 * @return array
+	 */
+	public function fields()
+	{
+		return $this->_fields;
 	}
 	
 	/**
 	 * Return results as array 
 	 * 
-	 * @returns	object|array
+	 * @return	object|array
 	 */
 	function as_array($contextual = true)
 	{
 		if ( $this->state() == STATE_FRESH)
 		{
-			$this->state(STATE_FRESH);
 			$this->_build->query_type(SELECT);
 			
 			if ($this->_build->limit()==1)
@@ -710,7 +720,7 @@ abstract class ORM
 	/**
 	 * Return results as JSON
 	 * 
-	 * @returns	string							
+	 * @return	string							
 	 */
 	function as_json($contextual = true) {
 		$result = $this->as_array();
@@ -720,7 +730,7 @@ abstract class ORM
 	/**
 	 * Find and return one entry
 	 * 
-	 * @returns	object
+	 * @return	object
 	 */
 	function find_one()
 	{
@@ -734,7 +744,7 @@ abstract class ORM
 	/**
 	 * Find and return multiple entries
 	 * 
-	 * @returns	Resultset
+	 * @return	Resultset
 	 */
 	function find_many()
 	{
@@ -746,12 +756,10 @@ abstract class ORM
 	/**
 	 * Get the ID of this instance
 	 * 
-	 * @returns	int|string
+	 * @return	int|string
 	 */
 	function id()
 	{
-		$this->_build->query_type(SELECT);
-		
 		if ( $this->state() == STATE_FRESH)
 		{
 			return $this->find_one()->{$this->_build->id_column()};

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Fri, 02 Dec 2011 14:01:12 +0000">
+<meta name="when" content="Fri, 13 Jan 2012 18:08:38 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -95,15 +95,15 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <td class="description"><p class="name"><a href="#set_actor()">set_actor</a>(string name, string mode, string db_id)</p><p class="description">Creates / modifies settings for the given actor</p></td>
 </tr>
 <tr>
-<td class="type">static  void</td>
+<td class="type">static  object</td>
 <td class="description"><p class="name"><a href="#get_actor()">get_actor</a>(string|array name)</p><p class="description">Get actor settings</p></td>
 </tr>
 <tr>
-<td class="type">static  void</td>
+<td class="type">static  object</td>
 <td class="description"><p class="name"><a href="#get_rules()">get_rules</a>(bool flat)</p><p class="description">Get the active rules</p></td>
 </tr>
 <tr>
-<td class="type">static  void</td>
+<td class="type">static  bool</td>
 <td class="description"><p class="name"><a href="#has_permission()">has_permission</a>(array|string rule, array|string actor, bool fatal)</p><p class="description">Check if actor has given permission</p></td>
 </tr>
 <tr>
@@ -135,32 +135,15 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <td class="description"><p class="name"><a href="#_validate_select_query()">_validate_select_query</a>(<a href="../crossorm/builder.html">Builder</a> builder, array|string actor)</p><p class="description">Validate the given SELECT query</p></td>
 </tr>
 <tr>
-<td class="type">private static  void</td>
-<td class="description"><p class="name"><a href="#_object_merge()">_object_merge</a>(object|array ob, object|array ob2)</p><p class="description">Merge two objects recursively, can also input an array, basically enforces
-a json style array/object structure after merging both inputs as arrays</p></td>
-</tr>
-<tr>
-<td class="type">private static  void</td>
-<td class="description"><p class="name"><a href="#_objectify()">_objectify</a>(array|object ob)</p><p class="description">Turn array / object structure into json style structure</p></td>
-</tr>
-<tr>
-<td class="type">private static  void</td>
-<td class="description"><p class="name"><a href="#_object_to_array()">_object_to_array</a>(object|array ob)</p><p class="description">Convert object to array recursively</p></td>
-</tr>
-<tr>
-<td class="type">private static  void</td>
-<td class="description"><p class="name"><a href="#_flatten_array()">_flatten_array</a>(array|object array, string parents)</p><p class="description">Flatten array, if input contains an object it will be converted to an array</p></td>
-</tr>
-<tr>
-<td class="type">private static  void</td>
+<td class="type">private static  object</td>
 <td class="description"><p class="name"><a href="#_objectify_strings()">_objectify_strings</a>(array|string array)</p><p class="description">Convert an flattened array to a properly structured object</p></td>
 </tr>
 <tr>
-<td class="type">private static  void</td>
+<td class="type">private static  array|object</td>
 <td class="description"><p class="name"><a href="#_ensure_exists()">_ensure_exists</a>(array|object ob, string|int entry, string type)</p><p class="description">Checks if object / array entry exists and creates it if not</p></td>
 </tr>
 <tr>
-<td class="type">private static  void</td>
+<td class="type">private static  string</td>
 <td class="description"><p class="name"><a href="#_get_actor_id()">_get_actor_id</a>(string|array actor)</p><p class="description">Get actor id based on actor name and db id, falls back on defaults</p></td>
 </tr>
 </table>
@@ -208,11 +191,7 @@ a json style array/object structure after merging both inputs as arrays</p></td>
 <h3 id="clear()">clear</h3>
 <code class="signature">public static  void <strong>clear</strong>(string|null actor)</code>
 <div class="details">
-<p>Clear the ACL rules altogether (no arg) or for a specific actor</p><dl>
-<dt>Returns:</dt>
-<dd>void</dd>
-</dl>
-</div>
+<p>Clear the ACL rules altogether (no arg) or for a specific actor</p></div>
 
 <hr>
 
@@ -221,50 +200,34 @@ a json style array/object structure after merging both inputs as arrays</p></td>
 <h3 id="set_actor()">set_actor</h3>
 <code class="signature">public static  void <strong>set_actor</strong>(string name, string mode, string db_id)</code>
 <div class="details">
-<p>Creates / modifies settings for the given actor</p><dl>
-<dt>Returns:</dt>
-<dd>void</dd>
-</dl>
-</div>
+<p>Creates / modifies settings for the given actor</p></div>
 
 <hr>
 
 <a href="../source/lib/acl.php.html#line75" class="location">lib/acl.php at line 75</a>
 
 <h3 id="get_actor()">get_actor</h3>
-<code class="signature">public static  void <strong>get_actor</strong>(string|array name)</code>
+<code class="signature">public static  object <strong>get_actor</strong>(string|array name)</code>
 <div class="details">
-<p>Get actor settings</p><dl>
-<dt>Returns:</dt>
-<dd>object</dd>
-</dl>
-</div>
+<p>Get actor settings</p></div>
 
 <hr>
 
 <a href="../source/lib/acl.php.html#line100" class="location">lib/acl.php at line 100</a>
 
 <h3 id="get_rules()">get_rules</h3>
-<code class="signature">public static  void <strong>get_rules</strong>(bool flat)</code>
+<code class="signature">public static  object <strong>get_rules</strong>(bool flat)</code>
 <div class="details">
-<p>Get the active rules</p><dl>
-<dt>Returns:</dt>
-<dd>object</dd>
-</dl>
-</div>
+<p>Get the active rules</p></div>
 
 <hr>
 
 <a href="../source/lib/acl.php.html#line120" class="location">lib/acl.php at line 120</a>
 
 <h3 id="has_permission()">has_permission</h3>
-<code class="signature">public static  void <strong>has_permission</strong>(array|string rule, array|string actor, bool fatal)</code>
+<code class="signature">public static  bool <strong>has_permission</strong>(array|string rule, array|string actor, bool fatal)</code>
 <div class="details">
-<p>Check if actor has given permission</p><dl>
-<dt>Returns:</dt>
-<dd>bool</dd>
-</dl>
-</div>
+<p>Check if actor has given permission</p></div>
 
 <hr>
 
@@ -273,11 +236,7 @@ a json style array/object structure after merging both inputs as arrays</p></td>
 <h3 id="set_rules()">set_rules</h3>
 <code class="signature">public static  void <strong>set_rules</strong>(array rules, string type, array|string actor)</code>
 <div class="details">
-<p>Set multiple rules at once</p><dl>
-<dt>Returns:</dt>
-<dd>void</dd>
-</dl>
-</div>
+<p>Set multiple rules at once</p></div>
 
 <hr>
 
@@ -286,11 +245,7 @@ a json style array/object structure after merging both inputs as arrays</p></td>
 <h3 id="set_rule()">set_rule</h3>
 <code class="signature">public static  void <strong>set_rule</strong>(array|object|string rule, string type, array|string actor)</code>
 <div class="details">
-<p>Set a rule</p><dl>
-<dt>Returns:</dt>
-<dd>void</dd>
-</dl>
-</div>
+<p>Set a rule</p></div>
 
 <hr>
 
@@ -299,11 +254,7 @@ a json style array/object structure after merging both inputs as arrays</p></td>
 <h3 id="_set_rule_full()">_set_rule_full</h3>
 <code class="signature">private static  void <strong>_set_rule_full</strong>(array|object rule, string actor)</code>
 <div class="details">
-<p>Set a rule from the top level</p><dl>
-<dt>Returns:</dt>
-<dd>void</dd>
-</dl>
-</div>
+<p>Set a rule from the top level</p></div>
 
 <hr>
 
@@ -312,11 +263,7 @@ a json style array/object structure after merging both inputs as arrays</p></td>
 <h3 id="_set_rule_table()">_set_rule_table</h3>
 <code class="signature">private static  void <strong>_set_rule_table</strong>(array|object rule, string actor)</code>
 <div class="details">
-<p>Set a rule from the table level</p><dl>
-<dt>Returns:</dt>
-<dd>void</dd>
-</dl>
-</div>
+<p>Set a rule from the table level</p></div>
 
 <hr>
 
@@ -325,11 +272,7 @@ a json style array/object structure after merging both inputs as arrays</p></td>
 <h3 id="_set_rule_field()">_set_rule_field</h3>
 <code class="signature">private static  void <strong>_set_rule_field</strong>(array|object rule, string actor)</code>
 <div class="details">
-<p>Set a rule from the field level</p><dl>
-<dt>Returns:</dt>
-<dd>void</dd>
-</dl>
-</div>
+<p>Set a rule from the field level</p></div>
 
 <hr>
 
@@ -338,11 +281,7 @@ a json style array/object structure after merging both inputs as arrays</p></td>
 <h3 id="validate_query()">validate_query</h3>
 <code class="signature">public static  void <strong>validate_query</strong>(<a href="../crossorm/builder.html">Builder</a> builder, array|string actor)</code>
 <div class="details">
-<p>Validate the given query build</p><dl>
-<dt>Returns:</dt>
-<dd>void</dd>
-</dl>
-</div>
+<p>Validate the given query build</p></div>
 
 <hr>
 
@@ -351,103 +290,34 @@ a json style array/object structure after merging both inputs as arrays</p></td>
 <h3 id="_validate_select_query()">_validate_select_query</h3>
 <code class="signature">private static  void <strong>_validate_select_query</strong>(<a href="../crossorm/builder.html">Builder</a> builder, array|string actor)</code>
 <div class="details">
-<p>Validate the given SELECT query</p><dl>
-<dt>Returns:</dt>
-<dd>void</dd>
-</dl>
-</div>
+<p>Validate the given SELECT query</p></div>
 
 <hr>
 
-<a href="../source/lib/acl.php.html#line309" class="location">lib/acl.php at line 309</a>
-
-<h3 id="_object_merge()">_object_merge</h3>
-<code class="signature">private static  void <strong>_object_merge</strong>(object|array ob, object|array ob2)</code>
-<div class="details">
-<p>Merge two objects recursively, can also input an array, basically enforces
-a json style array/object structure after merging both inputs as arrays</p><dl>
-<dt>Returns:</dt>
-<dd>object|array</dd>
-</dl>
-</div>
-
-<hr>
-
-<a href="../source/lib/acl.php.html#line326" class="location">lib/acl.php at line 326</a>
-
-<h3 id="_objectify()">_objectify</h3>
-<code class="signature">private static  void <strong>_objectify</strong>(array|object ob)</code>
-<div class="details">
-<p>Turn array / object structure into json style structure</p><dl>
-<dt>Returns:</dt>
-<dd>array|object</dd>
-</dl>
-</div>
-
-<hr>
-
-<a href="../source/lib/acl.php.html#line338" class="location">lib/acl.php at line 338</a>
-
-<h3 id="_object_to_array()">_object_to_array</h3>
-<code class="signature">private static  void <strong>_object_to_array</strong>(object|array ob)</code>
-<div class="details">
-<p>Convert object to array recursively</p><dl>
-<dt>Returns:</dt>
-<dd>array</dd>
-</dl>
-</div>
-
-<hr>
-
-<a href="../source/lib/acl.php.html#line363" class="location">lib/acl.php at line 363</a>
-
-<h3 id="_flatten_array()">_flatten_array</h3>
-<code class="signature">private static  void <strong>_flatten_array</strong>(array|object array, string parents)</code>
-<div class="details">
-<p>Flatten array, if input contains an object it will be converted to an array</p><dl>
-<dt>Returns:</dt>
-<dd>array</dd>
-</dl>
-</div>
-
-<hr>
-
-<a href="../source/lib/acl.php.html#line401" class="location">lib/acl.php at line 401</a>
+<a href="../source/lib/acl.php.html#line306" class="location">lib/acl.php at line 306</a>
 
 <h3 id="_objectify_strings()">_objectify_strings</h3>
-<code class="signature">private static  void <strong>_objectify_strings</strong>(array|string array)</code>
+<code class="signature">private static  object <strong>_objectify_strings</strong>(array|string array)</code>
 <div class="details">
-<p>Convert an flattened array to a properly structured object</p><dl>
-<dt>Returns:</dt>
-<dd>object</dd>
-</dl>
-</div>
+<p>Convert an flattened array to a properly structured object</p></div>
 
 <hr>
 
-<a href="../source/lib/acl.php.html#line459" class="location">lib/acl.php at line 459</a>
+<a href="../source/lib/acl.php.html#line365" class="location">lib/acl.php at line 365</a>
 
 <h3 id="_ensure_exists()">_ensure_exists</h3>
-<code class="signature">private static  void <strong>_ensure_exists</strong>(array|object ob, string|int entry, string type)</code>
+<code class="signature">private static  array|object <strong>_ensure_exists</strong>(array|object ob, string|int entry, string type)</code>
 <div class="details">
-<p>Checks if object / array entry exists and creates it if not</p><dl>
-<dt>Returns:</dt>
-<dd>array|object</dd>
-</dl>
-</div>
+<p>Checks if object / array entry exists and creates it if not</p></div>
 
 <hr>
 
-<a href="../source/lib/acl.php.html#line494" class="location">lib/acl.php at line 494</a>
+<a href="../source/lib/acl.php.html#line400" class="location">lib/acl.php at line 400</a>
 
 <h3 id="_get_actor_id()">_get_actor_id</h3>
-<code class="signature">private static  void <strong>_get_actor_id</strong>(string|array actor)</code>
+<code class="signature">private static  string <strong>_get_actor_id</strong>(string|array actor)</code>
 <div class="details">
-<p>Get actor id based on actor name and db id, falls back on defaults</p><dl>
-<dt>Returns:</dt>
-<dd>string</dd>
-</dl>
-</div>
+<p>Get actor id based on actor name and db id, falls back on defaults</p></div>
 
 <hr>
 

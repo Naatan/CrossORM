@@ -26,6 +26,8 @@ All parts of the project (whether Completed, In Progress or Todo) are subject to
 
 * Unit tests for all libraries
 * Reorganize libraries in sub-directories of the lib folder
+* Create validation library
+* Make models useful (define structure, set ACL, etc)
 
 ## Todo (order does not indicate priority)
 
@@ -34,9 +36,7 @@ All parts of the project (whether Completed, In Progress or Todo) are subject to
 * Support raw queries, clauses & fields
 * Intelligently handle update/delete queries on resultsets
 * Develop proof-of-concept MongoDB driver
-* Make models useful (define structure, set ACL, etc)
 * Implement intuitive active record methods (see project goals)
-* Create validation library
 * Support ACL in models
 * Auto load dependencies (or hook into frameworks to do so)
 * Create proper documentation

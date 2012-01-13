@@ -31,7 +31,7 @@ class ACL
 	 * 
 	 * @param	string|null			$actor
 	 * 
-	 * @returns	void							
+	 * @return	void							
 	 */
 	public static function clear($actor = null)
 	{
@@ -57,7 +57,7 @@ class ACL
 	 * @param	string					$mode			
 	 * @param	string					$db_id
 	 * 
-	 * @returns	void							
+	 * @return	void							
 	 */
 	public static function set_actor($name, $mode = MODE_WHITELIST, $db_id = DB_ID_DEFAULT)
 	{
@@ -81,7 +81,7 @@ class ACL
 	 * 
 	 * @param	string|array			$name
 	 * 
-	 * @returns	object
+	 * @return	object
 	 */
 	public static function get_actor($name = ACTOR_DEFAULT)
 	{
@@ -106,7 +106,7 @@ class ACL
 	 * 
 	 * @param	bool			$flat
 	 * 
-	 * @returns	object
+	 * @return	object
 	 */
 	public static function get_rules($flat = false)
 	{
@@ -126,7 +126,7 @@ class ACL
 	 * @param	array|string			$actor			
 	 * @param	bool					$fatal
 	 * 
-	 * @returns	bool							
+	 * @return	bool							
 	 */
 	public static function has_permission($rule, $actor = null, $fatal = false)
 	{
@@ -163,7 +163,7 @@ class ACL
 	 * @param	array					$rules			
 	 * @param	string					$type			
 	 * @param	array|string			$actor			
-	 * @returns	void							
+	 * @return	void							
 	 */
 	public static function set_rules($rules, $type = RULE_TYPE_FULL, $actor = null)
 	{
@@ -180,7 +180,7 @@ class ACL
 	 * @param	string					$type			
 	 * @param	array|string			$actor
 	 * 
-	 * @returns	void							
+	 * @return	void							
 	 */
 	public static function set_rule($rule,$type = RULE_TYPE_FULL, $actor = null)
 	{
@@ -201,7 +201,7 @@ class ACL
 				break;
 		}
 		
-		static::$rules_flat = static::_flatten_array(static::$rules);
+		static::$rules_flat = Helpers::flatten_array(static::$rules);
 	}
 	
 	/**
@@ -210,7 +210,7 @@ class ACL
 	 * @param	array|object			$rule
 	 * @param	string					$actor
 	 * 
-	 * @returns	void							
+	 * @return	void							
 	 */
 	private static function _set_rule_full($rule,$actor)
 	{
@@ -221,7 +221,7 @@ class ACL
 		
 		static::_ensure_exists( static::$rules,	$actor,	'object' );
 		
-		static::_object_merge( 	static::$rules->{$actor}, $rule );
+		Helpers::object_merge( 	static::$rules->{$actor}, $rule );
 	}
 	
 	/**
@@ -230,15 +230,15 @@ class ACL
 	 * @param	array|object			$rule			
 	 * @param	string					$actor
 	 * 
-	 * @returns	void							
+	 * @return	void							
 	 */
 	private static function _set_rule_table($rule,$actor)
 	{
-		static::_ensure_exists( static::$rules->{$actor},						'tables',	'object'	);
+		static::_ensure_exists( static::$rules->{$actor},					'tables',	'object'	);
 		static::_ensure_exists( static::$rules->{$actor}->tables->{$rule[0]},	'actions',	'array'		);
 		static::_ensure_exists( static::$rules->{$actor}->tables->{$rule[0]},	'fields',	'object'	);
 		
-		static::_object_merge( 	static::$rules->{$actor}->tables->{$rule[0]}, $rule[1] );
+		Helpers::object_merge( 	static::$rules->{$actor}->tables->{$rule[0]}, $rule[1] );
 		
 	}
 	
@@ -248,7 +248,7 @@ class ACL
 	 * @param	array|object			$rule			
 	 * @param	string					$actor
 	 * 
-	 * @returns	void							
+	 * @return	void							
 	 */
 	private static function _set_rule_field($rule,$actor)
 	{
@@ -257,7 +257,7 @@ class ACL
 		static::_ensure_exists( static::$rules->{$actor}->tables->{$rule[0]},	'actions',	'array'		);
 		static::_ensure_exists( static::$rules->{$actor}->tables->{$rule[0]},	'fields',	'object'	);
 		
-		static::_object_merge( 	static::$rules->{$actor}->tables->{$rule[0]}->fields, $rule[1] );
+		Helpers::object_merge( 	static::$rules->{$actor}->tables->{$rule[0]}->fields, $rule[1] );
 	}
 	
 	/**
@@ -266,7 +266,7 @@ class ACL
 	 * @param	Builder					$builder
 	 * @param	array|string			$actor
 	 * 
-	 * @returns	void							
+	 * @return	void							
 	 */
 	public static function validate_query(Builder $builder, $actor)
 	{
@@ -293,7 +293,7 @@ class ACL
 	 * @param	Builder					$builder
 	 * @param	array|string			$actor
 	 * 
-	 * @returns	void							
+	 * @return	void							
 	 */
 	private static function _validate_select_query(\CrossORM\Builder $builder, $actor)
 	{
@@ -309,105 +309,10 @@ class ACL
 	}
 	
 	/**
-	 * Merge two objects recursively, can also input an array, basically enforces
-	 * a json style array/object structure after merging both inputs as arrays
-	 * 
-	 * @param	object|array			$ob
-	 * @param	object|array			$ob2
-	 * 
-	 * @returns	object|array
-	 */
-	private static function _object_merge(&$ob,$ob2)
-	{
-		$ob = static::_objectify(
-			array_merge_recursive(
-				static::_object_to_array($ob),
-				static::_object_to_array($ob2)
-			)
-		);
-	}
-	
-	/**
-	 * Turn array / object structure into json style structure
-	 * 
-	 * @param	array|object			$ob
-	 * 
-	 * @returns	array|object			
-	 */
-	private static function _objectify($ob)
-	{
-		return json_decode(json_encode($ob));
-	}
-	
-	/**
-	 * Convert object to array recursively
-	 * 
-	 * @param	object|array			$ob
-	 * 
-	 * @returns	array
-	 */
-	private static function _object_to_array($ob)
-	{
-		if (!is_array($ob) AND !is_object($ob))
-		{
-			return $ob;
-		}
-		
-		$ob = (array) $ob;
-		
-		foreach ($ob AS $k => $v)
-		{
-			$ob[$k] = static::_object_to_array($ob[$k]);
-		}
-		
-		return $ob;
-	}
-	
-	/**
-	 * Flatten array, if input contains an object it will be converted to an array
-	 * 
-	 * @param	array|object			$array			
-	 * @param	string					$parents
-	 * 
-	 * @returns	array			
-	 */
-	private static function _flatten_array($array, $parents = '')
-	{
-		if ( !is_array($array) AND !is_object($array))
-		{
-			return array($parents . $array);
-		}
-		
-		if (empty($parents))
-		{
-			$array 	= static::_object_to_array($array);
-		}
-		
-		$flat 	= array();
-		
-		foreach ($array AS $k => $v)
-		{
-			if (is_numeric($k))
-			{
-				$k = '';
-				$p = $parents;
-			} else
-			{
-				$p = $parents . $k . '.';
-				$flat[] = $parents . $k;
-			}
-			
-			$flat = array_merge($flat,static::_flatten_array($v,$p));
-		}
-		
-		return $flat;
-	}
-	
-	/**
 	 * Convert an flattened array to a properly structured object
 	 * 
 	 * @param	array|string			$array
-	 * @returns	object
+	 * @return	object
 	 */
 	private static function _objectify_strings($array)
 	{
@@ -456,7 +361,7 @@ class ACL
 			
 		}
 		
-		return static::_objectify($result);
+		return Helpers::objectify($result);
 	}
 	
 	/**
@@ -465,7 +370,8 @@ class ACL
 	 * @param	array|object			$ob				
 	 * @param	string|int				$entry			
 	 * @param	string					$type			
-	 * @returns	array|object						
+	 * 
+	 * @return	array|object						
 	 */
 	private static function _ensure_exists(&$ob,$entry,$type='')
 	{
@@ -500,7 +406,7 @@ class ACL
 	 * 
 	 * @param	string|array			$actor
 	 * 
-	 * @returns	string							
+	 * @return	string							
 	 */
 	private static function _get_actor_id($actor = null)
 	{
