@@ -1,0 +1,372 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Tue, 15 May 2012 19:23:20 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+<link rel="start" href="../../../overview-summary.html">
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+<script type="text/javascript">
+			$(document).ready(function() {
+				$('iframe').load(function() {
+				  this.style.height =
+				  this.contentWindow.document.body.offsetHeight + 'px';
+				});
+			});
+		</script>
+<title>CrossORM/Core/Model.php (CrossORM Documentation)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>CrossORM</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../todo-list.html">Todo</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/crossorm/core/model.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>CrossORM/Core/Model.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>namespace CrossORM\Core;
+<a name="line4"></a>
+<a name="line5"></a>use \CrossORM\DB,
+<a name="line6"></a>	\CrossORM\Exceptions,
+<a name="line7"></a>	\CrossORM\Helpers,
+<a name="line8"></a>	\CrossORM\Security\Validation;
+<a name="line9"></a>
+<a name="line10"></a>/**
+<a name="line11"></a> * Model class, wraps around the ORM
+<a name="line12"></a> */
+<a name="line13"></a>abstract class Model
+<a name="line14"></a>{
+<a name="line15"></a>	
+<a name="line16"></a>	protected $orm;
+<a name="line17"></a>	
+<a name="line18"></a>	protected $table_name 	= null;
+<a name="line19"></a>	protected $db_id		= null;
+<a name="line20"></a>	protected $config		= null;
+<a name="line21"></a>	
+<a name="line22"></a>	protected $id_field 	= 'id';
+<a name="line23"></a>	protected $fields		= array();
+<a name="line24"></a>	
+<a name="line25"></a>	protected $_validate_on = \CrossORM\VALIDATE_ON_ALL;
+<a name="line26"></a>
+<a name="line27"></a>	protected $dynamic_methods 	= array();
+<a name="line28"></a>
+<a name="line29"></a>	private $_dynamic_methods 	= array(
+<a name="line30"></a>		'where_%field%'					=> array('where_equal', 	'%field%', '%value%'),
+<a name="line31"></a>		'where_%field%_not'				=> array('where_not_equal', '%field%', '%value%'),
+<a name="line32"></a>		'where_%field%_gt'				=> array('where_gt', 		'%field%', '%value%'),
+<a name="line33"></a>		'where_%field%_gte'				=> array('where_gte', 		'%field%', '%value%'),
+<a name="line34"></a>		'where_%field%_lt'				=> array('where_lt', 		'%field%', '%value%'),
+<a name="line35"></a>		'where_%field%_lte' 			=> array('where_lte', 		'%field%', '%value%'),
+<a name="line36"></a>		'where_%field%_is_null'			=> array('where_null', 		'%field%', '%value%'),
+<a name="line37"></a>		'where_%field%_is_not_null' 	=> array('where_not_null', 	'%field%', '%value%'),
+<a name="line38"></a>		'where_%field%_in' 				=> array('where_in', 		'%field%', '%value%'),
+<a name="line39"></a>		'where_%field%_like'			=> array('where_like', 		'%field%', '%value%'),
+<a name="line40"></a>		'where_%field%_not_like' 		=> array('where_not_like', 	'%field%', '%value%'),
+<a name="line41"></a>
+<a name="line42"></a>		'order_by_%field%' 				=> array('order_by_desc', 	'%field%'),
+<a name="line43"></a>		'order_%field%_desc' 			=> array('order_by_desd', 	'%field%'),
+<a name="line44"></a>		'order_%field%_asc'				=> array('order_by_asc', 	'%field%'),
+<a name="line45"></a>
+<a name="line46"></a>		'group_by_%field%'				=> array('group_by', 		'%field%')
+<a name="line47"></a>	);
+<a name="line48"></a>
+<a name="line49"></a>	private $_method_hooks  	= array();
+<a name="line50"></a>	
+<a name="line51"></a>	/**
+<a name="line52"></a>	 * Constructor
+<a name="line53"></a>	 * 
+<a name="line54"></a>	 * @return	$this	
+<a name="line55"></a>	 */
+<a name="line56"></a>	public function __construct($id = NULL, $config = NULL, $orm = NULL)
+<a name="line57"></a>	{
+<a name="line58"></a>
+<a name="line59"></a>		// Detect DB ID to use
+<a name="line60"></a>		if ($id == NULL AND $this->db_id != NULL)
+<a name="line61"></a>		{
+<a name="line62"></a>			$id = $this->db_id;
+<a name="line63"></a>		}
+<a name="line64"></a>		
+<a name="line65"></a>		$this->db_id 	= $id;
+<a name="line66"></a>		$this->config 	= $config;
+<a name="line67"></a>		$table_name 	= $this->_get_table_name();
+<a name="line68"></a>		
+<a name="line69"></a>		// Initiate ORM
+<a name="line70"></a>		if ($orm == NULL)
+<a name="line71"></a>		{
+<a name="line72"></a>			$this->orm 	= DB::factory($id, $config);
+<a name="line73"></a>			$this->orm->table($table_name);
+<a name="line74"></a>		}
+<a name="line75"></a>			else
+<a name="line76"></a>		{
+<a name="line77"></a>			$this->orm 	= $orm;
+<a name="line78"></a>		}
+<a name="line79"></a>
+<a name="line80"></a>		$this->prepare_fields();
+<a name="line81"></a>
+<a name="line82"></a>		return $this;
+<a name="line83"></a>	}
+<a name="line84"></a>	
+<a name="line85"></a>	/**
+<a name="line86"></a>	 * Method overloading, forward unknown calls to the ORM
+<a name="line87"></a>	 * 
+<a name="line88"></a>	 * @param	string			$method			
+<a name="line89"></a>	 * @param	array			$args
+<a name="line90"></a>	 * 
+<a name="line91"></a>	 * @return	mixed						
+<a name="line92"></a>	 */
+<a name="line93"></a>	public function __call($method,$args)
+<a name="line94"></a>	{
+<a name="line95"></a>		if (isset($this->_method_hooks[$method]))
+<a name="line96"></a>		{
+<a name="line97"></a>			
+<a name="line98"></a>			$hook 		= $this->_method_hooks[$method];
+<a name="line99"></a>			$method 	= array_shift($hook->args);
+<a name="line100"></a>
+<a name="line101"></a>			$replace 	= array(
+<a name="line102"></a>				'%field%'	=> $hook->field,
+<a name="line103"></a>				'%value%'	=> count($args) > 0 ? $args[0] : NULL,
+<a name="line104"></a>				'%values%'	=> $args
+<a name="line105"></a>			);
+<a name="line106"></a>
+<a name="line107"></a>			for ($i=0; $i < count($args); $i++)
+<a name="line108"></a>			{ 
+<a name="line109"></a>				$replace['%value'.($i+1).'%'] = $args[$i];
+<a name="line110"></a>			}
+<a name="line111"></a>
+<a name="line112"></a>			foreach ($hook->args AS &$argument)
+<a name="line113"></a>			{
+<a name="line114"></a>				$argument = isset($replace[$argument]) ? $replace[$argument] : NULL;
+<a name="line115"></a>			}
+<a name="line116"></a>
+<a name="line117"></a>			$result = call_user_func_array(array($this,$method),$hook->args);
+<a name="line118"></a>
+<a name="line119"></a>		}
+<a name="line120"></a>		else
+<a name="line121"></a>		{
+<a name="line122"></a>
+<a name="line123"></a>			if (in_array($method,array('run','save')))
+<a name="line124"></a>			{
+<a name="line125"></a>				$this->_validate_fields();
+<a name="line126"></a>			}
+<a name="line127"></a>
+<a name="line128"></a>			$result = call_user_func_array(array($this->orm,$method),$args);
+<a name="line129"></a>
+<a name="line130"></a>		}
+<a name="line131"></a>		
+<a name="line132"></a>		if ($result instanceof ORM)
+<a name="line133"></a>		{
+<a name="line134"></a>			$this->orm = $result;
+<a name="line135"></a>			return $this;
+<a name="line136"></a>		}
+<a name="line137"></a>			else
+<a name="line138"></a>		{
+<a name="line139"></a>			return $result;
+<a name="line140"></a>		}
+<a name="line141"></a>	}
+<a name="line142"></a>	
+<a name="line143"></a>	/**
+<a name="line144"></a>	 * Forward __get calls to ORM
+<a name="line145"></a>	 * 
+<a name="line146"></a>	 * @param	string			$key
+<a name="line147"></a>	 * 
+<a name="line148"></a>	 * @return	mixed							
+<a name="line149"></a>	 */
+<a name="line150"></a>	public function __get($key)
+<a name="line151"></a>	{
+<a name="line152"></a>		return $this->orm->{$key};
+<a name="line153"></a>	}
+<a name="line154"></a>	
+<a name="line155"></a>	/**
+<a name="line156"></a>	 * Forward __set calls to ORM
+<a name="line157"></a>	 * 
+<a name="line158"></a>	 * @param	string			$key			
+<a name="line159"></a>	 * @param	mixed			$value
+<a name="line160"></a>	 * 
+<a name="line161"></a>	 * @return	mixed							
+<a name="line162"></a>	 */
+<a name="line163"></a>	public function __set($key,$value)
+<a name="line164"></a>	{
+<a name="line165"></a>		if (count($this->fields) > 0 AND !isset($this->fields->{$key}))
+<a name="line166"></a>		{
+<a name="line167"></a>			throw new Exceptions\Validation('Trying to set field "' . (string) $key . '" which does not exist in model "' . (string) get_class($this) . '"');
+<a name="line168"></a>		}
+<a name="line169"></a>		
+<a name="line170"></a>		if (in_array($this->_validate_on, array(\CrossORM\VALIDATE_ON_ALL, \CrossORM\VALIDATE_ON_SET)) AND isset($this->fields->{$key}))
+<a name="line171"></a>		{
+<a name="line172"></a>			$field = $this->fields->{$key};
+<a name="line173"></a>			
+<a name="line174"></a>			$rules  = isset($field->validation) ? $field->validation . ',' : '';
+<a name="line175"></a>			$rules .= isset($field->type) ? $field->type : '';
+<a name="line176"></a>			
+<a name="line177"></a>			Validation::run(isset($field->label) ? $field->label : $key, $value, $rules, $this);
+<a name="line178"></a>		}
+<a name="line179"></a>		
+<a name="line180"></a>		return $this->orm->{$key} = $value;
+<a name="line181"></a>	}
+<a name="line182"></a>	
+<a name="line183"></a>	/**
+<a name="line184"></a>	 * Forward __isset calls to ORM
+<a name="line185"></a>	 * 
+<a name="line186"></a>	 * @param	string			$key
+<a name="line187"></a>	 * 
+<a name="line188"></a>	 * @return	bool							
+<a name="line189"></a>	 */
+<a name="line190"></a>	public function __isset($key)
+<a name="line191"></a>	{
+<a name="line192"></a>		return isset($this->orm{$key});
+<a name="line193"></a>	}
+<a name="line194"></a>	
+<a name="line195"></a>	/**
+<a name="line196"></a>	 * Instantiate new instance of model
+<a name="line197"></a>	 * 
+<a name="line198"></a>	 * @return	object							
+<a name="line199"></a>	 */
+<a name="line200"></a>	public static function factory()
+<a name="line201"></a>	{
+<a name="line202"></a>		$class_name = get_called_class();
+<a name="line203"></a>		return new $class_name;
+<a name="line204"></a>	}
+<a name="line205"></a>
+<a name="line206"></a>	private function prepare_fields() 
+<a name="line207"></a>	{
+<a name="line208"></a>		$this->fields 		= Helpers::objectify($this->fields);
+<a name="line209"></a>		$dynamic_methods 	= array_merge($this->_dynamic_methods,$this->dynamic_methods);
+<a name="line210"></a>
+<a name="line211"></a>		foreach ($this->fields AS $field => $data)
+<a name="line212"></a>		{
+<a name="line213"></a>			foreach ($dynamic_methods AS $method => $hook)
+<a name="line214"></a>			{
+<a name="line215"></a>				$method 						= str_replace('%field%', $field, $method);
+<a name="line216"></a>				$this->_method_hooks[$method] 	= (object) array('field' => $field, 'args' => $hook);
+<a name="line217"></a>			}
+<a name="line218"></a>		}
+<a name="line219"></a>	}
+<a name="line220"></a>
+<a name="line221"></a>	public function find_one()
+<a name="line222"></a>	{
+<a name="line223"></a>		$this->orm = $this->orm->find_one();
+<a name="line224"></a>		return $this;
+<a name="line225"></a>	}
+<a name="line226"></a>	
+<a name="line227"></a>	public function find_many()
+<a name="line228"></a>	{
+<a name="line229"></a>		if ( ! $result = $this->orm->find_many())
+<a name="line230"></a>		{
+<a name="line231"></a>			return false;
+<a name="line232"></a>		}
+<a name="line233"></a>		
+<a name="line234"></a>		$class 	= get_called_class();
+<a name="line235"></a>		$rows 	= array();
+<a name="line236"></a>		
+<a name="line237"></a>		foreach ($result->get_rows() AS $row)
+<a name="line238"></a>		{
+<a name="line239"></a>			$rows[] = new $this($this->db_id, $this->config, $row);
+<a name="line240"></a>		}
+<a name="line241"></a>		
+<a name="line242"></a>		return $rows;
+<a name="line243"></a>	}
+<a name="line244"></a>
+<a name="line245"></a>	protected function _validate_fields()
+<a name="line246"></a>	{
+<a name="line247"></a>		$fields = $this->orm->fields();
+<a name="line248"></a>
+<a name="line249"></a>		foreach ($fields AS $key => $value)
+<a name="line250"></a>		{
+<a name="line251"></a>			if (in_array($this->_validate_on,array(\CrossORM\VALIDATE_ON_ALL,\CrossORM\VALIDATE_ON_RUN)) AND isset($this->fields->{$key}))
+<a name="line252"></a>			{
+<a name="line253"></a>				$field = $this->fields->{$key};
+<a name="line254"></a>				
+<a name="line255"></a>				$rules  = isset($field->validation) ? $field->validation . ',' : '';
+<a name="line256"></a>				$rules .= isset($field->type) ? $field->type : '';
+<a name="line257"></a>				
+<a name="line258"></a>				Validation::run(isset($field->label) ? $field->label : $key, $value, $rules, $this);
+<a name="line259"></a>			}
+<a name="line260"></a>		}
+<a name="line261"></a>	}
+<a name="line262"></a>	
+<a name="line263"></a>	/**
+<a name="line264"></a>	 * Static method to get a table name given a class name.
+<a name="line265"></a>	 * If the supplied class has a public static property
+<a name="line266"></a>	 * named $_table, the value of this property will be
+<a name="line267"></a>	 * returned. If not, the class name will be converted using
+<a name="line268"></a>	 * the _class_name_to_table_name method method.
+<a name="line269"></a>	 */
+<a name="line270"></a>	protected function _get_table_name()
+<a name="line271"></a>	{
+<a name="line272"></a>		if ( !empty($this->table_name))
+<a name="line273"></a>		{
+<a name="line274"></a>			return $this->table_name;
+<a name="line275"></a>		}
+<a name="line276"></a>		
+<a name="line277"></a>		$class_name = get_class($this);
+<a name="line278"></a>		return static::_class_name_to_table_name($class_name);
+<a name="line279"></a>	}
+<a name="line280"></a>	
+<a name="line281"></a>	/**
+<a name="line282"></a>	 * Static method to convert a class name in CapWords
+<a name="line283"></a>	 * to a table name in lowercase_with_underscores.
+<a name="line284"></a>	 * For example, CarTyre would be converted to car_tyre.
+<a name="line285"></a>	 */
+<a name="line286"></a>	public static function _class_name_to_table_name($class_name)
+<a name="line287"></a>	{
+<a name="line288"></a>		$table_name = strtolower(preg_replace('/(?<=[a-z])([A-Z])/', '_$1', basename($class_name)));
+<a name="line289"></a>		
+<a name="line290"></a>		if (substr($table_name,0,6)=='model_')
+<a name="line291"></a>		{
+<a name="line292"></a>			$table_name = substr($table_name,6);
+<a name="line293"></a>		}
+<a name="line294"></a>		
+<a name="line295"></a>		if (substr($table_name,-6)=='_model')
+<a name="line296"></a>		{
+<a name="line297"></a>			$table_name = substr($table_name,0,-6);
+<a name="line298"></a>		}
+<a name="line299"></a>		
+<a name="line300"></a>		return $table_name;
+<a name="line301"></a>	}
+<a name="line302"></a>	
+<a name="line303"></a>}</pre>
+<div class="header">
+<h1>CrossORM</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../todo-list.html">Todo</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/crossorm/core/model.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href=http://peej.github.com/phpdoctor/>PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

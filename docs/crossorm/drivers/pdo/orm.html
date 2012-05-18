@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Fri, 13 Jan 2012 18:08:38 +0000">
+<meta name="when" content="Tue, 15 May 2012 19:23:20 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -50,41 +50,24 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <div class="qualifiedName">CrossORM\Drivers\PDO\ORM</div>
-<a href="../../../source/drivers/pdo/orm.php.html#line54" class="location">drivers/pdo/orm.php at line 54</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line11" class="location">CrossORM/Drivers/Pdo/ORM.php at line 11</a>
 
 <h1>Class ORM</h1>
 
-<pre class="tree"><a href="../../../crossorm/orm.html">ORM</a><br>    └─<strong>ORM</strong><br /></pre>
+<pre class="tree"><a href="../../../crossorm/core/orm.html">ORM</a><br>    └─<strong>ORM</strong><br /></pre>
 
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../crossorm/drivers/pdo/orm.html">ORM</a> </dd>
+<dd><a href="../../../crossorm/core/orm.html">CrossORM\Core\ORM</a> </dd>
 </dl>
 
 <hr>
 
-<p class="signature">public  class <strong>ORM</strong><br>extends <a href="../../../crossorm/orm.html">ORM</a>
+<p class="signature">public  class <strong>ORM</strong><br>extends <a href="../../../crossorm/core/orm.html">ORM</a>
 
 </p>
 
-<div class="comment" id="overview_description"><p>CrossORM ORM library for PDO driver
-This library is based on the excellent "Idiorm" library by Jamie Matthews</p><p>Idiorm</p><p>http://github.com/j4mie/idiorm/</p><p>A single-class super-simple database abstraction layer for PHP.
-Provides (nearly) zero-configuration object-relational mapping
-and a fluent interface for building basic, commonly-used queries.</p><p>BSD Licensed.</p><p>Copyright (c) 2010, Jamie Matthews
-All rights reserved.</p><p>Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:</p><p>* Redistributions of source code must retain the above copyright notice, this
-list of conditions and the following disclaimer.</p><p>* Redistributions in binary form must reproduce the above copyright notice,
-this list of conditions and the following disclaimer in the documentation
-and/or other materials provided with the distribution.</p><p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p></div>
+<div class="comment" id="overview_description"><p>ORM Class, where most of the magic happens</p></div>
 
 <hr>
 
@@ -97,8 +80,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p></div>
 </table>
 
 <table class="inherit">
-<tr><th colspan="2">Fields inherited from CrossORM\ORM</th></tr>
-<tr><td><a href="../../../crossorm/orm.html#_acl">_acl</a>, <a href="../../../crossorm/orm.html#_actor">_actor</a>, <a href="../../../crossorm/orm.html#_build">_build</a>, <a href="../../../crossorm/orm.html#_config">_config</a>, <a href="../../../crossorm/orm.html#_conn">_conn</a>, <a href="../../../crossorm/orm.html#_connections">_connections</a>, <a href="../../../crossorm/orm.html#_db_id">_db_id</a>, <a href="../../../crossorm/orm.html#_fields">_fields</a>, <a href="../../../crossorm/orm.html#_last_query">_last_query</a>, <a href="../../../crossorm/orm.html#_last_query_result">_last_query_result</a>, <a href="../../../crossorm/orm.html#_state">_state</a></td></tr></table>
+<tr><th colspan="2">Fields inherited from CrossORM\Core\ORM</th></tr>
+<tr><td><a href="../../../crossorm/core/orm.html#_acl">_acl</a>, <a href="../../../crossorm/core/orm.html#_actor">_actor</a>, <a href="../../../crossorm/core/orm.html#_build">_build</a>, <a href="../../../crossorm/core/orm.html#_config">_config</a>, <a href="../../../crossorm/core/orm.html#_conn">_conn</a>, <a href="../../../crossorm/core/orm.html#_connections">_connections</a>, <a href="../../../crossorm/core/orm.html#_db_id">_db_id</a>, <a href="../../../crossorm/core/orm.html#_fields">_fields</a>, <a href="../../../crossorm/core/orm.html#_last_query">_last_query</a>, <a href="../../../crossorm/core/orm.html#_last_query_result">_last_query_result</a>, <a href="../../../crossorm/core/orm.html#_model">_model</a>, <a href="../../../crossorm/core/orm.html#_state">_state</a></td></tr></table>
 
 <table id="summary_method">
 <tr><th colspan="2">Method Summary</th></tr>
@@ -194,21 +177,21 @@ only adds the pieces if they are not empty.</p></td>
 </table>
 
 <table class="inherit">
-<tr><th colspan="2">Methods inherited from CrossORM\ORM</th></tr>
-<tr><td><a href="../../../crossorm/orm.html#__construct()">__construct</a>, <a href="../../../crossorm/orm.html#__get()">__get</a>, <a href="../../../crossorm/orm.html#__isset()">__isset</a>, <a href="../../../crossorm/orm.html#__set()">__set</a>, <a href="../../../crossorm/orm.html#_create_instance_from_row()">_create_instance_from_row</a>, <a href="../../../crossorm/orm.html#acl()">acl</a>, <a href="../../../crossorm/orm.html#as_array()">as_array</a>, <a href="../../../crossorm/orm.html#as_json()">as_json</a>, <a href="../../../crossorm/orm.html#create()">create</a>, <a href="../../../crossorm/orm.html#delete()">delete</a>, <a href="../../../crossorm/orm.html#fields()">fields</a>, <a href="../../../crossorm/orm.html#find_many()">find_many</a>, <a href="../../../crossorm/orm.html#find_one()">find_one</a>, <a href="../../../crossorm/orm.html#for_table()">for_table</a>, <a href="../../../crossorm/orm.html#get()">get</a>, <a href="../../../crossorm/orm.html#get_query()">get_query</a>, <a href="../../../crossorm/orm.html#group_by()">group_by</a>, <a href="../../../crossorm/orm.html#hydrate()">hydrate</a>, <a href="../../../crossorm/orm.html#id()">id</a>, <a href="../../../crossorm/orm.html#id_column()">id_column</a>, <a href="../../../crossorm/orm.html#limit()">limit</a>, <a href="../../../crossorm/orm.html#offset()">offset</a>, <a href="../../../crossorm/orm.html#order_by_asc()">order_by_asc</a>, <a href="../../../crossorm/orm.html#order_by_desc()">order_by_desc</a>, <a href="../../../crossorm/orm.html#save()">save</a>, <a href="../../../crossorm/orm.html#select()">select</a>, <a href="../../../crossorm/orm.html#set()">set</a>, <a href="../../../crossorm/orm.html#state()">state</a>, <a href="../../../crossorm/orm.html#table()">table</a>, <a href="../../../crossorm/orm.html#table_alias()">table_alias</a>, <a href="../../../crossorm/orm.html#validate_acl()">validate_acl</a>, <a href="../../../crossorm/orm.html#where()">where</a>, <a href="../../../crossorm/orm.html#where_equal()">where_equal</a>, <a href="../../../crossorm/orm.html#where_gt()">where_gt</a>, <a href="../../../crossorm/orm.html#where_gte()">where_gte</a>, <a href="../../../crossorm/orm.html#where_id_is()">where_id_is</a>, <a href="../../../crossorm/orm.html#where_in()">where_in</a>, <a href="../../../crossorm/orm.html#where_like()">where_like</a>, <a href="../../../crossorm/orm.html#where_lt()">where_lt</a>, <a href="../../../crossorm/orm.html#where_lte()">where_lte</a>, <a href="../../../crossorm/orm.html#where_not_equal()">where_not_equal</a>, <a href="../../../crossorm/orm.html#where_not_in()">where_not_in</a>, <a href="../../../crossorm/orm.html#where_not_like()">where_not_like</a>, <a href="../../../crossorm/orm.html#where_not_null()">where_not_null</a>, <a href="../../../crossorm/orm.html#where_null()">where_null</a></td></tr></table>
+<tr><th colspan="2">Methods inherited from CrossORM\Core\ORM</th></tr>
+<tr><td><a href="../../../crossorm/core/orm.html#__construct()">__construct</a>, <a href="../../../crossorm/core/orm.html#__get()">__get</a>, <a href="../../../crossorm/core/orm.html#__isset()">__isset</a>, <a href="../../../crossorm/core/orm.html#__set()">__set</a>, <a href="../../../crossorm/core/orm.html#_create_instance_from_row()">_create_instance_from_row</a>, <a href="../../../crossorm/core/orm.html#acl()">acl</a>, <a href="../../../crossorm/core/orm.html#as_array()">as_array</a>, <a href="../../../crossorm/core/orm.html#as_json()">as_json</a>, <a href="../../../crossorm/core/orm.html#create()">create</a>, <a href="../../../crossorm/core/orm.html#delete()">delete</a>, <a href="../../../crossorm/core/orm.html#fields()">fields</a>, <a href="../../../crossorm/core/orm.html#find_many()">find_many</a>, <a href="../../../crossorm/core/orm.html#find_one()">find_one</a>, <a href="../../../crossorm/core/orm.html#for_table()">for_table</a>, <a href="../../../crossorm/core/orm.html#get()">get</a>, <a href="../../../crossorm/core/orm.html#get_query()">get_query</a>, <a href="../../../crossorm/core/orm.html#group_by()">group_by</a>, <a href="../../../crossorm/core/orm.html#hydrate()">hydrate</a>, <a href="../../../crossorm/core/orm.html#id()">id</a>, <a href="../../../crossorm/core/orm.html#id_column()">id_column</a>, <a href="../../../crossorm/core/orm.html#limit()">limit</a>, <a href="../../../crossorm/core/orm.html#offset()">offset</a>, <a href="../../../crossorm/core/orm.html#order_by_asc()">order_by_asc</a>, <a href="../../../crossorm/core/orm.html#order_by_desc()">order_by_desc</a>, <a href="../../../crossorm/core/orm.html#save()">save</a>, <a href="../../../crossorm/core/orm.html#select()">select</a>, <a href="../../../crossorm/core/orm.html#set()">set</a>, <a href="../../../crossorm/core/orm.html#state()">state</a>, <a href="../../../crossorm/core/orm.html#table()">table</a>, <a href="../../../crossorm/core/orm.html#table_alias()">table_alias</a>, <a href="../../../crossorm/core/orm.html#use_model()">use_model</a>, <a href="../../../crossorm/core/orm.html#validate_acl()">validate_acl</a>, <a href="../../../crossorm/core/orm.html#where()">where</a>, <a href="../../../crossorm/core/orm.html#where_NULL()">where_NULL</a>, <a href="../../../crossorm/core/orm.html#where_equal()">where_equal</a>, <a href="../../../crossorm/core/orm.html#where_gt()">where_gt</a>, <a href="../../../crossorm/core/orm.html#where_gte()">where_gte</a>, <a href="../../../crossorm/core/orm.html#where_id_is()">where_id_is</a>, <a href="../../../crossorm/core/orm.html#where_in()">where_in</a>, <a href="../../../crossorm/core/orm.html#where_like()">where_like</a>, <a href="../../../crossorm/core/orm.html#where_lt()">where_lt</a>, <a href="../../../crossorm/core/orm.html#where_lte()">where_lte</a>, <a href="../../../crossorm/core/orm.html#where_not_NULL()">where_not_NULL</a>, <a href="../../../crossorm/core/orm.html#where_not_equal()">where_not_equal</a>, <a href="../../../crossorm/core/orm.html#where_not_in()">where_not_in</a>, <a href="../../../crossorm/core/orm.html#where_not_like()">where_not_like</a></td></tr></table>
 
 <h2 id="detail_field">Field Detail</h2>
-<a href="../../../source/drivers/pdo/orm.php.html#line57" class="location">drivers/pdo/orm.php at line 57</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line14" class="location">CrossORM/Drivers/Pdo/ORM.php at line 14</a>
 
 <h3 id="_identifier_quote_character">_identifier_quote_character</h3>
-<code class="signature">private  mixed <strong>$_identifier_quote_character</strong> = null</code>
+<code class="signature">private  mixed <strong>$_identifier_quote_character</strong></code>
 <div class="details">
 </div>
 
 <hr>
 
 <h2 id="detail_method">Method Detail</h2>
-<a href="../../../source/drivers/pdo/orm.php.html#line64" class="location">drivers/pdo/orm.php at line 64</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line21" class="location">CrossORM/Drivers/Pdo/ORM.php at line 21</a>
 
 <h3 id="connect()">connect</h3>
 <code class="signature">public  void <strong>connect</strong>()</code>
@@ -221,7 +204,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line90" class="location">drivers/pdo/orm.php at line 90</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line47" class="location">CrossORM/Drivers/Pdo/ORM.php at line 47</a>
 
 <h3 id="run()">run</h3>
 <code class="signature">public  void <strong>run</strong>()</code>
@@ -234,7 +217,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line121" class="location">drivers/pdo/orm.php at line 121</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line78" class="location">CrossORM/Drivers/Pdo/ORM.php at line 78</a>
 
 <h3 id="build()">build</h3>
 <code class="signature">public  void <strong>build</strong>()</code>
@@ -247,7 +230,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line149" class="location">drivers/pdo/orm.php at line 149</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line106" class="location">CrossORM/Drivers/Pdo/ORM.php at line 106</a>
 
 <h3 id="_build_select()">_build_select</h3>
 <code class="signature">protected  void <strong>_build_select</strong>()</code>
@@ -260,7 +243,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line166" class="location">drivers/pdo/orm.php at line 166</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line123" class="location">CrossORM/Drivers/Pdo/ORM.php at line 123</a>
 
 <h3 id="_build_select_start()">_build_select_start</h3>
 <code class="signature">protected  void <strong>_build_select_start</strong>()</code>
@@ -273,7 +256,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line204" class="location">drivers/pdo/orm.php at line 204</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line161" class="location">CrossORM/Drivers/Pdo/ORM.php at line 161</a>
 
 <h3 id="_build_update()">_build_update</h3>
 <code class="signature">protected  void <strong>_build_update</strong>()</code>
@@ -286,7 +269,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line218" class="location">drivers/pdo/orm.php at line 218</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line175" class="location">CrossORM/Drivers/Pdo/ORM.php at line 175</a>
 
 <h3 id="_build_update_start()">_build_update_start</h3>
 <code class="signature">protected  void <strong>_build_update_start</strong>()</code>
@@ -299,7 +282,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line239" class="location">drivers/pdo/orm.php at line 239</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line196" class="location">CrossORM/Drivers/Pdo/ORM.php at line 196</a>
 
 <h3 id="_build_insert()">_build_insert</h3>
 <code class="signature">protected  void <strong>_build_insert</strong>()</code>
@@ -312,7 +295,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line262" class="location">drivers/pdo/orm.php at line 262</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line219" class="location">CrossORM/Drivers/Pdo/ORM.php at line 219</a>
 
 <h3 id="_build_delete()">_build_delete</h3>
 <code class="signature">protected  void <strong>_build_delete</strong>()</code>
@@ -325,7 +308,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line277" class="location">drivers/pdo/orm.php at line 277</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line234" class="location">CrossORM/Drivers/Pdo/ORM.php at line 234</a>
 
 <h3 id="_build_delete_start()">_build_delete_start</h3>
 <code class="signature">protected  void <strong>_build_delete_start</strong>()</code>
@@ -338,7 +321,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line290" class="location">drivers/pdo/orm.php at line 290</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line247" class="location">CrossORM/Drivers/Pdo/ORM.php at line 247</a>
 
 <h3 id="_build_where()">_build_where</h3>
 <code class="signature">protected  void <strong>_build_where</strong>()</code>
@@ -351,7 +334,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line313" class="location">drivers/pdo/orm.php at line 313</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line270" class="location">CrossORM/Drivers/Pdo/ORM.php at line 270</a>
 
 <h3 id="_build_group_by()">_build_group_by</h3>
 <code class="signature">protected  void <strong>_build_group_by</strong>()</code>
@@ -364,7 +347,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line327" class="location">drivers/pdo/orm.php at line 327</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line284" class="location">CrossORM/Drivers/Pdo/ORM.php at line 284</a>
 
 <h3 id="_build_order_by()">_build_order_by</h3>
 <code class="signature">protected  void <strong>_build_order_by</strong>()</code>
@@ -377,7 +360,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line341" class="location">drivers/pdo/orm.php at line 341</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line298" class="location">CrossORM/Drivers/Pdo/ORM.php at line 298</a>
 
 <h3 id="_build_limit()">_build_limit</h3>
 <code class="signature">protected  void <strong>_build_limit</strong>()</code>
@@ -390,7 +373,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line355" class="location">drivers/pdo/orm.php at line 355</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line312" class="location">CrossORM/Drivers/Pdo/ORM.php at line 312</a>
 
 <h3 id="_build_offset()">_build_offset</h3>
 <code class="signature">protected  void <strong>_build_offset</strong>()</code>
@@ -403,7 +386,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line373" class="location">drivers/pdo/orm.php at line 373</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line330" class="location">CrossORM/Drivers/Pdo/ORM.php at line 330</a>
 
 <h3 id="_get_row()">_get_row</h3>
 <code class="signature">public  void <strong>_get_row</strong>(bool instantiate)</code>
@@ -418,7 +401,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line397" class="location">drivers/pdo/orm.php at line 397</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line354" class="location">CrossORM/Drivers/Pdo/ORM.php at line 354</a>
 
 <h3 id="_get_rows()">_get_rows</h3>
 <code class="signature">public  void <strong>_get_rows</strong>(bool instantiate)</code>
@@ -433,7 +416,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line408" class="location">drivers/pdo/orm.php at line 408</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line365" class="location">CrossORM/Drivers/Pdo/ORM.php at line 365</a>
 
 <h3 id="insert_id()">insert_id</h3>
 <code class="signature">public  void <strong>insert_id</strong>()</code>
@@ -442,7 +425,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line418" class="location">drivers/pdo/orm.php at line 418</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line375" class="location">CrossORM/Drivers/Pdo/ORM.php at line 375</a>
 
 <h3 id="count()">count</h3>
 <code class="signature">public  void <strong>count</strong>()</code>
@@ -455,7 +438,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line430" class="location">drivers/pdo/orm.php at line 430</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line387" class="location">CrossORM/Drivers/Pdo/ORM.php at line 387</a>
 
 <h3 id="_quote_identifier()">_quote_identifier</h3>
 <code class="signature">protected  void <strong>_quote_identifier</strong>(string identifier)</code>
@@ -468,7 +451,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line442" class="location">drivers/pdo/orm.php at line 442</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line399" class="location">CrossORM/Drivers/Pdo/ORM.php at line 399</a>
 
 <h3 id="_set_identifier_quote_character()">_set_identifier_quote_character</h3>
 <code class="signature">protected  void <strong>_set_identifier_quote_character</strong>(object conn)</code>
@@ -483,7 +466,7 @@ only adds the pieces if they are not empty.</p></td>
 
 <hr>
 
-<a href="../../../source/drivers/pdo/orm.php.html#line474" class="location">drivers/pdo/orm.php at line 474</a>
+<a href="../../../source/crossorm/drivers/pdo/orm.php.html#line431" class="location">CrossORM/Drivers/Pdo/ORM.php at line 431</a>
 
 <h3 id="_join_if_not_empty()">_join_if_not_empty</h3>
 <code class="signature">protected  void <strong>_join_if_not_empty</strong>(mixed glue, mixed pieces)</code>

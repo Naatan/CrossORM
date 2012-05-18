@@ -1,4 +1,4 @@
-Lightweight ORM based on Idiorm and Paris
+Lightweight ORM, originally based on Idiorm and Paris.
 
 # Project goals
 

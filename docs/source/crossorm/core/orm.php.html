@@ -1,0 +1,857 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Tue, 15 May 2012 19:23:20 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+<link rel="start" href="../../../overview-summary.html">
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+<script type="text/javascript">
+			$(document).ready(function() {
+				$('iframe').load(function() {
+				  this.style.height =
+				  this.contentWindow.document.body.offsetHeight + 'px';
+				});
+			});
+		</script>
+<title>CrossORM/Core/ORM.php (CrossORM Documentation)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>CrossORM</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../todo-list.html">Todo</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/crossorm/core/orm.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>CrossORM/Core/ORM.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>namespace CrossORM\Core;
+<a name="line4"></a>
+<a name="line5"></a>use CrossORM\Security\ACL;
+<a name="line6"></a>
+<a name="line7"></a>/**
+<a name="line8"></a> * ORM Class, where most of the magic happens
+<a name="line9"></a> */
+<a name="line10"></a>abstract class ORM
+<a name="line11"></a>{
+<a name="line12"></a>	
+<a name="line13"></a>	protected static $_connections;
+<a name="line14"></a>	
+<a name="line15"></a>	protected $_conn;
+<a name="line16"></a>	protected $_config;
+<a name="line17"></a>
+<a name="line18"></a>	protected $_state 	= \CrossORM\STATE_FRESH;
+<a name="line19"></a>	
+<a name="line20"></a>	protected $_fields 	= array();
+<a name="line21"></a>	
+<a name="line22"></a>	protected $_last_query;
+<a name="line23"></a>	protected $_last_query_result;
+<a name="line24"></a>	
+<a name="line25"></a>	protected $_db_id 	= \CrossORM\DB_ID_DEFAULT;
+<a name="line26"></a>	protected $_actor 	= \CrossORM\ACTOR_DEFAULT;
+<a name="line27"></a>	
+<a name="line28"></a>	protected $_acl 	= false;
+<a name="line29"></a>
+<a name="line30"></a>	protected $_model 	= NULL;
+<a name="line31"></a>
+<a name="line32"></a>	public $_build;
+<a name="line33"></a>	
+<a name="line34"></a>	/************************************************** INITIALIZATION */
+<a name="line35"></a>	
+<a name="line36"></a>	/**
+<a name="line37"></a>	 * Initiate a new instance of the ORM, and create the db connection
+<a name="line38"></a>	 * if it does not already exist
+<a name="line39"></a>	 * 
+<a name="line40"></a>	 * @param 	array|object			$config
+<a name="line41"></a>	 * 
+<a name="line42"></a>	 * @return 	$this							
+<a name="line43"></a>	 */
+<a name="line44"></a>	function __construct($config, $id = \CrossORM\DB_ID_DEFAULT)
+<a name="line45"></a>	{
+<a name="line46"></a>		$this->_config = (object) $config;
+<a name="line47"></a>		$this->_db_id = $id;
+<a name="line48"></a>		
+<a name="line49"></a>		$identifier = sha1($this->_config->connection_string);
+<a name="line50"></a>
+<a name="line51"></a>		if (isset(static::$_connections[$identifier]))
+<a name="line52"></a>		{
+<a name="line53"></a>			$this->_conn = static::$_connections[$identifier];
+<a name="line54"></a>		} else
+<a name="line55"></a>		{
+<a name="line56"></a>			$this->_conn = $this->connect();
+<a name="line57"></a>			static::$_connections[$identifier] = $this->_conn;
+<a name="line58"></a>		}
+<a name="line59"></a>		
+<a name="line60"></a>		$this->_build 	= new Builder;
+<a name="line61"></a>		
+<a name="line62"></a>		return $this;
+<a name="line63"></a>	}
+<a name="line64"></a>	
+<a name="line65"></a>	/**
+<a name="line66"></a>	 * Create a new instance
+<a name="line67"></a>	 * 
+<a name="line68"></a>	 * @param	array|object|NULL			$data
+<a name="line69"></a>	 * 
+<a name="line70"></a>	 * @return	object							
+<a name="line71"></a>	 */
+<a name="line72"></a>	protected function create($data = NULL)
+<a name="line73"></a>	{
+<a name="line74"></a>		$this->_build->query_type(\CrossORM\INSERT);
+<a name="line75"></a>		
+<a name="line76"></a>		$class_name = get_class($this);
+<a name="line77"></a>		
+<a name="line78"></a>		$instance = new $this($this->_config, $this->_db_id);
+<a name="line79"></a>		
+<a name="line80"></a>		$instance->table($this->_build->table());
+<a name="line81"></a>		$instance->id_column($this->_build->id_column());
+<a name="line82"></a>		$instance->acl($this->_acl ? $this->_actor : false);
+<a name="line83"></a>		
+<a name="line84"></a>		if ( $data !== NULL )
+<a name="line85"></a>		{
+<a name="line86"></a>			$instance->hydrate($data);
+<a name="line87"></a>			$instance->state(\CrossORM\STATE_HYDRATED);
+<a name="line88"></a>		}
+<a name="line89"></a>		
+<a name="line90"></a>		return $instance;
+<a name="line91"></a>	}
+<a name="line92"></a>	
+<a name="line93"></a>	/**
+<a name="line94"></a>	 * Hydrate this instance with data
+<a name="line95"></a>	 * 
+<a name="line96"></a>	 * @param	array			$data
+<a name="line97"></a>	 * 
+<a name="line98"></a>	 * @return	$this							
+<a name="line99"></a>	 */
+<a name="line100"></a>	protected function hydrate($data)
+<a name="line101"></a>	{
+<a name="line102"></a>		$this->set($data, NULL, true);
+<a name="line103"></a>		
+<a name="line104"></a>		return $this;
+<a name="line105"></a>	}
+<a name="line106"></a>	
+<a name="line107"></a>	/**
+<a name="line108"></a>	 * Turn a result row into an instance
+<a name="line109"></a>	 * 
+<a name="line110"></a>	 * @param	object|array			$row
+<a name="line111"></a>	 * 
+<a name="line112"></a>	 * @return	object							
+<a name="line113"></a>	 */
+<a name="line114"></a>	protected function _create_instance_from_row($row)
+<a name="line115"></a>	{
+<a name="line116"></a>		$result = $this->create($row);
+<a name="line117"></a>		
+<a name="line118"></a>		$result->_last_query 		= $this->_last_query;
+<a name="line119"></a>		$result->_last_query_result = $this->_last_query_result;
+<a name="line120"></a>		
+<a name="line121"></a>		return $result;
+<a name="line122"></a>	}
+<a name="line123"></a>	
+<a name="line124"></a>	/**
+<a name="line125"></a>	 * Set the query state
+<a name="line126"></a>	 * 
+<a name="line127"></a>	 * @param	string			$state
+<a name="line128"></a>	 * 
+<a name="line129"></a>	 * @return	string							
+<a name="line130"></a>	 */
+<a name="line131"></a>	protected function state($state = NULL)
+<a name="line132"></a>	{
+<a name="line133"></a>		if ($state == NULL)
+<a name="line134"></a>		{
+<a name="line135"></a>			return $this->_state;
+<a name="line136"></a>		}
+<a name="line137"></a>		
+<a name="line138"></a>		return $this->_state = $state;
+<a name="line139"></a>	}
+<a name="line140"></a>
+<a name="line141"></a>	public function use_model($model) 
+<a name="line142"></a>	{
+<a name="line143"></a>		$this->_modal = $model;
+<a name="line144"></a>	}
+<a name="line145"></a>	
+<a name="line146"></a>	/************************************************** OVERLOADING */
+<a name="line147"></a>	
+<a name="line148"></a>	/**
+<a name="line149"></a>	 * Forward __get requests to @see #get
+<a name="line150"></a>	 * 
+<a name="line151"></a>	 * @param	string			$key
+<a name="line152"></a>	 * 
+<a name="line153"></a>	 * @return	mixed							
+<a name="line154"></a>	 */
+<a name="line155"></a>	public function __get($key)
+<a name="line156"></a>	{
+<a name="line157"></a>		return $this->get($key);
+<a name="line158"></a>	}
+<a name="line159"></a>
+<a name="line160"></a>	/**
+<a name="line161"></a>	 * Forward __set requests to @see set()
+<a name="line162"></a>	 * 
+<a name="line163"></a>	 * @param	string			$key			
+<a name="line164"></a>	 * @param	mixed			$value
+<a name="line165"></a>	 * 
+<a name="line166"></a>	 * @return	mixed							
+<a name="line167"></a>	 */
+<a name="line168"></a>	public function __set($key, $value)
+<a name="line169"></a>	{
+<a name="line170"></a>		if ($this->state() == \CrossORM\STATE_HYDRATED)
+<a name="line171"></a>		{
+<a name="line172"></a>			$this->_build->query_type(\CrossORM\UPDATE);
+<a name="line173"></a>		}
+<a name="line174"></a>		
+<a name="line175"></a>		$this->set($key, $value);
+<a name="line176"></a>	}
+<a name="line177"></a>
+<a name="line178"></a>	/**
+<a name="line179"></a>	 * Check if @see $_fields has the given entry
+<a name="line180"></a>	 * 
+<a name="line181"></a>	 * @param	string			$key
+<a name="line182"></a>	 * 
+<a name="line183"></a>	 * @return	bool							
+<a name="line184"></a>	 */
+<a name="line185"></a>	public function __isset($key)
+<a name="line186"></a>	{
+<a name="line187"></a>		return isset($this->_fields[$key]);
+<a name="line188"></a>	}
+<a name="line189"></a>	
+<a name="line190"></a>	/************************************************** BUILDING QUERIES */
+<a name="line191"></a>	
+<a name="line192"></a>	/**
+<a name="line193"></a>	 * Toggle ACL and optionally set the actor to be used
+<a name="line194"></a>	 * 
+<a name="line195"></a>	 * @param	bool|string			$enable			If a string is given it will be used as the actor
+<a name="line196"></a>	 * 
+<a name="line197"></a>	 * @return	$this							
+<a name="line198"></a>	 */
+<a name="line199"></a>	function acl($enable = true)
+<a name="line200"></a>	{
+<a name="line201"></a>		if ( !is_bool($enable))
+<a name="line202"></a>		{
+<a name="line203"></a>			$this->_actor = $enable;
+<a name="line204"></a>		}
+<a name="line205"></a>		
+<a name="line206"></a>		$this->_acl = (bool) $enable;
+<a name="line207"></a>		
+<a name="line208"></a>		return $this;
+<a name="line209"></a>	}
+<a name="line210"></a>	
+<a name="line211"></a>	/**
+<a name="line212"></a>	 * Alias of @see table()
+<a name="line213"></a>	 * 
+<a name="line214"></a>	 * @param	string			$table_name
+<a name="line215"></a>	 * 
+<a name="line216"></a>	 * @return	$this
+<a name="line217"></a>	 */
+<a name="line218"></a>	function for_table($table_name)
+<a name="line219"></a>	{
+<a name="line220"></a>		return $this->table($table_name);
+<a name="line221"></a>	}
+<a name="line222"></a>	
+<a name="line223"></a>	/**
+<a name="line224"></a>	 * Define table name to base queries on
+<a name="line225"></a>	 * 
+<a name="line226"></a>	 * @param	string			$table_name
+<a name="line227"></a>	 * 
+<a name="line228"></a>	 * @return	$this
+<a name="line229"></a>	 */
+<a name="line230"></a>	function table($table_name)
+<a name="line231"></a>	{
+<a name="line232"></a>		$this->_build->table($table_name);
+<a name="line233"></a>		
+<a name="line234"></a>		return $this;
+<a name="line235"></a>	}
+<a name="line236"></a>
+<a name="line237"></a>	/**
+<a name="line238"></a>	 * Change the id column name
+<a name="line239"></a>	 * 
+<a name="line240"></a>	 * @param	string			$id_column
+<a name="line241"></a>	 * 
+<a name="line242"></a>	 * @return	$this							
+<a name="line243"></a>	 */
+<a name="line244"></a>	function id_column($id_column)
+<a name="line245"></a>	{
+<a name="line246"></a>		$this->_build->id_column($id_column);
+<a name="line247"></a>		
+<a name="line248"></a>		return $this;
+<a name="line249"></a>	}
+<a name="line250"></a>	
+<a name="line251"></a>	/**
+<a name="line252"></a>	 * Alias the table we're selecting from
+<a name="line253"></a>	 * 
+<a name="line254"></a>	 * @param	string			$alias
+<a name="line255"></a>	 * 
+<a name="line256"></a>	 * @return	$this						
+<a name="line257"></a>	 */
+<a name="line258"></a>	function table_alias($alias)
+<a name="line259"></a>	{
+<a name="line260"></a>		$this->_build->table_alias($alias);
+<a name="line261"></a>		
+<a name="line262"></a>		return $this;
+<a name="line263"></a>	}
+<a name="line264"></a>	
+<a name="line265"></a>	/**
+<a name="line266"></a>	 * Select one or multiple fields
+<a name="line267"></a>	 *
+<a name="line268"></a>	 * Any of the following will work as input
+<a name="line269"></a>	 *
+<a name="line270"></a>	 * * field1
+<a name="line271"></a>	 * * array(field1, alias_for_field1)
+<a name="line272"></a>	 * * array(field1,field2,field3)
+<a name="line273"></a>	 * * array(array(field1,alias_for_field1),array(field2,alias_for_field2))
+<a name="line274"></a>	 * 
+<a name="line275"></a>	 * @param	array|string			$select
+<a name="line276"></a>	 * 
+<a name="line277"></a>	 * @return	$this							
+<a name="line278"></a>	 */
+<a name="line279"></a>	function select($select)
+<a name="line280"></a>	{
+<a name="line281"></a>		$this->_build->select($column);
+<a name="line282"></a>		
+<a name="line283"></a>		return $this;
+<a name="line284"></a>	}
+<a name="line285"></a>	
+<a name="line286"></a>	/**
+<a name="line287"></a>	 * Add standard where clause statement
+<a name="line288"></a>	 * 
+<a name="line289"></a>	 * @param	string					$column_name	
+<a name="line290"></a>	 * @param	string|int|float		$value
+<a name="line291"></a>	 * 
+<a name="line292"></a>	 * @return	$this
+<a name="line293"></a>	 */
+<a name="line294"></a>	function where($column_name, $value)
+<a name="line295"></a>	{
+<a name="line296"></a>		$this->_build->clause($column_name, \CrossORM\EQUAL, $value);
+<a name="line297"></a>		
+<a name="line298"></a>		return $this;
+<a name="line299"></a>	}
+<a name="line300"></a>	
+<a name="line301"></a>	/**
+<a name="line302"></a>	 * Add standard where clause statement, links to @see where()
+<a name="line303"></a>	 * 
+<a name="line304"></a>	 * @param	string					$column_name	
+<a name="line305"></a>	 * @param	string|int|float		$value
+<a name="line306"></a>	 * 
+<a name="line307"></a>	 * @return	$this
+<a name="line308"></a>	 */
+<a name="line309"></a>	function where_equal($column_name, $value)
+<a name="line310"></a>	{
+<a name="line311"></a>		return $this->where($column_name, $value);
+<a name="line312"></a>	}
+<a name="line313"></a>	
+<a name="line314"></a>	/**
+<a name="line315"></a>	 * Add "is not" where clause statement
+<a name="line316"></a>	 * 
+<a name="line317"></a>	 * @param	string					$column_name	
+<a name="line318"></a>	 * @param	string|int|float		$value
+<a name="line319"></a>	 * 
+<a name="line320"></a>	 * @return	$this
+<a name="line321"></a>	 */
+<a name="line322"></a>	function where_not_equal($column_name, $value)
+<a name="line323"></a>	{
+<a name="line324"></a>		$this->_build->clause($column_name, \CrossORM\NOT_EQUAL, $value);
+<a name="line325"></a>		
+<a name="line326"></a>		return $this;
+<a name="line327"></a>	}
+<a name="line328"></a>	
+<a name="line329"></a>	/**
+<a name="line330"></a>	 * Get entry by id
+<a name="line331"></a>	 * 
+<a name="line332"></a>	 * @param	int			$id
+<a name="line333"></a>	 * 
+<a name="line334"></a>	 * @return	$this							
+<a name="line335"></a>	 */
+<a name="line336"></a>	function where_id_is($id)
+<a name="line337"></a>	{
+<a name="line338"></a>		$this->_build->clause($this->_build->id_column(), \CrossORM\EQUAL, $id);
+<a name="line339"></a>		
+<a name="line340"></a>		return $this;
+<a name="line341"></a>	}
+<a name="line342"></a>	
+<a name="line343"></a>	/**
+<a name="line344"></a>	 * Add "like" where clause statement
+<a name="line345"></a>	 * 
+<a name="line346"></a>	 * @param	string					$column_name	
+<a name="line347"></a>	 * @param	string|int|float		$value
+<a name="line348"></a>	 * 
+<a name="line349"></a>	 * @return	$this
+<a name="line350"></a>	 */
+<a name="line351"></a>	function where_like($column_name, $value)
+<a name="line352"></a>	{
+<a name="line353"></a>		$this->_build->clause($column_name, \CrossORM\LIKE, $value);
+<a name="line354"></a>		
+<a name="line355"></a>		return $this;
+<a name="line356"></a>	}
+<a name="line357"></a>	
+<a name="line358"></a>	/**
+<a name="line359"></a>	 * Add "not like" where clause statement
+<a name="line360"></a>	 * 
+<a name="line361"></a>	 * @param	string					$column_name	
+<a name="line362"></a>	 * @param	string|int|float		$value
+<a name="line363"></a>	 * 
+<a name="line364"></a>	 * @return	$this
+<a name="line365"></a>	 */
+<a name="line366"></a>	function where_not_like($column_name, $value)
+<a name="line367"></a>	{
+<a name="line368"></a>		$this->_build->clause($column_name, \CrossORM\NOT_LIKE, $value);
+<a name="line369"></a>		
+<a name="line370"></a>		return $this;
+<a name="line371"></a>	}
+<a name="line372"></a>	
+<a name="line373"></a>	/**
+<a name="line374"></a>	 * Add "greater than" where clause statement
+<a name="line375"></a>	 * 
+<a name="line376"></a>	 * @param	string					$column_name	
+<a name="line377"></a>	 * @param	string|int|float		$value
+<a name="line378"></a>	 * 
+<a name="line379"></a>	 * @return	$this
+<a name="line380"></a>	 */
+<a name="line381"></a>	function where_gt($column_name, $value)
+<a name="line382"></a>	{
+<a name="line383"></a>		$this->_build->clause($column_name, \CrossORM\GREATER_THAN, $value);
+<a name="line384"></a>		
+<a name="line385"></a>		return $this;
+<a name="line386"></a>	}
+<a name="line387"></a>	
+<a name="line388"></a>	/**
+<a name="line389"></a>	 * Add "less than" where clause statement
+<a name="line390"></a>	 * 
+<a name="line391"></a>	 * @param	string					$column_name	
+<a name="line392"></a>	 * @param	string|int|float		$value
+<a name="line393"></a>	 * 
+<a name="line394"></a>	 * @return	$this
+<a name="line395"></a>	 */
+<a name="line396"></a>	function where_lt($column_name, $value)
+<a name="line397"></a>	{
+<a name="line398"></a>		$this->_build->clause($column_name, \CrossORM\LESS_THAN, $value);
+<a name="line399"></a>		
+<a name="line400"></a>		return $this;
+<a name="line401"></a>	}
+<a name="line402"></a>	
+<a name="line403"></a>	/**
+<a name="line404"></a>	 * Add "greater than or equal" where clause statement
+<a name="line405"></a>	 * 
+<a name="line406"></a>	 * @param	string					$column_name	
+<a name="line407"></a>	 * @param	string|int|float		$value
+<a name="line408"></a>	 * 
+<a name="line409"></a>	 * @return	$this
+<a name="line410"></a>	 */
+<a name="line411"></a>	function where_gte($column_name, $value)
+<a name="line412"></a>	{
+<a name="line413"></a>		$this->_build->clause($column_name, \CrossORM\GREATER_THAN_EQUAL, $value);
+<a name="line414"></a>		
+<a name="line415"></a>		return $this;
+<a name="line416"></a>	}
+<a name="line417"></a>	
+<a name="line418"></a>	/**
+<a name="line419"></a>	 * Add "less than or equal" where clause statement
+<a name="line420"></a>	 * 
+<a name="line421"></a>	 * @param	string					$column_name	
+<a name="line422"></a>	 * @param	string|int|float		$value
+<a name="line423"></a>	 * 
+<a name="line424"></a>	 * @return	$this
+<a name="line425"></a>	 */
+<a name="line426"></a>	function where_lte($column_name, $value)
+<a name="line427"></a>	{
+<a name="line428"></a>		$this->_build->clause($column_name, \CrossORM\LESS_THAN_EQUAL, $value);
+<a name="line429"></a>		
+<a name="line430"></a>		return $this;
+<a name="line431"></a>	}
+<a name="line432"></a>	
+<a name="line433"></a>	/**
+<a name="line434"></a>	 * Add "IN" where clause statement
+<a name="line435"></a>	 * 
+<a name="line436"></a>	 * @param	string					$column_name	
+<a name="line437"></a>	 * @param	string|int|float		$value
+<a name="line438"></a>	 * 
+<a name="line439"></a>	 * @return	$this
+<a name="line440"></a>	 */
+<a name="line441"></a>	function where_in($column_name, $values)
+<a name="line442"></a>	{
+<a name="line443"></a>		$this->_build->clause($column_name, \CrossORM\IN, $value);
+<a name="line444"></a>		
+<a name="line445"></a>		return $this;
+<a name="line446"></a>	}
+<a name="line447"></a>	
+<a name="line448"></a>	/**
+<a name="line449"></a>	 * Add "NOT IN" where clause statement
+<a name="line450"></a>	 * 
+<a name="line451"></a>	 * @param	string					$column_name	
+<a name="line452"></a>	 * @param	string|int|float		$value
+<a name="line453"></a>	 * 
+<a name="line454"></a>	 * @return	$this
+<a name="line455"></a>	 */
+<a name="line456"></a>	function where_not_in($column_name, $values)
+<a name="line457"></a>	{
+<a name="line458"></a>		$this->_build->clause($column_name, \CrossORM\NOT_IN, $value);
+<a name="line459"></a>		
+<a name="line460"></a>		return $this;
+<a name="line461"></a>	}
+<a name="line462"></a>	
+<a name="line463"></a>	/**
+<a name="line464"></a>	 * Add "IS NULL" where clause statement
+<a name="line465"></a>	 * 
+<a name="line466"></a>	 * @param	string					$column_name	
+<a name="line467"></a>	 * @param	string|int|float		$value
+<a name="line468"></a>	 * 
+<a name="line469"></a>	 * @return	$this
+<a name="line470"></a>	 */
+<a name="line471"></a>	function where_NULL($column_name)
+<a name="line472"></a>	{
+<a name="line473"></a>		$this->_build->clause($column_name, \CrossORM\IS_NULL, $value);
+<a name="line474"></a>		
+<a name="line475"></a>		return $this;
+<a name="line476"></a>	}
+<a name="line477"></a>	
+<a name="line478"></a>	/**
+<a name="line479"></a>	 * Add "IS NOT NULL" where clause statement
+<a name="line480"></a>	 * 
+<a name="line481"></a>	 * @param	string					$column_name	
+<a name="line482"></a>	 * @param	string|int|float		$value
+<a name="line483"></a>	 * 
+<a name="line484"></a>	 * @return	$this
+<a name="line485"></a>	 */
+<a name="line486"></a>	function where_not_NULL($column_name)
+<a name="line487"></a>	{
+<a name="line488"></a>		$this->_build->clause($column_name, \CrossORM\IS_NOT_NULL, $value);
+<a name="line489"></a>		
+<a name="line490"></a>		return $this;
+<a name="line491"></a>	}
+<a name="line492"></a>	
+<a name="line493"></a>	/**
+<a name="line494"></a>	 * Limit results
+<a name="line495"></a>	 * 
+<a name="line496"></a>	 * @param	int			$limit
+<a name="line497"></a>	 * 
+<a name="line498"></a>	 * @return	$this							
+<a name="line499"></a>	 */
+<a name="line500"></a>	function limit($limit)
+<a name="line501"></a>	{
+<a name="line502"></a>		$this->_build->limit($limit);
+<a name="line503"></a>		
+<a name="line504"></a>		return $this;
+<a name="line505"></a>	}
+<a name="line506"></a>	
+<a name="line507"></a>	/**
+<a name="line508"></a>	 * Offset search entries
+<a name="line509"></a>	 * 
+<a name="line510"></a>	 * @param	int			$offset
+<a name="line511"></a>	 * 
+<a name="line512"></a>	 * @return	$this							
+<a name="line513"></a>	 */
+<a name="line514"></a>	function offset($offset)
+<a name="line515"></a>	{
+<a name="line516"></a>		$this->_build->offset($offset);
+<a name="line517"></a>		
+<a name="line518"></a>		return $this;
+<a name="line519"></a>	}
+<a name="line520"></a>	
+<a name="line521"></a>	/**
+<a name="line522"></a>	 * Order field descending
+<a name="line523"></a>	 * 
+<a name="line524"></a>	 * @param	string			$column_name
+<a name="line525"></a>	 * 
+<a name="line526"></a>	 * @return	$this							
+<a name="line527"></a>	 */
+<a name="line528"></a>	function order_by_desc($column_name)
+<a name="line529"></a>	{
+<a name="line530"></a>		$this->_build->order_by($column_name, \CrossORM\DESC);
+<a name="line531"></a>	}
+<a name="line532"></a>	
+<a name="line533"></a>	/**
+<a name="line534"></a>	 * Order field ascending
+<a name="line535"></a>	 * 
+<a name="line536"></a>	 * @param	string			$column_name
+<a name="line537"></a>	 * 
+<a name="line538"></a>	 * @return	$this							
+<a name="line539"></a>	 */
+<a name="line540"></a>	function order_by_asc($column_name)
+<a name="line541"></a>	{
+<a name="line542"></a>		$this->_build->order_by($column_name, \CrossORM\ASC);
+<a name="line543"></a>	}
+<a name="line544"></a>	
+<a name="line545"></a>	/**
+<a name="line546"></a>	 * Group results
+<a name="line547"></a>	 * 
+<a name="line548"></a>	 * @param	string			$column_name
+<a name="line549"></a>	 * 
+<a name="line550"></a>	 * @return	$this							
+<a name="line551"></a>	 */
+<a name="line552"></a>	function group_by($column_name)
+<a name="line553"></a>	{
+<a name="line554"></a>		$this->_build->group_by($column_name);
+<a name="line555"></a>	}
+<a name="line556"></a>
+<a name="line557"></a>	/**
+<a name="line558"></a>	 * Set a field value
+<a name="line559"></a>	 * 
+<a name="line560"></a>	 * @param	string|array			$key			
+<a name="line561"></a>	 * @param	string|int|float|NULL	$value
+<a name="line562"></a>	 * 
+<a name="line563"></a>	 * @return	$this					
+<a name="line564"></a>	 */
+<a name="line565"></a>	function set($key, $value = NULL, $hydrate = false)
+<a name="line566"></a>	{
+<a name="line567"></a>		if (!is_array($key))
+<a name="line568"></a>		{
+<a name="line569"></a>			$key = array($key => $value);
+<a name="line570"></a>		}
+<a name="line571"></a>		
+<a name="line572"></a>		foreach ($key AS $k => $v)
+<a name="line573"></a>		{
+<a name="line574"></a>			$this->_fields[$k] = $v;
+<a name="line575"></a>		}
+<a name="line576"></a>		
+<a name="line577"></a>		if ( ! $hydrate)
+<a name="line578"></a>		{
+<a name="line579"></a>			$this->_build->set($key, $value);
+<a name="line580"></a>		}
+<a name="line581"></a>		
+<a name="line582"></a>		return $this;
+<a name="line583"></a>	}
+<a name="line584"></a>	
+<a name="line585"></a>	/************************************************** EXECUTION */
+<a name="line586"></a>	
+<a name="line587"></a>	/**
+<a name="line588"></a>	 * Save the current modifications to the database
+<a name="line589"></a>	 * 
+<a name="line590"></a>	 * @return	$this
+<a name="line591"></a>	 */
+<a name="line592"></a>	public function save($query_type = NULL)
+<a name="line593"></a>	{
+<a name="line594"></a>		
+<a name="line595"></a>		// Optionally override the query_type
+<a name="line596"></a>		if ($query_type != NULL)
+<a name="line597"></a>		{
+<a name="line598"></a>			$this->_build->query_type($query_type);
+<a name="line599"></a>		}
+<a name="line600"></a>		
+<a name="line601"></a>		$type = $this->_build->query_type();
+<a name="line602"></a>		
+<a name="line603"></a>		// Auto detect query type if its not set to UPDATE or INSERT
+<a name="line604"></a>		if ( !in_array($type,array(\CrossORM\UPDATE,\CrossORM\INSERT)))
+<a name="line605"></a>		{
+<a name="line606"></a>			if ($this->state() == \CrossORM\STATE_HYDRATED)
+<a name="line607"></a>			{
+<a name="line608"></a>				$this->_build->query_type(\CrossORM\UPDATE);
+<a name="line609"></a>			}
+<a name="line610"></a>				else
+<a name="line611"></a>			{
+<a name="line612"></a>				$this->_build->query_type(\CrossORM\INSERT);
+<a name="line613"></a>			}
+<a name="line614"></a>		}
+<a name="line615"></a>		
+<a name="line616"></a>		// If querying upon a hydrated instance, limit the query to this db entry
+<a name="line617"></a>		if ($type == \CrossORM\UPDATE AND $this->state() == \CrossORM\STATE_HYDRATED)
+<a name="line618"></a>		{
+<a name="line619"></a>			$this->where_id_is($this->id());
+<a name="line620"></a>			$this->limit(1);
+<a name="line621"></a>		}
+<a name="line622"></a>		
+<a name="line623"></a>		$this->build()->run();
+<a name="line624"></a>		
+<a name="line625"></a>		// If this was an INSERT query, set the state to FRESH and define the inserted ID
+<a name="line626"></a>		// as a clause so that a followup SELECT query is executed properly
+<a name="line627"></a>		if ($type == \CrossORM\INSERT)
+<a name="line628"></a>		{
+<a name="line629"></a>			$this->state(\CrossORM\STATE_FRESH);
+<a name="line630"></a>			$this->where_id_is($this->insert_id());
+<a name="line631"></a>			$this->limit(1);
+<a name="line632"></a>		}
+<a name="line633"></a>		
+<a name="line634"></a>		return $this;
+<a name="line635"></a>	}
+<a name="line636"></a>	
+<a name="line637"></a>	/**
+<a name="line638"></a>	 * Perform a delete query based on the current critera's set in the builder
+<a name="line639"></a>	 * 
+<a name="line640"></a>	 * @return	$this							
+<a name="line641"></a>	 */
+<a name="line642"></a>	public function delete()
+<a name="line643"></a>	{
+<a name="line644"></a>		if ($this->state() == \CrossORM\STATE_HYDRATED)
+<a name="line645"></a>		{
+<a name="line646"></a>			$this->where_id_is($this->id());
+<a name="line647"></a>			$this->limit(1);
+<a name="line648"></a>		}
+<a name="line649"></a>		
+<a name="line650"></a>		$this->_build->query_type(\CrossORM\DELETE);
+<a name="line651"></a>		
+<a name="line652"></a>		$this->build()->run();
+<a name="line653"></a>		
+<a name="line654"></a>		return $this;
+<a name="line655"></a>	}
+<a name="line656"></a>	
+<a name="line657"></a>	/**
+<a name="line658"></a>	 * Validate if we have permission to run the query, throws @see Exceptions\ACL if not.
+<a name="line659"></a>	 * 
+<a name="line660"></a>	 * @return	void							
+<a name="line661"></a>	 */
+<a name="line662"></a>	public function validate_acl()
+<a name="line663"></a>	{
+<a name="line664"></a>		if ( !$this->_acl)
+<a name="line665"></a>		{
+<a name="line666"></a>			return;
+<a name="line667"></a>		}
+<a name="line668"></a>		
+<a name="line669"></a>		ACL::validate_query($this->_build,array($this->_actor,$this->_db_id));
+<a name="line670"></a>	}
+<a name="line671"></a>	
+<a name="line672"></a>	public function get_query()
+<a name="line673"></a>	{
+<a name="line674"></a>		return $this->_last_query;
+<a name="line675"></a>	}
+<a name="line676"></a>	
+<a name="line677"></a>	/************************************************** RESULTS */
+<a name="line678"></a>	
+<a name="line679"></a>	/**
+<a name="line680"></a>	 * Get entry from @see $_fields
+<a name="line681"></a>	 * 
+<a name="line682"></a>	 * @param	string			$key
+<a name="line683"></a>	 * 
+<a name="line684"></a>	 * @return	mixed
+<a name="line685"></a>	 */
+<a name="line686"></a>	public function get($key) 
+<a name="line687"></a>	{
+<a name="line688"></a>		return isset($this->_fields[$key]) ? $this->_fields[$key] : NULL;
+<a name="line689"></a>	}
+<a name="line690"></a>
+<a name="line691"></a>	/**
+<a name="line692"></a>	 * Get the defined fields
+<a name="line693"></a>	 * 
+<a name="line694"></a>	 * @return array
+<a name="line695"></a>	 */
+<a name="line696"></a>	public function fields()
+<a name="line697"></a>	{
+<a name="line698"></a>		return $this->_fields;
+<a name="line699"></a>	}
+<a name="line700"></a>	
+<a name="line701"></a>	/**
+<a name="line702"></a>	 * Return results as array 
+<a name="line703"></a>	 * 
+<a name="line704"></a>	 * @return	object|array
+<a name="line705"></a>	 */
+<a name="line706"></a>	function as_array($contextual = true)
+<a name="line707"></a>	{
+<a name="line708"></a>		if ( $this->state() == \CrossORM\STATE_FRESH)
+<a name="line709"></a>		{
+<a name="line710"></a>			$this->_build->query_type(\CrossORM\SELECT);
+<a name="line711"></a>			
+<a name="line712"></a>			if ($this->_build->limit()==1)
+<a name="line713"></a>			{
+<a name="line714"></a>				return (array) $this->_get_row();
+<a name="line715"></a>			}
+<a name="line716"></a>				else
+<a name="line717"></a>			{
+<a name="line718"></a>				return $this->_get_rows();
+<a name="line719"></a>			}
+<a name="line720"></a>		}
+<a name="line721"></a>			else
+<a name="line722"></a>		{
+<a name="line723"></a>			if ($contextual)
+<a name="line724"></a>			{
+<a name="line725"></a>				return $this->_fields;
+<a name="line726"></a>			}
+<a name="line727"></a>				else
+<a name="line728"></a>			{
+<a name="line729"></a>				return array($this->_fields);
+<a name="line730"></a>			}
+<a name="line731"></a>			
+<a name="line732"></a>		}
+<a name="line733"></a>	}
+<a name="line734"></a>	
+<a name="line735"></a>	/**
+<a name="line736"></a>	 * Return results as JSON
+<a name="line737"></a>	 * 
+<a name="line738"></a>	 * @return	string							
+<a name="line739"></a>	 */
+<a name="line740"></a>	function as_json($contextual = true)
+<a name="line741"></a>	{
+<a name="line742"></a>		$result = $this->as_array();
+<a name="line743"></a>		return json_encode($result, JSON_BIGINT_AS_STRING | JSON_NUMERIC_CHECK);
+<a name="line744"></a>	}
+<a name="line745"></a>
+<a name="line746"></a>	/**
+<a name="line747"></a>	 * Find and return one entry
+<a name="line748"></a>	 * 
+<a name="line749"></a>	 * @return	object
+<a name="line750"></a>	 */
+<a name="line751"></a>	function find_one()
+<a name="line752"></a>	{
+<a name="line753"></a>		$this->_build->query_type(\CrossORM\SELECT);
+<a name="line754"></a>		
+<a name="line755"></a>		$this->_build->limit(1);
+<a name="line756"></a>		
+<a name="line757"></a>		return $this->_get_row(true);
+<a name="line758"></a>	}
+<a name="line759"></a>
+<a name="line760"></a>	/**
+<a name="line761"></a>	 * Find and return multiple entries
+<a name="line762"></a>	 * 
+<a name="line763"></a>	 * @return	Resultset
+<a name="line764"></a>	 */
+<a name="line765"></a>	function find_many()
+<a name="line766"></a>	{
+<a name="line767"></a>		$this->_build->query_type(\CrossORM\SELECT);
+<a name="line768"></a>		
+<a name="line769"></a>		return new Resultset($this->_get_rows(true), $this->_last_query);
+<a name="line770"></a>	}
+<a name="line771"></a>	
+<a name="line772"></a>	/**
+<a name="line773"></a>	 * Get the ID of this instance
+<a name="line774"></a>	 * 
+<a name="line775"></a>	 * @return	int|string
+<a name="line776"></a>	 */
+<a name="line777"></a>	function id()
+<a name="line778"></a>	{
+<a name="line779"></a>		if ( $this->state() == \CrossORM\STATE_FRESH)
+<a name="line780"></a>		{
+<a name="line781"></a>			return $this->find_one()->{$this->_build->id_column()};
+<a name="line782"></a>		} else
+<a name="line783"></a>		{
+<a name="line784"></a>			return $this->_fields[$this->_build->id_column()];
+<a name="line785"></a>		}
+<a name="line786"></a>	}
+<a name="line787"></a>	
+<a name="line788"></a>}</pre>
+<div class="header">
+<h1>CrossORM</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../todo-list.html">Todo</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/crossorm/core/orm.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href=http://peej.github.com/phpdoctor/>PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>
