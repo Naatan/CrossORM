@@ -21,24 +21,24 @@ All parts of the project (whether Completed, In Progress or Todo) are subject to
 * Support for drivers
 * phpdoc configuration
 * PHPUnit setup
-
-## In Progress
-
 * Unit tests for all libraries
 * Reorganize libraries in sub-directories of the lib folder
 * Create validation library
+* Intelligently handle update/delete queries on resultsets
+* Auto load dependencies (or hook into frameworks to do so)
+
+## In Progress
+
 * Make models useful (define structure, set ACL, etc)
 
 ## Todo (order does not indicate priority)
 
-* Fork & modify PHPUnit and VisualPHPUnit repo's and use them as submodules
+* <del>Fork & modify PHPUnit and VisualPHPUnit repo's and use them as submodules</del>
 * Support SQL Joins
 * Support raw queries, clauses & fields
-* Intelligently handle update/delete queries on resultsets
 * Develop proof-of-concept MongoDB driver
 * Implement intuitive active record methods (see project goals)
 * Support ACL in models
-* Auto load dependencies (or hook into frameworks to do so)
 * Create proper documentation
 
 # Sample usage
