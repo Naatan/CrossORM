@@ -45,18 +45,18 @@ All parts of the project (whether Completed, In Progress or Todo) are subject to
 
 ## Initiate connection
 
-
+```php
     DB::factory(array(
-        'driver'            => 'pdo',
-        'connection_string' => 'mysql:dbname=test;host=127.0.0.1',
-        'username'             => 'root',
-        'password'             => '',
+        'driver'                => 'pdo',
+        'connection_string'     => 'mysql:dbname=test;host=127.0.0.1',
+        'username'              => 'root',
+        'password'              => '',
     ));
-
+```
 
 ## Standard select and consequent update & delete queries
 
-
+```php
     // Execute query to get first row from table
     $result = DB::factory()->for_table('test')->find_one();
     
@@ -70,11 +70,11 @@ All parts of the project (whether Completed, In Progress or Todo) are subject to
     
     // Delete the row
     $result->delete();
-
+```
 
 ## Select query with ACL
 
-
+```php
     // Define the rules, note that if the select action is not set on the table but IS set on the field then select queries will not work,
     // both the table and the fields being used need to have the permission set
     $rules = array(
@@ -92,11 +92,11 @@ All parts of the project (whether Completed, In Progress or Todo) are subject to
     
     // So this will fail
     $result = DB::factory()->acl()->for_table('test')->find_one();
-
+```
 
 ## Insert row
 
-
+```php
     // Execute query to get first row from table
     $entry = DB::factory()->for_table('test');
     
@@ -107,11 +107,11 @@ All parts of the project (whether Completed, In Progress or Todo) are subject to
     $entry->save();
     
     $entry->delete();
-
+```
 
 ## Select and consequent update & delete queries on multiple entries
 
-
+```php
     // Execute query to get first row from table
     $result = DB::factory()->for_table('test')->where_like('name', 'a%')->find_many();
     
@@ -127,11 +127,11 @@ All parts of the project (whether Completed, In Progress or Todo) are subject to
     
     // Delete rows
     $result->delete();
-
+```
 
 ## Model usage
 
-
+```php
     class Model_Test extends Model {
         protected $table_name     = 'test';        // optional, table name can be detected from class name
         protected $db_id        = 'default';     // redundant, 'default' is already assumed
@@ -139,3 +139,4 @@ All parts of the project (whether Completed, In Progress or Todo) are subject to
     
     $Test = new Model_Test;
     $result = $Test->find_one();
+```
