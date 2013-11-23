@@ -1,7 +1,9 @@
-<phpunit bootstrap="depend/Bootstrap.php">
-	<testsuites>
-		<testsuite>
-			<directory suffix=".php">tests/</directory>
-		</testsuite>
+<phpunit bootstrap="depend/Bootstrap.php"
+         convertWarningsToExceptions="false"
+         strict="false">
+    <testsuites>
+        <testsuite>
+            <directory suffix=".php">tests/</directory>
+        </testsuite>
     </testsuites>
 </phpunit>
