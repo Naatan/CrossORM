@@ -8,6 +8,13 @@ CREATE TABLE IF NOT EXISTS `test` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 ;
 
+-- SQLITE version
+
+CREATE TABLE test(
+   id INTEGER PRIMARY KEY   AUTOINCREMENT,
+   name           TEXT      NOT NULL
+);
+
 --
 -- Dumping data for table `test`
 --
@@ -18,4 +25,3 @@ INSERT INTO `test` (`id`, `name`) VALUES
 (3, 'test3'),
 (4, 'test4'),
 (5, 'test5');
-
